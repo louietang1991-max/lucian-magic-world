@@ -482,3 +482,32 @@
   bottom: -10px;
   box-shadow: 0 3px 8px rgba(0,0,0,.18);
 }
+
+/* 圖鑑咭片排版修正（span 要 display:block 先食到 aspect-ratio） */
+.album-card { overflow: hidden; }
+.album-card .ac-art { display: block; width: 100%; aspect-ratio: 1 / 1; }
+.album-card .ac-art svg { width: 100%; height: 100%; display: block; }
+.album-card .ac-name { display: block; }
+.album-card .ac-en { display: block; }
+.album-card .ac-stars { display: flex; justify-content: center; }
+.album-card .ac-lock { top: 42%; }
+.album-card.locked .ac-art svg { filter: brightness(0) opacity(.16); }
+
+/* 圖鑑咭片（最終） */
+.album-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.album-grid { grid-auto-rows: min-content; }
+.album-card:active { transform: scale(0.96); }
+.album-card .ac-art { display: block; width: 100%; height: clamp(56px, 17vw, 84px); flex: 0 0 auto; }
+.album-card .ac-art svg { width: 100%; height: 100%; display: block; }
+.album-card .ac-name { display: block; font-size: 15px; line-height: 1.2; }
+.album-card .ac-en { display: block; font-size: 9.5px; line-height: 1.2; }
+.album-card .ac-stars { display: flex; justify-content: center; margin-top: auto; padding-bottom: 2px; }
+.album-card .ac-lock { top: 38%; }

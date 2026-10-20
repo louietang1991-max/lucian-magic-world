@@ -58,8 +58,10 @@
     arr.forEach((a) => {
       const rec = collected[a.id];
       const rar = window.RARITY[a.rarity] || window.RARITY[1];
-      const card = document.createElement('button');
+      const card = document.createElement('div');
       card.className = 'album-card' + (rec ? '' : ' locked');
+      card.setAttribute('role', 'button');
+      card.tabIndex = 0;
       card.style.setProperty('--rar', rar.color);
       card.innerHTML = `
         <span class="ac-rar"></span>
