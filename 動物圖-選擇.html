@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>動物圖 · P4 風格 × 3 seeds</title>
+<style>
+  :root { --ink:#2b2140; --ink2:#6b5b8a; --line:#e4dcf2; --accent:#7c4dff; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:18px 18px 60px; background:#faf8ff; color:var(--ink);
+    font-family:"PingFang HK","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif; line-height:1.5; font-size:13px; }
+  h1 { font-size:22px; margin:0 0 6px; }
+  .sub { color:var(--ink2); font-size:13px; margin-bottom:14px; }
+  .howto { background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px; font-size:12.5px; margin-bottom:18px; }
+  .howto b { color:var(--accent); }
+  .howto code { background:#f1ecff; padding:1px 6px; border-radius:5px; }
+  .row { background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px 12px; margin-bottom:12px; }
+  .row h2 { font-size:15px; margin:0 0 8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .row h2 .id { font-size:11px; color:#fff; background:var(--accent); border-radius:99px; padding:1px 9px; font-weight:700; }
+  .row h2 .loc { font-size:11px; color:var(--ink2); font-weight:600; }
+  .shots { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  figure { margin:0; }
+  figure img { width:100%; border-radius:10px; display:block; background:#eef; }
+  figcaption { font-size:11px; color:var(--ink2); text-align:center; margin-top:2px; }
+  .pick { text-align:center; font-size:11.5px; color:#8d7fab; }
+  .missing { display:grid; place-items:center; height:100%; min-height:120px; color:#b9adcf; font-size:12px; border:1px dashed var(--line); border-radius:10px; }
+  @media print { body { background:#fff; } .row { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<h1>動物圖 · P4 風格（跟 reference art）× 3 seeds</h1>
+<div class="sub">每隻動物出 3 個 seed，你揀邊個好（例如「蟹要 s2，獅子要 s1」），我就用嗰個做全套；唔講就用 s1。</div>
+<div class="howto">
+  <b>做法：</b>FLUX.2 Klein + 你 <code>reference art</code> 嘅蟹圖做 style reference；背景跟動物住嘅地方（沙灘／海面／海底／河流／森林／草原／沙漠／雪地）。<br>
+  <b>之後仲會做：</b>每隻動物再出一張「乾淨背景版」用嚟剪影（探索畫面嘅影子）＋ 102 個字詞圖。
+</div>
+<div id="list"></div>
+<script src="assets/js/data-animals.js"></script>
+<script>
+  const ANIMALS = window.ANIMAL_DATA;
+  const LOC = Object.fromEntries((window.LOCATIONS || []).map((l) => [l.id, l]));
+  const ready = {};
+  const list = document.getElementById('list');
+  ANIMALS.forEach((a) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<h2><span class="id">${a.zh} · ${a.id}</span><span class="loc">${(LOC[a.loc] || {}).emoji || ''} ${(LOC[a.loc] || {}).zh || a.loc}</span></h2>`;
+    const shots = document.createElement('div');
+    shots.className = 'shots';
+    for (let k = 1; k <= 3; k++) {
+      const fig = document.createElement('figure');
+      fig.innerHTML = `<img src="assets/img/animals/hero/${a.id}_s${k}.png" alt="${a.id} s${k}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'missing',textContent:'未生成'}))">
+        <figcaption>${a.id} · seed ${k}</figcaption>`;
+      shots.appendChild(fig);
+    }
+    row.appendChild(shots);
+    list.appendChild(row);
+  });
+</script>
+</body>
+</html>

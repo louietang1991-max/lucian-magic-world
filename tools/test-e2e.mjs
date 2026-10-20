@@ -178,12 +178,19 @@ async function main() {
     }
     assert(await page.evaluate(() => window.Feed.F.stage === 'ready'), '掟完生果 → 出節奏面板');
     assert(await page.evaluate(() => !document.getElementById('rhythm-ready').hidden), '見到「聽節拍 / 開始」兩個掣');
-    // 試「聽節拍」
+    // 試「聽節拍」（而家會先數 1、2、3 再示範）
     await page.evaluate(() => document.getElementById('rhythm-listen').click());
-    await sleep(900);
-    assert(await page.evaluate(() => window.Feed.F.stage === 'demo'), '撳「聽節拍」會示範一次');
+    await sleep(400);
+    assert(await page.evaluate(() => window.Feed.F.stage === 'count'), '聽節拍之前都會數 1、2、3');
     const tDemo = Date.now();
+    let demoSeen = false;
     while (Date.now() - tDemo < 12000) {
+      if (await page.evaluate(() => window.Feed.F.stage === 'demo')) { demoSeen = true; break; }
+      await sleep(120);
+    }
+    assert(demoSeen, '撳「聽節拍」會示範一次');
+    const tDemo2 = Date.now();
+    while (Date.now() - tDemo2 < 12000) {
       if (await page.evaluate(() => window.Feed.F.stage === 'ready')) break;
       await sleep(150);
     }

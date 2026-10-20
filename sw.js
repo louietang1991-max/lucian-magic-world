@@ -19,6 +19,7 @@ const CORE = [
   './assets/js/data-vocab.js',
   './assets/js/core.js',
   './assets/js/artwork.js',
+  './assets/js/ai-index.js',
   './assets/js/audio-manifest.js',
   './assets/js/audio.js',
   './assets/js/rhythm.js',

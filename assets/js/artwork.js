@@ -954,8 +954,33 @@
   const locIndex = {};
   (window.LOCATIONS || []).forEach((l) => (locIndex[l.id] = l));
 
+  /* ===== AI 圖（P4 風格）：有圖就用圖，冇就用 SVG ===== */
+  const AI = window.AI_INDEX || { heroes: {}, cutouts: [], items: {} };
+  const aiCut = new Set((AI.cutouts || []).map(String));
+
+  function aiHeroSrc(id) {
+    const arr = (AI.heroes || {})[id];
+    if (!arr || !arr.length) return null;
+    return arr[0]; // 預設用 seed 1
+  }
+  function aiCutoutSrc(id) {
+    if (!aiCut.has(id)) return null;
+    return 'assets/img/animals/cutout-webp/' + id + '.webp';
+  }
+  function aiImg(src, cls, alt) {
+    return '<img class="art ' + (cls || '') + '" src="' + src + '" alt="' + (alt || '') + '" draggable="false" loading="lazy">';
+  }
+
   function animal(id, opts) {
     opts = opts || {};
+    // 1) 要求 AI 圖
+    if (opts.kind === 'hero') {
+      const src = aiHeroSrc(id);
+      if (src) return aiImg(src, 'ai-hero', id);
+    } else {
+      const src = aiCutoutSrc(id);
+      if (src) return aiImg(src, 'ai-cutout' + (opts.shadow ? ' ai-shadow' : ''), id);
+    }
     const fn = ANIMALS[id] || ANIMALS.bear;
     S.shadow = !!opts.shadow;
     let inner;
@@ -968,7 +993,11 @@
     opts = opts || {};
     if (!it) return '';
     if (it.art && it.art.startsWith('animal:')) {
-      return animal(it.art.slice(7), opts);
+      return animal(it.art.slice(7), Object.assign({ kind: 'hero' }, opts));
+    }
+    // 題目圖：有 AI 圖就用（key = topic/index）
+    if (it._aiKey && AI.items && AI.items[it._aiKey]) {
+      return aiImg(AI.items[it._aiKey], 'ai-item', it.en || it.zh);
     }
     if (it.art && /^n\d+$/.test(it.art)) {
       // 數字：大大個數字 + 小圓點

@@ -65,13 +65,14 @@
       circle.style.left = g.cx - g.r + 'px';
       circle.style.top = g.cy - g.r + 'px';
     }
-    // 跟拍雙手：放喺圈圈左右上方
+    // 跟拍雙手：大隻、由左右下方包住圈圈
     const hands = document.querySelectorAll('#beat-hands .hand');
     if (hands.length >= 2) {
-      const hy = g.cy - g.r * 1.12;
-      hands[0].style.left = Math.max(4, g.cx - g.r * 1.05 - 46) + 'px';
+      const hw = Math.min(window.innerWidth * 0.42, 210);
+      const hy = g.cy - hw * 0.55;
+      hands[0].style.left = Math.max(-hw * 0.12, g.cx - g.r - hw * 0.82) + 'px';
       hands[0].style.top = hy + 'px';
-      hands[1].style.left = Math.min(window.innerWidth - 100, g.cx + g.r * 1.05 - 46) + 'px';
+      hands[1].style.left = Math.min(window.innerWidth - hw * 0.88, g.cx + g.r - hw * 0.18) + 'px';
       hands[1].style.top = hy + 'px';
     }
     const animal = $('#feed-animal');
@@ -322,17 +323,18 @@
   /** 聽節拍：示範一次（唔計分） */
   function listenBeat() {
     if (F.stage !== 'ready') return;
-    F.stage = 'demo';
     F.demo = true;
     setReadyButtons(true);
-    A().play('p/zh-HK/listen-beat');
-    const hint = $('#feed-hint');
-    if (hint) hint.textContent = '聽下個拍子…';
     const p = F.pattern;
     renderDots();
-    later(() => {
+    // 聽節拍之前都數 1、2、3，等小朋友知幾時開始
+    runCountIn(() => {
       if (F.stage === 'done') return;
-      if (F.stage !== 'demo') { F.demo = false; return; }
+      if (!F.demo) return;
+      F.stage = 'demo';
+      A().play('p/zh-HK/listen-beat');
+      const hint = $('#feed-hint');
+      if (hint) hint.textContent = '聽下個拍子…';
       const ok = window.Metro.start({
         bpm: p.bpm,
         countIn: 0,
@@ -342,13 +344,14 @@
         onEnd: () => {
           F.demo = false;
           F.stage = 'ready';
+          setStage('ready');
           setReadyButtons(false);
           const h = $('#feed-hint');
           if (h) h.textContent = '準備好就撳「開始」！';
         },
       });
       if (!ok) { F.demo = false; F.stage = 'ready'; setReadyButtons(false); }
-    }, 1000);
+    });
   }
 
   function onDemoBeat(i) {
@@ -367,10 +370,11 @@
     }
   }
 
-  /** 開始：數 1、2、3 先正式開始 */
-  function startBeats() {
-    if (F.stage !== 'ready') return;
+  /** 共用：數 1、2、3 之後再開始（cb 係數完之後要做嘅事） */
+  function runCountIn(cb) {
     F.stage = 'count';
+    F.countToken = (F.countToken || 0) + 1;
+    const token = F.countToken;
     const panel = $('#rhythm-ready');
     if (panel) panel.hidden = true;
     setStage('beat');
@@ -380,20 +384,26 @@
     const nums = ['1', '2', '3'];
     nums.forEach((n, i) => {
       later(() => {
-        if (F.stage === 'done') return;
+        if (F.stage === 'done' || token !== F.countToken) return;
         showCount(n);
         A().countIn(i === 0 ? 1 : 2);
         slamHands();
       }, i * 640);
     });
     later(() => {
-      if (F.stage === 'done') return;
+      if (F.stage === 'done' || token !== F.countToken) return;
       showCount('開始！');
     }, nums.length * 640);
     later(() => {
-      if (F.stage === 'done') return;
-      beginMetro();
+      if (F.stage === 'done' || token !== F.countToken) return;
+      cb();
     }, nums.length * 640 + 720);
+  }
+
+  /** 開始：數 1、2、3 先正式開始 */
+  function startBeats() {
+    if (F.stage !== 'ready') return;
+    runCountIn(() => beginMetro());
   }
 
   function beginMetro() {
@@ -552,7 +562,7 @@
       rb.classList.toggle('legend', a.rarity >= 3);
     }
     const art = $('#reveal-art');
-    if (art) art.innerHTML = window.Art.animal(a.id);
+    if (art) art.innerHTML = window.Art.animal(a.id, { kind: 'hero' });
     const nm = $('#reveal-name');
     if (nm) nm.textContent = a.zh;
     const en = $('#reveal-en');
