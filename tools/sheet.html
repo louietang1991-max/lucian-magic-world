@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animals sheet</title>
+<link rel="stylesheet" href="../assets/css/theme.css">
+<style>
+  body { overflow: auto; position: static; background: #fff; padding: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .cell { border: 1px solid #ddd; border-radius: 10px; text-align: center; font: 10px/1.2 system-ui; padding: 3px; background: #fff; }
+  .cell svg { width: 100%; height: auto; display: block; }
+  .shadow svg { filter: brightness(0) opacity(.85); background: #ffe9b8; }
+  .items { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<h3 style="font:14px system-ui">Animals (35)</h3>
+<div class="grid" id="grid"></div>
+<h3 style="font:14px system-ui">Shadows</h3>
+<div class="grid" id="grid2"></div>
+<h3 style="font:14px system-ui">Items</h3>
+<div class="items" id="grid3"></div>
+<script src="../assets/js/data-animals.js"></script>
+<script src="../assets/js/data-vocab.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/artwork.js"></script>
+<script>
+  const g = document.getElementById('grid');
+  const g2 = document.getElementById('grid2');
+  const g3 = document.getElementById('grid3');
+  for (const a of window.ANIMAL_DATA) {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.innerHTML = window.Art.animal(a.id) + '<div>' + a.zh + ' 繚 ' + a.en + '</div>';
+    g.appendChild(c);
+    const c2 = document.createElement('div');
+    c2.className = 'cell shadow';
+    c2.innerHTML = window.Art.animal(a.id, { shadow: true }) + '<div>' + a.id + '</div>';
+    g2.appendChild(c2);
+  }
+  const allItems = [];
+  for (const [tid, t] of Object.entries(window.VOCAB)) t.items.forEach((it, i) => allItems.push({ ...it, tid, i }));
+  for (const it of allItems) {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.innerHTML = window.Art.item(it) + '<div>' + it.art + '</div>';
+    g3.appendChild(c);
+  }
+</script>
+</body>
+</html>

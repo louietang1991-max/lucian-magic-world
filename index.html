@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#2a1b4a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="description" content="Lucian 的魔法世界 — 為 3 歲小朋友而設的中英普學習遊戲：聽音揀圖、玩動物餵食節奏遊戲、儲動物圖鑑。" />
+<title>Lucian 的魔法世界</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/img/icon-180.png" />
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="assets/css/theme.css" />
+<link rel="stylesheet" href="assets/css/layout.css" />
+<link rel="stylesheet" href="assets/css/games.css" />
+<link rel="stylesheet" href="assets/css/feed.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- =============================== 開機載入 =============================== -->
+  <section class="screen active" id="screen-boot">
+    <div class="boot">
+      <div class="boot-sun"></div>
+      <img class="boot-logo" src="assets/img/logo.svg" alt="Lucian 的魔法世界" />
+      <div class="boot-text">Lucian 的魔法世界</div>
+      <div class="boot-bar"><i></i></div>
+      <button class="boot-go" id="btn-boot-start" hidden>開始遊戲 ▸</button>
+    </div>
+  </section>
+
+  <!-- ================================= 主頁 ================================= -->
+  <section class="screen" id="screen-home">
+    <div class="home-bg">
+      <span class="floaty f1">⭐</span><span class="floaty f2">🍎</span><span class="floaty f3">🌟</span>
+      <span class="floaty f4">🍓</span><span class="floaty f5">✨</span><span class="floaty f6">🍇</span>
+    </div>
+    <div class="home-top">
+      <div class="fruit-pill" id="home-fruits" title="魔法生果">
+        <span class="fruit-ico">🍎</span><span class="fruit-val" id="home-fruit-val">0</span>
+      </div>
+      <button class="icon-btn gear" id="btn-settings" aria-label="設定">⚙️</button>
+    </div>
+    <div class="home-hero">
+      <img class="home-logo" src="assets/img/logo.svg" alt="" />
+      <h1 class="home-title">Lucian 的<br>魔法世界</h1>
+      <p class="home-sub" id="home-greeting">一齊學中英普，餵動物食魔法生果！</p>
+    </div>
+    <div class="home-menu">
+      <button class="big-card card-learn" data-go="learn">
+        <span class="bc-ico">📚</span>
+        <span class="bc-title">學習小遊戲</span>
+        <span class="bc-sub">聽聲音學字詞</span>
+      </button>
+      <button class="big-card card-explore" data-go="explore">
+        <span class="bc-ico">🔭</span>
+        <span class="bc-title">尋找動物</span>
+        <span class="bc-sub">去 8 個地方探險</span>
+      </button>
+    </div>
+    <div class="home-bottom">
+      <button class="round-action" data-go="album">
+        <span class="ra-ico">📖</span><span>動物圖鑑</span>
+        <span class="ra-badge" id="album-badge">0/35</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============================== 學習：選單 ============================== -->
+  <section class="screen" id="screen-learn">
+    <header class="topbar">
+      <button class="icon-btn back" data-back="home" aria-label="返去">◀</button>
+      <h2 class="topbar-title">學習小遊戲</h2>
+      <div class="fruit-pill small"><span class="fruit-ico">🍎</span><span class="fruit-val" data-fruit-val>0</span></div>
+    </header>
+    <div class="learn-body">
+      <p class="learn-hint">揀一個遊戲玩啦！</p>
+      <div class="game-list">
+        <button class="game-row" data-quiz="A">
+          <span class="gr-icon gr-a">🔊</span>
+          <span class="gr-txt"><b>聽聲音，揀圖案</b><small>聽粵語 / 英語 / 普通話，揀正確圖片</small></span>
+          <span class="gr-play">▶</span>
+        </button>
+        <button class="game-row" data-quiz="B">
+          <span class="gr-icon gr-b">🖼️</span>
+          <span class="gr-txt"><b>睇圖案，揀字詞</b><small>睇圖片，揀正確嘅中文字 / 英文字</small></span>
+          <span class="gr-play">▶</span>
+        </button>
+        <button class="game-row" data-quiz="C">
+          <span class="gr-icon gr-c">🔤</span>
+          <span class="gr-txt"><b>睇字詞，揀圖案</b><small>睇中文字 / 英文字，揀正確圖片</small></span>
+          <span class="gr-play">▶</span>
+        </button>
+      </div>
+      <div class="topic-preview" id="learn-topics"></div>
+    </div>
+  </section>
+
+  <!-- =============================== 答題畫面 =============================== -->
+  <section class="screen" id="screen-quiz">
+    <header class="topbar quiz-top">
+      <button class="icon-btn back" data-quiz-quit aria-label="離開">✕</button>
+      <div class="quiz-progress"><div class="qp-dots" id="quiz-dots"></div></div>
+      <div class="fruit-pill small"><span class="fruit-ico">🍎</span><span class="fruit-val" data-fruit-val>0</span></div>
+    </header>
+    <div class="quiz-stage">
+      <div class="quiz-prompt" id="quiz-prompt">
+        <button class="speaker-btn" id="quiz-speaker" aria-label="再聽一次">
+          <span class="sp-ico">🔊</span><span class="sp-ring"></span><span class="sp-ring d2"></span>
+        </button>
+        <div class="prompt-text" id="quiz-prompt-text"></div>
+        <div class="prompt-sub" id="quiz-prompt-sub"></div>
+      </div>
+      <div class="answers" id="quiz-answers"></div>
+    </div>
+    <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+  </section>
+
+  <!-- ============================ 學習：小結算 ============================ -->
+  <section class="screen" id="screen-result">
+    <div class="result-wrap">
+      <div class="result-stars" id="result-stars"></div>
+      <h2 class="result-title" id="result-title">好叻呀！</h2>
+      <p class="result-sub" id="result-sub"></p>
+      <div class="fruit-haul" id="result-fruits"></div>
+      <button class="btn primary big" id="result-again">再玩一次</button>
+      <button class="btn ghost big" data-go="learn">揀第二個遊戲</button>
+    </div>
+  </section>
+
+  <!-- ============================== 探索：地圖 ============================== -->
+  <section class="screen" id="screen-explore">
+    <header class="topbar">
+      <button class="icon-btn back" data-back="home" aria-label="返去">◀</button>
+      <h2 class="topbar-title">去邊度探險？</h2>
+      <div class="fruit-pill small"><span class="fruit-ico">🍎</span><span class="fruit-val" data-fruit-val>0</span></div>
+    </header>
+    <div class="map-body">
+      <p class="map-hint">撳一個地方，去搵動物嘅影子！</p>
+      <div class="map-grid" id="map-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================= 探索：地點場景 ============================= -->
+  <section class="screen" id="screen-place">
+    <div class="scene" id="place-scene">
+      <div class="scene-deco" id="place-deco"></div>
+      <div class="scene-shadows" id="place-shadows"></div>
+      <div class="scene-hint" id="place-hint">用手指掃一掃，撥開啲沙⋯</div>
+    </div>
+    <header class="floating-bar">
+      <button class="icon-btn back" data-back="explore" aria-label="返去">◀</button>
+      <div class="place-name" id="place-name">沙灘</div>
+      <div class="place-count" id="place-count">0/4</div>
+    </header>
+  </section>
+
+  <!-- ============================= 餵食 + 節奏 ============================= -->
+  <section class="screen" id="screen-feed">
+    <canvas id="feed-canvas"></canvas>
+    <div class="feed-animal" id="feed-animal">
+      <div class="fa-art" id="feed-animal-art"></div>
+      <div class="fa-name" id="feed-animal-name"></div>
+    </div>
+    <button class="feed-circle" id="feed-circle" aria-label="圈圈"><span class="fc-shine"></span><span class="fc-label" id="fc-label"></span></button>
+    <header class="floating-bar">
+      <button class="icon-btn back" id="feed-quit" aria-label="返去">◀</button>
+      <div class="feed-title" id="feed-title">餵動物啦！</div>
+      <div class="fruit-pill small"><span class="fruit-ico">🍎</span><span class="fruit-val" data-fruit-val>0</span></div>
+    </header>
+    <div class="feed-tip" id="feed-tip"></div>
+    <div class="basket" id="feed-basket">
+      <div class="basket-fruits" id="basket-fruits"></div>
+      <div class="basket-count"><span id="basket-num">3</span><small>剩低</small></div>
+    </div>
+    <div class="feed-foot" id="feed-foot">
+      <div class="beat-dots" id="beat-dots"></div>
+      <div class="feed-hint" id="feed-hint">將魔法生果掟入圈圈！</div>
+    </div>
+  </section>
+
+  <!-- =============================== 獎勵卡 =============================== -->
+  <section class="screen" id="screen-reveal">
+    <div class="reveal-bg" id="reveal-bg"></div>
+    <div class="reveal-card">
+      <div class="reveal-rarity" id="reveal-rarity"></div>
+      <div class="reveal-art" id="reveal-art"></div>
+      <div class="reveal-name" id="reveal-name"></div>
+      <div class="reveal-en" id="reveal-en"></div>
+      <div class="reveal-stars" id="reveal-stars"></div>
+      <div class="reveal-score" id="reveal-score"></div>
+      <div class="reveal-facts" id="reveal-facts"></div>
+      <div class="reveal-actions">
+        <button class="btn primary" id="reveal-next">繼續</button>
+        <button class="btn ghost" id="reveal-again">再餵一次</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================== 圖鑑 =============================== -->
+  <section class="screen" id="screen-album">
+    <header class="topbar">
+      <button class="icon-btn back" data-back="home" aria-label="返去">◀</button>
+      <h2 class="topbar-title">動物圖鑑</h2>
+      <div class="album-progress" id="album-progress">0/35</div>
+    </header>
+    <div class="album-tabs" id="album-tabs"></div>
+    <div class="album-grid" id="album-grid"></div>
+  </section>
+
+  <!-- =============================== 設定 =============================== -->
+  <section class="screen" id="screen-settings">
+    <header class="topbar">
+      <button class="icon-btn back" data-back="home" aria-label="返去">◀</button>
+      <h2 class="topbar-title">設定（家長用）</h2>
+      <div style="width:44px"></div>
+    </header>
+    <div class="settings-body" id="settings-body">
+      <div class="set-lock" id="set-lock">
+        <div class="lock-emoji">🔒</div>
+        <p>呢度俾家長用，請先答啱：</p>
+        <div class="lock-q" id="lock-q"></div>
+        <div class="lock-options" id="lock-options"></div>
+      </div>
+      <div class="set-content" id="set-content" hidden>
+        <div class="set-group">
+          <h3>題目庫（學習遊戲用）</h3>
+          <div class="chips" id="set-topics"></div>
+          <p class="set-note">可以揀多個主題；「動物」會用第二部分嘅動物。</p>
+        </div>
+        <div class="set-group">
+          <h3>發音語言</h3>
+          <div class="seg" id="set-speak">
+            <button data-v="yue">粵語</button><button data-v="man">普通話</button><button data-v="en">English</button>
+          </div>
+        </div>
+        <div class="set-group">
+          <h3>文字語言（遊戲 2 / 3）</h3>
+          <div class="seg" id="set-text">
+            <button data-v="zh">中文</button><button data-v="en">English</button>
+          </div>
+        </div>
+        <div class="set-group">
+          <h3>語速 <span class="set-val" id="set-rate-val">0.9x</span></h3>
+          <input type="range" id="set-rate" min="0.6" max="1.2" step="0.05" />
+        </div>
+        <div class="set-group">
+          <h3>節奏速度 <span class="set-val" id="set-tempo-val">90 BPM</span></h3>
+          <input type="range" id="set-tempo" min="60" max="120" step="5" />
+        </div>
+        <div class="set-group">
+          <h3>開關</h3>
+          <label class="switch-row"><span>音效</span><input type="checkbox" id="set-sfx" /></label>
+          <label class="switch-row"><span>答啱自動去下一題</span><input type="checkbox" id="set-autonext" /></label>
+          <label class="switch-row"><span>輕鬆模式（答錯可以再試）</span><input type="checkbox" id="set-easy" /></label>
+        </div>
+        <div class="set-group">
+          <h3>進度</h3>
+          <p class="set-note" id="set-progress-note"></p>
+          <button class="btn danger" id="set-reset">清除所有進度</button>
+        </div>
+        <div class="set-group">
+          <h3>關於</h3>
+          <p class="set-note">Lucian 的魔法世界 v1.0 · 為 3 歲小朋友而設<br>所有圖案由 SVG 手繪，語音係預先合成嘅音檔，支援離線玩（第二次開始）。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="layer-popup" class="layer"></div>
+  <div id="layer-toast" class="layer"></div>
+  <div id="rotate-hint"><div class="rh-inner"><span>📱</span><p>請將手機打直玩</p></div></div>
+</div>
+
+<script src="assets/js/debug-trap.js"></script>
+<script src="assets/js/data-animals.js"></script>
+<script src="assets/js/data-vocab.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/artwork.js"></script>
+<script src="assets/js/audio-manifest.js"></script>
+<script src="assets/js/audio.js"></script>
+<script src="assets/js/rhythm.js"></script>
+<script src="assets/js/screen-home.js"></script>
+<script src="assets/js/screen-settings.js"></script>
+<script src="assets/js/screen-learn.js"></script>
+<script src="assets/js/screen-explore.js"></script>
+<script src="assets/js/screen-feed.js"></script>
+<script src="assets/js/screen-album.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/screen-boot.js"></script>
+</body>
+</html>

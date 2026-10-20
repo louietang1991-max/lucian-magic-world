@@ -1,0 +1,484 @@
+/* =========================================================================
+ *  games.css — 餵食節奏遊戲、獎勵卡、圖鑑、設定、場景主題
+ * ========================================================================= */
+
+/* ------------------------------------------------------------- 場景主題 */
+.scene-deco, .reveal-bg { transition: background 0.5s; }
+
+/* 沙灘 */
+.theme-beach-bg {
+  background: linear-gradient(180deg, #ffd89b 0%, #ffc07a 30%, #ffe9b8 42%, #f4d9a0 52%, #eccb8b 100%);
+}
+.beach-sky { position: absolute; inset: 0 0 42% 0; background: linear-gradient(180deg, #7ec8f0, #bfe6ff 70%, #ffe9c9); }
+.beach-sun { position: absolute; left: 50%; top: 54px; width: 76px; height: 76px; margin-left: -38px; border-radius: 50%; background: radial-gradient(circle, #ffe9a8, #ffcc4d); box-shadow: 0 0 60px 20px rgba(255, 210, 90, 0.55); }
+.beach-sea { position: absolute; left: 0; right: 0; top: 40%; height: 14%; background: linear-gradient(180deg, #6fd0e8, #3aa8c8); }
+.beach-sea::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 26px;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.75) 0 18px, transparent 18px 40px);
+  border-radius: 50%; opacity: .8; animation: waveMove 3s linear infinite;
+}
+@keyframes waveMove { to { transform: translateX(-40px) } }
+.beach-sand { position: absolute; left: 0; right: 0; bottom: 0; height: 54%; background: linear-gradient(180deg, #f8e3b0, #e8c98a 60%, #d9b673); }
+.beach-sand::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(180,140,80,.35) 1.5px, transparent 1.5px);
+  background-size: 22px 22px; opacity: .5;
+}
+.palm { position: absolute; bottom: 40%; width: 8px; height: 90px; background: #a9713f; border-radius: 4px; transform-origin: bottom center; }
+.palm::before {
+  content: ""; position: absolute; left: 50%; top: -14px; width: 90px; height: 60px; transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse 40px 14px at 20% 60%, #3e8e41 60%, transparent 62%),
+    radial-gradient(ellipse 40px 14px at 80% 60%, #3e8e41 60%, transparent 62%),
+    radial-gradient(ellipse 40px 14px at 50% 30%, #4caf50 60%, transparent 62%);
+}
+
+/* 海面 */
+.theme-sea-bg { background: linear-gradient(180deg, #8ee4ff 0%, #57c4f0 26%, #2a9dd8 45%, #1a6fa8 100%); }
+.sea-sun { position: absolute; right: 44px; top: 60px; width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(circle, #fff6c9, #ffd166); box-shadow: 0 0 70px 24px rgba(255, 220, 120, 0.5); }
+.sea-wave { position: absolute; left: -10%; width: 120%; height: 90px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); }
+.sea-boat { position: absolute; left: 50%; bottom: 52%; transform: translateX(-50%); animation: boatBob 3.4s ease-in-out infinite; }
+@keyframes boatBob { 0%,100%{transform:translateX(-50%) translateY(0) rotate(-1.5deg)} 50%{transform:translateX(-50%) translateY(-9px) rotate(1.5deg)} }
+
+/* 海底 */
+.theme-underwater-bg { background: linear-gradient(180deg, #62d0f7 0%, #2f9fd6 22%, #1565c0 55%, #0b3d91 100%); }
+.uw-ray { position: absolute; top: -10%; width: 90px; height: 130%; background: linear-gradient(180deg, rgba(255,255,255,.4), transparent 75%); transform-origin: top center; filter: blur(3px); animation: raySway 5s ease-in-out infinite alternate; }
+@keyframes raySway { from { transform: rotate(-8deg) scaleX(1) } to { transform: rotate(8deg) scaleX(1.25) } }
+.uw-bubble { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,.6); background: rgba(255,255,255,.14); animation: bubbleUp linear infinite; }
+@keyframes bubbleUp { from { transform: translateY(0) scale(.7); opacity: 0 } 15%{opacity:.9} to { transform: translateY(-70vh) scale(1.15); opacity: 0 } }
+.uw-weed { position: absolute; bottom: -10px; width: 20px; height: 150px; border-radius: 50% 50% 10px 10px; background: linear-gradient(180deg, #43aa8b, #1b7a5a); transform-origin: bottom center; animation: weedSway 3.6s ease-in-out infinite alternate; }
+@keyframes weedSway { from { transform: rotate(-7deg) } to { transform: rotate(7deg) } }
+.uw-sand { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(180deg, #2b6fa8, #14497a); border-radius: 50% 50% 0 0 / 40px 40px 0 0; }
+
+/* 河流 */
+.theme-river-bg { background: linear-gradient(180deg, #cdefff 0%, #8fd8c0 26%, #4caf50 48%, #2e7d32 100%); }
+.river-water { position: absolute; left: -6%; right: -6%; bottom: 6%; height: 44%; border-radius: 46% 46% 0 0; background: linear-gradient(180deg, #7fd8f0, #3aa8c8 60%, #1f7a9c); }
+.river-bank { position: absolute; left: -6%; right: -6%; bottom: 0; height: 16%; background: linear-gradient(180deg, #8ac926, #4c9a2a); border-radius: 46% 46% 0 0; }
+.river-tree { position: absolute; bottom: 16%; width: 0; height: 0; }
+.river-tree i {
+  position: absolute; left: 50%; bottom: 0; width: 16px; height: 90px; background: #7a4a1f; transform: translateX(-50%); border-radius: 6px;
+}
+.river-tree b {
+  position: absolute; left: 50%; bottom: 74px; width: 120px; height: 120px; transform: translateX(-50%);
+  border-radius: 46% 54% 48% 52% / 52% 46% 54% 48%; background: radial-gradient(circle at 40% 35%, #63c26b, #2e7d32);
+}
+.reed { position: absolute; bottom: 14%; width: 6px; height: 90px; background: linear-gradient(180deg, #9ccc65, #558b2f); border-radius: 4px; transform-origin: bottom center; animation: weedSway 3s ease-in-out infinite alternate; }
+
+/* 森林 */
+.theme-forest-bg { background: linear-gradient(180deg, #b9e3a0 0%, #7cc47f 25%, #3e8e41 55%, #20512a 100%); }
+.forest-tree { position: absolute; bottom: 8%; transform-origin: bottom center; }
+.forest-tree i { position: absolute; left: 50%; bottom: 0; width: 18px; height: 120px; background: #6b4423; transform: translateX(-50%); border-radius: 6px; }
+.forest-tree b { position: absolute; left: 50%; width: 150px; height: 150px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle at 38% 32%, #7bd16b, #2e7d32); }
+.forest-tree b:nth-child(2) { bottom: 86px; }
+.forest-tree b:nth-child(3) { bottom: 130px; width: 112px; height: 112px; }
+.forest-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 16%; background: linear-gradient(180deg, #558b2f, #33691e); }
+.firefly { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #ffe97a; box-shadow: 0 0 14px 5px rgba(255, 233, 122, 0.75); animation: fireflyFloat 4s ease-in-out infinite; }
+@keyframes fireflyFloat { 0%,100%{transform:translate(0,0); opacity:.5} 50%{transform:translate(18px,-22px); opacity:1} }
+
+/* 草原 */
+.theme-grass-bg { background: linear-gradient(180deg, #cdefff 0%, #ffe9a8 34%, #e3d05c 44%, #c8b23a 62%, #9a8c1f 100%); }
+.grass-sun { position: absolute; left: 30px; top: 46px; width: 66px; height: 66px; border-radius: 50%; background: radial-gradient(circle, #fff3b0, #ffca3a); box-shadow: 0 0 60px 22px rgba(255, 202, 58, 0.45); }
+.grass-hill { position: absolute; left: -10%; right: -10%; border-radius: 50%; background: #b8a62c; }
+.acacia { position: absolute; bottom: 22%; }
+.acacia i { position: absolute; left: 50%; bottom: 0; width: 12px; height: 100px; background: #6b4423; transform: translateX(-50%); }
+.acacia b { position: absolute; left: 50%; bottom: 92px; width: 170px; height: 46px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse at 50% 30%, #7cb342, #33691e); }
+
+/* 沙漠 */
+.theme-desert-bg { background: linear-gradient(180deg, #ffd08a 0%, #ffb35c 30%, #e8904a 52%, #c96f2e 75%, #a85a24 100%); }
+.desert-sun { position: absolute; left: 50%; top: 66px; margin-left: -34px; width: 68px; height: 68px; border-radius: 50%; background: radial-gradient(circle, #fff1c9, #ffb347); box-shadow: 0 0 70px 26px rgba(255, 170, 70, 0.55); }
+.dune { position: absolute; left: -14%; width: 128%; height: 40%; border-radius: 50%; background: linear-gradient(180deg, #f0b06a, #d98f4a); }
+.cactus { position: absolute; bottom: 18%; width: 26px; height: 100px; border-radius: 14px; background: linear-gradient(90deg, #4caf50, #2e7d32); }
+.cactus::before, .cactus::after { content: ""; position: absolute; width: 18px; height: 40px; border-radius: 10px; background: #43a047; }
+.cactus::before { left: -18px; bottom: 28px; }
+.cactus::after { right: -18px; bottom: 44px; }
+
+/* 雪地 */
+.theme-snow-bg { background: linear-gradient(180deg, #b9d9f0 0%, #dff3ff 34%, #f4fbff 58%, #e4f2fb 100%); }
+.snow-star { position: absolute; color: #fff; font-size: 20px; opacity: .9; animation: twinkle 3s ease-in-out infinite alternate; }
+.snow-hill { position: absolute; left: -12%; width: 124%; height: 46%; border-radius: 50%; background: linear-gradient(180deg, #ffffff, #d8e9f5); }
+.aurora {
+  position: absolute; left: -20%; right: -20%; top: 4%; height: 30%;
+  background: linear-gradient(100deg, rgba(120,255,200,.0), rgba(120,255,200,.5), rgba(140,180,255,.45), rgba(255,140,220,.0));
+  filter: blur(16px); transform: skewY(-6deg); animation: auroraShift 7s ease-in-out infinite alternate;
+}
+@keyframes auroraShift { from { transform: skewY(-8deg) translateX(-20px); opacity: .7 } to { transform: skewY(-2deg) translateX(20px); opacity: 1 } }
+.snow-pine { position: absolute; bottom: 16%; }
+.snow-pine i { position: absolute; left: 50%; bottom: 0; width: 10px; height: 40px; background: #6b4423; transform: translateX(-50%); }
+.snow-pine b { position: absolute; left: 50%; bottom: 30px; width: 0; height: 0; transform: translateX(-50%); border-left: 42px solid transparent; border-right: 42px solid transparent; border-bottom: 78px solid #2e5c3a; }
+.snow-pine b:nth-child(3) { bottom: 74px; border-left-width: 34px; border-right-width: 34px; border-bottom-width: 62px; }
+.snow-pine b::after { content: ""; position: absolute; left: -24px; top: 0; width: 48px; height: 30px; background: #fff; border-radius: 50%; opacity: .85; }
+
+/* --------------------------------------------------------------- 餵食畫面 */
+#screen-feed .floating-bar { position: absolute; left: 0; right: 0; top: 0; }
+.feed-tip {
+  position: absolute;
+  left: 50%;
+  top: 76px;
+  transform: translateX(-50%);
+  background: rgba(20, 12, 40, 0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 9px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+  z-index: 6;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.feed-tip.show { opacity: 1; }
+.basket {
+  position: absolute;
+  left: 50%;
+  bottom: calc(84px + var(--safe-b));
+  transform: translateX(-50%);
+  width: 168px;
+  height: 96px;
+  z-index: 8;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+}
+.basket:active { cursor: grabbing; }
+.basket .basket-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffe9a8, #ffc93c);
+  box-shadow: 0 6px 0 #c98a00, 0 12px 24px rgba(0, 0, 0, 0.3);
+  color: #6b4400;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 1;
+  transition: transform 0.12s var(--ease-bounce);
+}
+.basket .basket-count small { font-size: 11px; font-weight: 800; letter-spacing: .06em; }
+.basket.empty .basket-count { opacity: 0.55; }
+.basket.shake .basket-count { animation: shake 0.4s; }
+.basket-hint {
+  position: absolute;
+  bottom: calc(196px + var(--safe-b));
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(20, 12, 40, 0.5);
+  padding: 7px 16px;
+  border-radius: 999px;
+  pointer-events: none;
+  animation: hintBreath 2s ease-in-out infinite;
+  white-space: nowrap;
+  z-index: 7;
+}
+.feed-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(12px + var(--safe-b));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 7;
+  pointer-events: none;
+}
+.feed-hint { color: #fff; font-size: 15px; font-weight: 800; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); text-align: center; padding: 0 20px; }
+.beat-dots { display: flex; gap: 10px; align-items: center; }
+.beat-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: transform 0.12s, background 0.12s;
+}
+.beat-dot.on { background: var(--gold); box-shadow: 0 0 14px 4px rgba(255, 201, 60, 0.6); }
+.beat-dot.hit { background: var(--mint); }
+.beat-dot.count { background: rgba(176, 107, 255, 0.8); }
+.beat-dot.now { transform: scale(1.5); }
+
+/* 分數彈出 */
+.fly-score {
+  position: absolute;
+  z-index: 9;
+  font-size: 34px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.3), 0 0 18px rgba(255, 210, 100, 0.9);
+  pointer-events: none;
+  animation: flyScore 1s ease-out forwards;
+}
+@keyframes flyScore { 0%{transform:translate(-50%,-50%) scale(.6); opacity:0} 25%{transform:translate(-50%,-80%) scale(1.25); opacity:1} 100%{transform:translate(-50%,-180%) scale(1); opacity:0} }
+.rating-bubble {
+  position: absolute;
+  z-index: 9;
+  font-size: 30px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  animation: flyScore 1.1s ease-out forwards;
+}
+
+/* --------------------------------------------------------------- 獎勵卡 */
+#screen-reveal { background: #1c1235; align-items: center; justify-content: center; }
+.reveal-bg { position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 30%, #6b4bb0 0%, #2f2055 55%, #150e28 100%); }
+.reveal-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 74% 22%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 40% 70%, #fff9, transparent),
+    radial-gradient(2px 2px at 86% 62%, #fff8, transparent),
+    radial-gradient(1.5px 1.5px at 12% 78%, #fff7, transparent);
+  animation: twinkle 3s ease-in-out infinite alternate;
+}
+.reveal-card {
+  position: relative;
+  z-index: 2;
+  width: min(92vw, 440px);
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  background: linear-gradient(180deg, #fffdf8, #fff3e0);
+  border-radius: 34px;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 2px 0 #fff;
+  animation: revealIn 0.5s var(--ease-bounce) both;
+}
+@keyframes revealIn { from { transform: scale(0.7) translateY(40px); opacity: 0 } to { transform: none; opacity: 1 } }
+.reveal-rarity {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--rar, #7ed957);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+  letter-spacing: .06em;
+}
+.reveal-rarity.legend { animation: legendGlow 1.4s ease-in-out infinite alternate; }
+@keyframes legendGlow { from { box-shadow: 0 3px 0 rgba(0,0,0,.18), 0 0 0 rgba(255,179,0,0) } to { box-shadow: 0 3px 0 rgba(0,0,0,.18), 0 0 26px 8px rgba(255,179,0,.6) } }
+.reveal-art { width: min(64vw, 260px); height: min(64vw, 260px); margin-top: 6px; }
+.reveal-art svg { width: 100%; height: 100%; animation: artIn 0.6s 0.1s var(--ease-bounce) both; }
+@keyframes artIn { from { transform: scale(0.4) rotate(-12deg); opacity: 0 } to { transform: none; opacity: 1 } }
+.reveal-name { font-family: var(--font-han); font-size: 42px; font-weight: 900; color: #3d2a6b; line-height: 1.1; letter-spacing: .06em; }
+.reveal-en { font-size: 19px; font-weight: 900; color: #8d7fab; letter-spacing: .08em; text-transform: uppercase; }
+.reveal-stars .star { width: 38px; height: 38px; }
+.reveal-score { font-size: 15px; font-weight: 800; color: #a08fc0; }
+.reveal-facts { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.fact-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 18px;
+  padding: 11px 14px;
+  box-shadow: 0 3px 0 rgba(120, 90, 180, 0.13);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.42;
+  color: #4a3670;
+  text-align: left;
+  animation: factIn 0.4s var(--ease-bounce) both;
+}
+.fact-row .fr-ico { font-size: 19px; flex: 0 0 auto; }
+.fact-row.locked { color: #b9adcf; background: #f6f1ff; box-shadow: none; }
+@keyframes factIn { from { transform: translateY(14px); opacity: 0 } to { transform: none; opacity: 1 } }
+.reveal-actions { display: flex; gap: 10px; width: 100%; margin-top: 10px; }
+.reveal-actions .btn { flex: 1; min-height: 56px; font-size: 18px; padding: 0 10px; }
+.reveal-newtag {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #fff;
+  background: var(--rose);
+  padding: 4px 12px;
+  border-radius: 999px;
+  animation: bump 1.2s infinite;
+  letter-spacing: .08em;
+}
+
+/* --------------------------------------------------------------- 圖鑑 */
+.album-tabs { display: flex; gap: 8px; padding: 0 14px 10px; overflow-x: auto; flex: 0 0 auto; -webkit-overflow-scrolling: touch; }
+.album-tabs::-webkit-scrollbar { display: none; }
+.album-tab {
+  flex: 0 0 auto;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #6a4fa8;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 rgba(120, 90, 180, 0.16);
+  white-space: nowrap;
+}
+.album-tab.on { background: #7c4dff; color: #fff; box-shadow: 0 3px 0 #5a2fd0; }
+.album-progress { font-size: 15px; font-weight: 900; color: #6a4fa8; background: #fff; padding: 8px 14px; border-radius: 999px; box-shadow: 0 3px 0 rgba(120,90,180,.16); }
+.album-grid { flex: 1; overflow-y: auto; padding: 0 14px 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-content: start; }
+.album-card {
+  position: relative;
+  border-radius: 20px;
+  background: #fff;
+  padding: 8px 6px 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 0 rgba(120, 90, 180, 0.16);
+  border: 3px solid var(--rar, #ddd);
+  overflow: hidden;
+}
+.album-card .ac-art { width: 100%; aspect-ratio: 1; }
+.album-card .ac-art svg { width: 100%; height: 100%; }
+.album-card.locked .ac-art svg { filter: brightness(0) opacity(.16); }
+.album-card.locked { background: #f4efff; }
+.album-card .ac-name { font-family: var(--font-han); font-size: 15px; font-weight: 900; color: #3d2a6b; white-space: nowrap; }
+.album-card .ac-en { font-size: 9.5px; font-weight: 800; color: #a08fc0; text-transform: uppercase; letter-spacing: .04em; }
+.album-card .ac-stars .star { width: 13px; height: 13px; }
+.album-card .ac-rar { position: absolute; top: 4px; left: 4px; width: 9px; height: 9px; border-radius: 50%; background: var(--rar); box-shadow: 0 0 6px var(--rar); }
+.album-card .ac-lock { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); font-size: 22px; opacity: .5; }
+.album-card.new::after {
+  content: "NEW";
+  position: absolute;
+  top: 6px;
+  right: -20px;
+  transform: rotate(38deg);
+  background: var(--rose);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 900;
+  padding: 2px 22px;
+  letter-spacing: .08em;
+}
+.album-empty { grid-column: 1 / -1; text-align: center; color: #8d7fab; font-size: 15px; font-weight: 700; padding: 30px 10px; line-height: 1.6; }
+
+/* 圖鑑詳情 */
+.animal-sheet { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.animal-sheet .as-art { width: 160px; height: 160px; }
+.animal-sheet .as-art svg { width: 100%; height: 100%; }
+.animal-sheet .as-name { font-family: var(--font-han); font-size: 30px; font-weight: 900; color: #3d2a6b; }
+.animal-sheet .as-en { font-size: 15px; font-weight: 800; color: #8d7fab; text-transform: uppercase; letter-spacing: .08em; }
+.animal-sheet .as-facts { width: 100%; display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
+.animal-sheet .as-actions { display: flex; gap: 8px; width: 100%; margin-top: 10px; }
+.animal-sheet .as-actions .btn { flex: 1; min-height: 48px; font-size: 16px; }
+
+/* --------------------------------------------------------------- 設定 */
+.settings-body { flex: 1; overflow-y: auto; padding: 6px 16px calc(30px + var(--safe-b)); }
+.set-lock { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 20px; text-align: center; }
+.lock-emoji { font-size: 60px; }
+.set-lock p { font-size: 17px; font-weight: 800; color: #6a5a8a; }
+.lock-q { font-size: 40px; font-weight: 900; color: #4a3670; letter-spacing: .06em; }
+.lock-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 340px; }
+.lock-options button {
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 26px;
+  font-weight: 900;
+  color: #4a3670;
+  box-shadow: 0 4px 0 rgba(120, 90, 180, 0.2);
+}
+.lock-options button:active { transform: scale(0.95); }
+.set-group { background: #fff; border-radius: 22px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 0 rgba(120, 90, 180, 0.14); }
+.set-group h3 { font-size: 15px; font-weight: 900; color: #6a4fa8; margin-bottom: 10px; letter-spacing: .04em; display: flex; justify-content: space-between; align-items: center; }
+.set-note { font-size: 12.5px; color: #8d7fab; font-weight: 700; line-height: 1.5; margin-top: 8px; }
+.set-val { font-size: 13px; color: #ffb703; background: #fff6dd; padding: 3px 10px; border-radius: 999px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: #f3edff;
+  color: #6a4fa8;
+  font-size: 14px;
+  font-weight: 800;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+}
+.chip.on { background: #7c4dff; color: #fff; border-color: #5a2fd0; box-shadow: 0 3px 0 #4b21b8; }
+.seg { display: flex; gap: 6px; background: #f3edff; border-radius: 16px; padding: 5px; }
+.seg button { flex: 1; padding: 11px 6px; border-radius: 12px; font-size: 15px; font-weight: 800; color: #6a4fa8; }
+.seg button.on { background: #7c4dff; color: #fff; box-shadow: 0 3px 0 #4b21b8; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; font-size: 15px; font-weight: 800; color: #4a3670; }
+.switch-row + .switch-row { border-top: 1px dashed var(--line); }
+.switch-row input { appearance: none; -webkit-appearance: none; width: 56px; height: 32px; border-radius: 999px; background: #ddd4ee; position: relative; transition: background 0.2s; flex: 0 0 56px; }
+.switch-row input::after { content: ""; position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: transform 0.2s var(--ease-bounce); }
+.switch-row input:checked { background: #3ddc97; }
+.switch-row input:checked::after { transform: translateX(24px); }
+.set-group .btn { width: 100%; margin-top: 10px; }
+
+/* 撥開沙／水提示手指 */
+.tap-hand {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  font-size: 46px;
+  pointer-events: none;
+  animation: tapHand 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+  z-index: 9;
+}
+@keyframes tapHand {
+  0%,100% { transform: translate(-50%, -60%) scale(1); opacity: .95 }
+  50% { transform: translate(-50%, -40%) scale(1.12); opacity: 1 }
+}
+.shadow-spot.revealed::before { border-style: solid; }
+
+/* 餵食階段：生果籃唔好阻住拍子 */
+.stage-throw .basket { opacity: 1; }
+.stage-beat .basket, .stage-tap .basket { pointer-events: none; opacity: .55; }
+
+.sheet-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3edff;
+  color: #6a4fa8;
+  font-size: 18px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 3px 0 rgba(120,90,180,.18);
+  z-index: 3;
+}
+.animal-sheet.popup-card { position: relative; }
+
+/* 已餵過嘅動物：彩色留喺場景 */
+.shadow-spot.visited {
+  pointer-events: none;
+  animation: visitedFloat 3.2s ease-in-out infinite;
+}
+.shadow-spot.visited::before { display: none; }
+.shadow-spot.visited .sp-art { filter: drop-shadow(0 8px 12px rgba(0,0,0,.28)); animation: none; }
+@keyframes visitedFloat {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(0) }
+  50% { transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) translateY(-8px) }
+}
+.shadow-spot .visited-badge {
+  background: rgba(255,255,255,.92) !important;
+  color: #b03a63;
+  font-size: 12.5px;
+  bottom: -10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.18);
+}

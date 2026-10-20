@@ -1,0 +1,7 @@
+node_modules/
+tools/shots/
+tools/patch*.mjs
+tools/debug-*.mjs
+*.zip
+.DS_Store
+Thumbs.db
