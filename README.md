@@ -101,18 +101,22 @@ npm start          # 開 http://127.0.0.1:8123
 index.html                 入口（所有畫面嘅 HTML）
 manifest.webmanifest       PWA 設定
 sw.js                      Service Worker（離線快取）
+netlify.toml               Netlify 用嘅 cache header 設定
 assets/css/                theme.css / layout.css / games.css / feed.css
 assets/js/
   data-animals.js          35 隻動物資料（名、稀有度、冷知識、family）
   data-vocab.js            9 個題目庫
   artwork.js               全部 SVG 手繪圖案（動物 + 物品）
   audio.js                 音檔播放 + Web Audio 音效合成
+  audio-manifest.js        語音清單（fetch manifest.json 失敗時嘅後備）
   rhythm.js                節拍器（精準排程）
   core.js                  狀態 / 畫面切換 / 小工具
   screen-*.js              每個畫面
 assets/audio/              495 段預先合成語音 + manifest.json
 assets/img/                Logo 同 App 圖示
-tools/                     產生語音、圖示、測試用嘅 script
+screenshots/               遊戲截圖（唔需要上傳）
+tools/                     產生語音、圖示、打包、測試用嘅 script
+lucian-magic-world.zip     👈 直接上傳用嘅打包檔
 ```
 
 ### 想加動物？
@@ -129,8 +133,15 @@ tools/                     產生語音、圖示、測試用嘅 script
 - **節拍**：Web Audio 排程 + `lookahead`，拍子誤差 < 10ms；評分容許 ±0.34 秒（對小朋友好寬鬆）
 - **離線**：Service Worker 會 cache 核心檔案；語音係「用過先 cache」，所以第一次玩某個字會有少少載入時間，之後就唔使再落載
 - **唔會收集任何個人資料**，冇分析、冇廣告、冇第三方追蹤
+- **動物「相片」**：為咗統一畫風同保持檔案細（全部內嵌 SVG，唔使載入相片），圖鑑用嘅係可愛卡通插畫而唔係真實相片。如果想換成真實動物相片，可以將 `artwork.js` 嘅 `Art.animal()` 改成回傳 `<img>`，再放相片去 `assets/img/animals/`（每隻動物一張 512×512 PNG）
 
-## 六、授權 / 注意
+## 六、iOS / Android 注意
+
+- iOS 第一次要有用戶點擊（按「開始遊戲」）之後先會有聲，屬正常
+- 如果電話靜音開關開咗（iPhone 側邊粒掣），網頁聲音可能會冇聲，記得熄咗佢
+- Android Chrome 第一次可能要等 1–2 秒載入語音
+
+## 七、授權 / 注意
 
 - 圖案（SVG）為本專案原創，可自由用於私人用途
 - 語音由 Google Translate TTS 合成，僅供私人／家庭使用；如要公開發佈或商業使用，請自行替換為其他 TTS 或真人錄音
