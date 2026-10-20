@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>畫風樣本 第二輪 — 唔再係「BB 著動物衫」</title>
+<style>
+  :root { --ink:#2b2140; --ink2:#6b5b8a; --line:#e4dcf2; --accent:#7c4dff; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:20px 20px 60px; background:#faf8ff; color:var(--ink);
+    font-family:"PingFang HK","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif; line-height:1.6; }
+  h1 { font-size:24px; margin:0 0 6px; }
+  .sub { color:var(--ink2); font-size:13.5px; margin-bottom:16px; }
+  .howto { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:13px; margin-bottom:22px; }
+  .howto b { color:var(--accent); }
+  .howto code { background:#f1ecff; padding:1px 7px; border-radius:5px; }
+  .opt { background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px 18px 18px; margin-bottom:18px; }
+  .opt h2 { font-size:18px; margin:0 0 4px; }
+  .tag { font-size:11.5px; font-weight:700; color:#fff; background:var(--accent); border-radius:99px; padding:2px 10px; margin-left:8px; vertical-align:2px; }
+  .tag.rec { background:#ffb703; color:#4a2d00; }
+  .desc { color:var(--ink2); font-size:13px; margin-bottom:12px; }
+  .imgs { display:grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap:12px; }
+  figure { margin:0; }
+  figure img { width:100%; border-radius:12px; display:block; box-shadow:0 6px 18px rgba(36,26,64,.16); }
+  figcaption { font-size:11.5px; color:var(--ink2); margin-top:4px; text-align:center; }
+  .pros { display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; margin-top:12px; }
+  .pros div { flex:1; min-width:230px; background:#f8f4ff; border-radius:10px; padding:8px 12px; }
+  .pros b { color:var(--accent); }
+  .footer { font-size:12px; color:var(--ink2); border-top:1px dashed var(--line); padding-top:10px; }
+  .warn { background:#fff6dd; border-radius:10px; padding:10px 14px; font-size:12.5px; color:#6b4400; margin-bottom:18px; }
+</style>
+</head>
+<body>
+<h1>畫風樣本 · 第二輪</h1>
+<div class="sub">上一輪個問題係 prompt 用咗「cute cartoon <b>baby</b> crab」—— 模型真係畫咗個 BB 著蟹衫。今次改咗 prompt：寫明「ANIMAL character with a crab face, not human, no human skin」，再加 negative prompt 排除「human baby / costume / onesie」。</div>
+
+<div class="warn">
+  <b>三個新方向，全部本機 ComfyUI 生成（冇收費 API）：</b><br>
+  <b>P1</b> 卡通吉祥物（簡化、最可愛）　·　<b>P2</b> 3D 動畫電影感（動物結構較準，教育性好）　·　<b>P4</b> 用你 reference 圖做參考（最似你原本套風格）<br>
+  <b>你想我再出多啲：</b>可以每個方向出 4–6 個 seed 變體，或者試「繪本風／黏土風／毛公仔風／真實照片風」，你話聲。
+</div>
+
+<div class="opt">
+  <h2>P1 · 卡通吉祥物（Z-Image）<span class="tag">8–10 秒/張</span></h2>
+  <div class="desc">圓潤、簡化、眼睛大大，最適合 3 歲小朋友；背景乾淨可以直接剪影。</div>
+  <div class="imgs">
+    <figure><img src="風格樣本2/P1-crab-zimage.png"><figcaption>蟹（Z-Image）</figcaption></figure>
+    <figure><img src="風格樣本2/P1-octopus-zimage.png"><figcaption>八爪魚（同一 prompt 模板，好一致）</figcaption></figure>
+  </div>
+  <div class="pros">
+    <div><b>優點：</b>最快、最可愛、跨動物一致；背景乾淨易剪影。</div>
+    <div><b>缺點：</b>簡化咗，動物特徵冇咁準。</div>
+  </div>
+</div>
+
+<div class="opt">
+  <h2>P1 · 卡通吉祥物（FLUX.2）<span class="tag">15 秒/張</span></h2>
+  <div class="desc">同一個 prompt，換 FLUX.2 —— 膠質感更強、立體感更好。</div>
+  <div class="imgs">
+    <figure><img src="風格樣本2/P1-crab-flux2.png"><figcaption>蟹（FLUX.2）</figcaption></figure>
+  </div>
+  <div class="pros">
+    <div><b>優點：</b>質感最靚。</div>
+    <div><b>缺點：</b>慢少少；同 Z-Image 比風格會唔完全一致（所以整套要用同一個模型）。</div>
+  </div>
+</div>
+
+<div class="opt">
+  <h2>P2 · 3D 動畫電影感（Z-Image）<span class="tag">10 秒/張</span></h2>
+  <div class="desc">寫明動物結構（殼紋、眼柄、八隻腳），出嚟似動畫電影角色，最「真動物」。</div>
+  <div class="imgs">
+    <figure><img src="風格樣本2/P2-crab-zimage.png"><figcaption>蟹（結構版）</figcaption></figure>
+  </div>
+  <div class="pros">
+    <div><b>優點：</b>教育性好（小朋友睇到真正蟹嘅樣）；質感高級。</div>
+    <div><b>缺點：</b>會出現石頭等小道具；細隻動物未必夠可愛。</div>
+  </div>
+</div>
+
+<div class="opt">
+  <h2>P4 · 用你嘅 reference 圖做參考（FLUX.2 + ReferenceLatent）<span class="tag rec">推薦</span><span class="tag">12–16 秒/張</span></h2>
+  <div class="desc">直接餵你 `reference art` 嘅圖做 style reference，再叫佢畫另一隻動物 —— 出嚟同你嗰 20 張 reference 幾乎同一個世界（藍色水下、泡泡、水草、石頭、膠質感）。<br>
+  呢個就係本機版嘅「nano banana 風格遷移」。</div>
+  <div class="imgs">
+    <figure><img src="風格樣本2/P4-dolphin-ref.png"><figcaption>海豚（用蟹圖做參考）</figcaption></figure>
+    <figure><img src="風格樣本2/P4-turtle-ref.png"><figcaption>海龜（同一參考，風格一致）</figcaption></figure>
+  </div>
+  <div class="pros">
+    <div><b>優點：</b>最貼近你提供嘅參考風格；動物樣（唔會變 BB）；背景／泡泡／水草自動跟；12–16 秒一張。</div>
+    <div><b>缺點：</b>背景固定係「藍色水下」，陸地動物（獅子、駱駝）要另外做背景或者換參考圖。</div>
+  </div>
+</div>
+
+<div class="footer">
+  <b>下一步：</b>揀一個方向（P1 / P2 / P4，或混合）→ 我會出 3–4 個變體俾你 confirm 單一隻 → 之後全套 35 動物 + 102 字詞逐隻生成（每隻可以出 2 個 seed 揀一個）。<br>
+  <b>Nano Banana：</b>本機冇你嘅 Google API key，所以叫唔到；如果你有 Google AI Studio 免費 key（設定 <code>GOOGLE_API_KEY</code>），我就可以直接用 Gemini 3 Flash Image 出圖／改圖。
+</div>
+</body>
+</html>
