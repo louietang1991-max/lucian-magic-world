@@ -1,12 +1,16 @@
 /* =========================================================================
- *  gen-audio.mjs — 用 Google Translate TTS 預先產生所有語音檔
- *  用法: node tools/gen-audio.mjs [--force] [--only=v,p,a,f]
- *  輸出: assets/audio/*.mp3  +  assets/audio/manifest.json
+ *  gen-audio.mjs — 用 Microsoft Edge（Azure Neural）語音合成所有語音檔
+ *  - 粵語：zh-HK-HiuMaanNeural（自然女聲）
+ *  - 普通話：zh-CN-XiaoxiaoNeural
+ *  - 英語：en-US-JennyNeural
+ *  用法: node tools/gen-audio.mjs [--force] [--only=v,p,a,f] [--conc=3]
+ *  輸出: assets/audio/*.mp3 + manifest.json
  * ========================================================================= */
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { EdgeTTS } from '@andresaya/edge-tts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -14,24 +18,24 @@ const OUT = path.join(ROOT, 'assets', 'audio');
 const FORCE = process.argv.includes('--force');
 const ONLY_ARG = (process.argv.find((a) => a.startsWith('--only=')) || '').split('=')[1];
 const ONLY = ONLY_ARG ? new Set(ONLY_ARG.split(',')) : null;
+const CONC_ARG = (process.argv.find((a) => a.startsWith('--conc=')) || '').split('=')[1];
+const CONC = Number(CONC_ARG || 3);
 
 fs.mkdirSync(OUT, { recursive: true });
 
-/* ---------- 載入資料檔（瀏覽器全域風格） ---------- */
+/* ---------- 載入資料檔 ---------- */
 const ctx = { window: {}, console };
 vm.createContext(ctx);
 for (const f of ['assets/js/data-animals.js', 'assets/js/data-vocab.js']) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 }
 const ANIMALS = ctx.window.ANIMAL_DATA;
-const LOCATIONS = ctx.window.LOCATIONS;
 const VOCAB = ctx.window.VOCAB;
 const ANIMAL_TOPIC = ctx.window.buildAnimalTopic();
 const ALL_TOPICS = { ...VOCAB, animal: ANIMAL_TOPIC };
 
 /* ---------- 粵語句子 ---------- */
 const PHRASES = {
-  // 通用
   'hi': '哈囉！我係魔法精靈，一齊玩啦！',
   'tap-start': '撳個掣開始啦！',
   'game-a-title': '聽聲音，揀圖案！',
@@ -49,13 +53,11 @@ const PHRASES = {
   'well-done': '做得好！',
   'back': '返去啦。',
   'lets-go': '我哋出發啦！',
-  // 第一部分結果
   'fruits-earned': '你贏到魔法生果啦！',
   'play-again': '再玩一次！',
-  // 第二部分
   'meet-animals': '一齊去搵動物啦！',
   'find-shadow': '你見到動物嘅影子未呀？',
-  'wipe-sand': '用手指抹開啲沙同水，睇下係邊個？',
+  'wipe-sand': '用手指撥開啲沙，睇下係邊個？',
   'found-animal': '你搵到動物啦！',
   'feed-it': '餵佢食魔法生果啦！',
   'throw-fruit': '用手指將魔法生果掟入圈圈裡面！',
@@ -78,6 +80,10 @@ const PHRASES = {
   'great-score': '好好分呀！',
   'close': '閂咗佢。',
   'settings-locked': '呢度係大人用嘅。',
+  'peek-grass': '啲動物匿埋喺草同樹後面，等佢哋出嚟嗰陣撳佢啦！',
+  'peek-water': '啲動物會喺水底浮上嚟，等佢浮上水面先撳佢啦！',
+  'wait-peek': '等佢出嚟先撳啦！',
+  'dig-hint': '用手指撥開啲沙，見到影子就撳佢！',
 };
 
 const EN_PHRASES = {
@@ -88,35 +94,33 @@ const EN_PHRASES = {
   'well-done': 'Well done!',
 };
 
-/* ---------- 建立工作清單 ---------- */
-const jobs = []; // {key, text, lang, tl}
-const add = (key, text, lang, tl) => {
-  if (!text) return;
-  jobs.push({ key, text: String(text), lang, tl });
+/* ---------- 聲音設定 ---------- */
+const VOICE = {
+  yue: { voice: 'zh-HK-HiuMaanNeural', rate: '-8%', pitch: '+2Hz' },
+  man: { voice: 'zh-CN-XiaoxiaoNeural', rate: '-10%', pitch: '+2Hz' },
+  en: { voice: 'en-US-JennyNeural', rate: '-8%', pitch: '+2Hz' },
 };
 
-// 題庫字詞（粵/普/英）
+/* ---------- 建立工作清單 ---------- */
+const jobs = [];
+const add = (key, text, lang) => { if (text) jobs.push({ key, text: String(text), lang }); };
+
 for (const [tid, topic] of Object.entries(ALL_TOPICS)) {
-  if (tid === 'animal') continue; // 動物題庫用動物名音檔
+  if (tid === 'animal') continue;
   topic.items.forEach((it, i) => {
-    add(`v/${tid}/${i}/yue`, it.yue || it.zh, 'yue', 'zh-HK');
-    add(`v/${tid}/${i}/man`, it.zh, 'man', 'zh-CN');
-    add(`v/${tid}/${i}/en`, it.en, 'en', 'en');
+    add(`v/${tid}/${i}/yue`, it.yue || it.zh, 'yue');
+    add(`v/${tid}/${i}/man`, it.zh, 'man');
+    add(`v/${tid}/${i}/en`, it.en, 'en');
   });
 }
-// 動物名
 for (const a of ANIMALS) {
-  add(`a/${a.id}/yue`, a.yue || a.zh, 'yue', 'zh-HK');
-  add(`a/${a.id}/man`, a.zh, 'man', 'zh-CN');
-  add(`a/${a.id}/en`, a.en, 'en', 'en');
+  add(`a/${a.id}/yue`, a.yue || a.zh, 'yue');
+  add(`a/${a.id}/man`, a.zh, 'man');
+  add(`a/${a.id}/en`, a.en, 'en');
 }
-// 動物冷知識（粵）
-for (const a of ANIMALS) {
-  a.facts.forEach((f, i) => add(`f/${a.id}/${i}`, f, 'yue', 'zh-HK'));
-}
-// 句子
-for (const [k, t] of Object.entries(PHRASES)) add(`p/zh-HK/${k}`, t, 'yue', 'zh-HK');
-for (const [k, t] of Object.entries(EN_PHRASES)) add(`p/en/${k}`, t, 'en', 'en');
+for (const a of ANIMALS) a.facts.forEach((f, i) => add(`f/${a.id}/${i}`, f, 'yue'));
+for (const [k, t] of Object.entries(PHRASES)) add(`p/zh-HK/${k}`, t, 'yue');
+for (const [k, t] of Object.entries(EN_PHRASES)) add(`p/en/${k}`, t, 'en');
 
 if (ONLY) {
   const keep = jobs.filter((j) => ONLY.has(j.key.split('/')[0]));
@@ -124,48 +128,50 @@ if (ONLY) {
   jobs.push(...keep);
 }
 
-// 過濾已存在
+const fileOf = (key) => path.join(OUT, key.replace(/\//g, '_') + '.mp3');
 const pending = jobs.filter((j) => {
-  const p = path.join(OUT, j.key.replace(/\//g, '_') + '.mp3');
-  if (!FORCE && fs.existsSync(p) && fs.statSync(p).size > 1500) return false;
+  const p = fileOf(j.key);
+  if (!FORCE && fs.existsSync(p) && fs.statSync(p).size > 2000) return false;
   return true;
 });
 
-console.log(`[audio] total=${jobs.length} pending=${pending.length} out=${OUT}`);
+console.log(`[edge-tts] total=${jobs.length} pending=${pending.length} conc=${CONC}`);
 
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const tts = new EdgeTTS();
 
-async function fetchOne(job) {
-  const q = encodeURIComponent(job.text);
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${q}&tl=${job.tl}&client=tw-ob&ttsspeed=1`;
-  const res = await fetch(url, { headers: { 'User-Agent': UA, Referer: 'https://translate.google.com/' } });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const buf = Buffer.from(await res.arrayBuffer());
-  if (buf.length < 1000) throw new Error('too small ' + buf.length);
-  if (!(buf[0] === 0xff && (buf[1] & 0xe0) === 0xe0)) throw new Error('not mp3');
+async function synthOne(job) {
+  const cfg = VOICE[job.lang] || VOICE.yue;
+  const res = await tts.generate(job.text, cfg.voice, {
+    rate: cfg.rate,
+    pitch: cfg.pitch,
+    outputFormat: 'audio-24khz-48kbitrate-mono-mp3',
+    timeout: 25000,
+  });
+  const buf = Buffer.isBuffer(res.audio) ? res.audio : Buffer.from(res.audio);
+  if (buf.length < 800) throw new Error('too small ' + buf.length);
+  if (!(buf[0] === 0xff || (buf[0] === 0x49 && buf[1] === 0x44))) throw new Error('not mp3');
   return buf;
 }
 
 let ok = 0, fail = 0, i = 0;
-const CONC = 3;
+const failures = [];
 async function worker() {
   while (i < pending.length) {
     const job = pending[i++];
-    const file = path.join(OUT, job.key.replace(/\//g, '_') + '.mp3');
     for (let attempt = 1; attempt <= 4; attempt++) {
       try {
-        const buf = await fetchOne(job);
-        fs.writeFileSync(file, buf);
+        const buf = await synthOne(job);
+        fs.writeFileSync(fileOf(job.key), buf);
         ok++;
-        if (ok % 25 === 0) console.log(`[audio] ${ok}/${pending.length} … ${job.key}`);
+        if (ok % 20 === 0) console.log(`[edge-tts] ${ok}/${pending.length} … ${job.key}`);
         break;
       } catch (e) {
-        if (attempt === 4) { fail++; console.warn(`[fail] ${job.key}: ${e.message}`); }
-        else await sleep(700 * attempt);
+        if (attempt === 4) { fail++; failures.push(job.key + ': ' + e.message); console.warn(`[fail] ${job.key}: ${e.message}`); }
+        else await sleep(500 * attempt);
       }
     }
-    await sleep(120 + Math.random() * 120);
+    await sleep(60);
   }
 }
 const t0 = Date.now();
@@ -173,12 +179,14 @@ await Promise.all(Array.from({ length: CONC }, worker));
 
 /* ---------- manifest ---------- */
 const manifest = {};
+let totalBytes = 0;
 for (const j of jobs) {
-  const name = j.key.replace(/\//g, '_') + '.mp3';
-  const p = path.join(OUT, name);
-  if (fs.existsSync(p)) {
-    manifest[j.key] = { f: 'assets/audio/' + name, t: j.text, lang: j.lang };
-  }
+  const p = fileOf(j.key);
+  if (!fs.existsSync(p)) continue;
+  const size = fs.statSync(p).size;
+  totalBytes += size;
+  manifest[j.key] = { f: 'assets/audio/' + path.basename(p), t: j.text, lang: j.lang, s: size };
 }
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest));
-console.log(`[audio] done ok=${ok} fail=${fail} manifest=${Object.keys(manifest).length} in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+console.log(`[edge-tts] done ok=${ok} fail=${fail} manifest=${Object.keys(manifest).length} size=${(totalBytes / 1048576).toFixed(2)}MB in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+if (failures.length) { console.log('--- failures ---'); failures.slice(0, 20).forEach((f) => console.log(f)); }

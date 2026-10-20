@@ -357,7 +357,7 @@
       });
     }
     const quit = $('[data-quiz-quit]');
-    if (quit) quit.addEventListener('click', () => { A().stop(); C.go('learn'); });
+    if (quit) quit.addEventListener('click', () => { A().stop(); C.back('learn'); });
     const again = $('#result-again');
     if (again) again.addEventListener('click', () => startGame(Q.mode));
   }

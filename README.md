@@ -2,7 +2,7 @@
 
 為 3 歲小朋友而設嘅**中／英／普學習 + 動物餵食節奏遊戲**，純 HTML5，手機直向操作，支援離線玩（PWA）。
 
-> 所有圖案都係手繪 SVG，所有語音都係預先合成嘅 MP3 音檔（495 段），唔需要上網都可以玩。
+> 所有圖案都係手繪 SVG，所有語音都係預先合成嘅 MP3 音檔（499 段，用 Microsoft Edge Neural 語音），唔需要上網都可以玩。
 
 ---
 
@@ -12,7 +12,7 @@
 
 ### 方法 A：Netlify Drop（最簡單，唔使 git）
 1. 去 <https://app.netlify.com/drop>
-2. 將**整個資料夾**（或者我幫你打包好嘅 `lucian-magic-world.zip`）拖入去
+2. 將**整個資料夾**（或者打包好嘅 `lucian-magic-world.zip`）拖入去
 3. 即刻有條 `https://xxxx.netlify.app` 嘅網址，用手機開就得
 4. （可選）註冊帳戶就可以改個好記嘅名，例如 `lucian-magic.netlify.app`
 
@@ -20,7 +20,7 @@
 ```bash
 git init
 git add .
-git commit -m "Lucian magic world v1.0"
+git commit -m "Lucian magic world"
 git branch -M main
 git remote add origin https://github.com/<你嘅帳號>/lucian-magic-world.git
 git push -u origin main
@@ -51,17 +51,22 @@ git push -u origin main
 - 答錯有溫柔提示，可以再試（輕鬆模式，預設開啟）
 - 題目庫（9 個主題）：動物、生果、蔬菜、交通工具、顏色、形狀、數字、身體、屋企
 
-### 第二部分：尋找動物（8 個地點）
-沙灘 · 海面 · 海底 · 河流 · 森林 · 草原 · 沙漠 · 雪地
+### 第二部分：尋找動物（8 個地點 × 35 隻動物）
 
-1. 入到地點會**隨機出現 3–5 隻動物嘅影子**，匿喺沙／水／雪／樹葉下面
-2. 小朋友用手指**撥開**沙／水，就會見到影子（影子外框顏色 = 稀有度）
-3. 撳影子 → 餵食畫面：
-   - **掟魔法生果**入圈圈（撳圈或由生果籃向上拉瞄準），越中間越高分（每次最多 20 分，共 3 次）
-   - **跟拍子**：圈圈先跟節拍閃 4 下（數拍子），然後正式開始，跟住拍子撳圈圈（每拍最多 10 分，共 4 拍）
-   - 無論成功失敗，動物都會現身，代表餵食成功
-4. 分數越高 → 越多星 → 解鎖越多**動物冷知識**（最多 4 條）
-5. 儲齊 **35 隻動物**圖鑑，稀有度分 4 級：普通（綠）· 少見（藍）· 稀有（紫）· 傳說（金）
+| 地點 | 玩法 |
+|---|---|
+| **沙灘 · 沙漠 · 雪地** | 🏖️ **刮刮卡**：用手指撥開沙／雪，逐隻影子撥出嚟（唔會一隻就開哂） |
+| **海面 · 河流** | 🌊 **浮上水面**：影子沉喺水底（模糊、半透明），定時浮上水面，浮起先撳到 |
+| **海底 · 森林 · 草原** | 🌿 **匿埋探頭**：影子收埋喺水草／草／樹叢後面，不時探頭出嚟，探頭先撳到 |
+
+- 每個地點**隨機出 3–5 隻**動物嘅影子，影子外框顏色 = 稀有度：綠 普通 · 藍 少見 · 紫 稀有 · **金 傳說**
+- 未探頭時撳 → 影子會搖一搖 + 語音提示「等佢出嚟先撳啦！」
+- 撳到影子 → **餵食畫面**：
+  - **掟 3 個魔法生果入圈圈**（撳圈或由生果籃向上拉瞄準），越中間越高分（最多 60 分）
+  - **跟節拍**：圈圈先跟拍子閃 4 下（數拍子），之後正式 4 拍撳圈（最多 40 分）
+  - 無論成功失敗，動物都會**現身**、食得好開心，代表餵食成功
+- 分數 → 星星 → 解鎖**動物冷知識**（最多 4 條）＋圖鑑星級
+- 儲齊 **35 隻動物** 圖鑑；餵過嘅動物會用彩色留喺場景度
 
 ---
 
@@ -83,7 +88,15 @@ git push -u origin main
 
 ---
 
-## 四、本機測試 / 修改
+## 四、題目庫／圖鑑對照表（俾家長核對）
+
+- `題目庫對照表.pdf` — 可以直接睇／print，每個字詞同動物都有 **ID**（例如 `fruit-0`、`animal-fennec`、`p-good`）
+- `題目庫對照表.html` — 互動版（用瀏覽器開）
+- 覺得邊張圖／邊個字／邊句粵語有問題，同我講個 ID 就得
+
+---
+
+## 五、本機測試 / 修改
 
 ```bash
 npm start          # 開 http://127.0.0.1:8123
@@ -92,57 +105,63 @@ npm start          # 開 http://127.0.0.1:8123
 | 指令 | 做乜 |
 |---|---|
 | `npm start` | 起一個本機靜態 server（必須用 http:// 開，唔好直接 double click HTML） |
-| `npm run audio` | 重新產生所有語音檔（需要網絡；會寫入 `assets/audio/`） |
+| `npm run audio` | 重新產生所有語音（Edge Neural；需要網絡；寫入 `assets/audio/`） |
+| `npm run audio:google` | 後備：用 Google Translate TTS 產生（較機械聲） |
+| `npm run audio:manifest` | 更新 `assets/js/audio-manifest.js`（fetch 失敗時嘅後備清單） |
 | `npm run icons` | 由 `assets/img/logo.svg` 重新產生 PWA 圖示 |
-| `npm test` | 用 Chrome 行一次完整流程測試（會出截圖喺 `tools/shots/`） |
+| `npm run review` | 重新產生題目庫對照表 PDF |
+| `npm run pack` | 打包 `lucian-magic-world.zip`（上傳用） |
+| `npm test` | 用 Chrome 行一次完整流程測試 |
 
 ### 專案結構
 ```
 index.html                 入口（所有畫面嘅 HTML）
+題目庫對照表.html / .pdf    題目庫＋圖鑑對照（家長核對用，唔需要上傳）
 manifest.webmanifest       PWA 設定
 sw.js                      Service Worker（離線快取）
 netlify.toml               Netlify 用嘅 cache header 設定
 assets/css/                theme.css / layout.css / games.css / feed.css
 assets/js/
-  data-animals.js          35 隻動物資料（名、稀有度、冷知識、family）
+  data-animals.js          35 隻動物（名、稀有度、冷知識、family）
   data-vocab.js            9 個題目庫
   artwork.js               全部 SVG 手繪圖案（動物 + 物品）
   audio.js                 音檔播放 + Web Audio 音效合成
   audio-manifest.js        語音清單（fetch manifest.json 失敗時嘅後備）
   rhythm.js                節拍器（精準排程）
-  core.js                  狀態 / 畫面切換 / 小工具
+  core.js                  狀態 / 畫面切換 / 返回導航 / 小工具
   screen-*.js              每個畫面
-assets/audio/              495 段預先合成語音 + manifest.json
+assets/audio/              499 段預先合成語音 + manifest.json
 assets/img/                Logo 同 App 圖示
 screenshots/               遊戲截圖（唔需要上傳）
-tools/                     產生語音、圖示、打包、測試用嘅 script
+tools/                     產生語音、圖示、對照表、打包、測試用嘅 script
 lucian-magic-world.zip     👈 直接上傳用嘅打包檔
 ```
 
 ### 想加動物？
 1. 喺 `assets/js/data-animals.js` 加一筆（`id / loc / rarity / zh / en / facts`）
 2. 喺 `assets/js/artwork.js` 嘅 `ANIMALS` 加一個畫法函式（用 `ellipse / path / face / earsTri` 等 helper，畫布 200×200）
-3. 跑 `npm run audio` 產生新嘅讀音同冷知識音檔
+3. 跑 `npm run audio` 產生新嘅讀音同冷知識音檔，再 `npm run audio:manifest`
 
 ---
 
-## 五、技術備註
+## 六、技術備註
 
-- **語音**：預先用 Google Translate TTS 合成成 MP3（粵語 zh-HK、普通話 zh-CN、英語），遊戲時直接播放，因此任何手機／瀏覽器發音都一致
+- **語音**：Microsoft Edge（Azure Neural）合成，粵語 `zh-HK-HiuMaanNeural`、普通話 `zh-CN-XiaoxiaoNeural`、英語 `en-US-JennyNeural`，語速 −8~10%、音調 +2Hz（小朋友聽得清楚啲）。**預先合成成 MP3**，所以所有手機發音一致
 - **音效**：Web Audio API 即時合成（拍子聲、過關音樂、咬嘢聲），冇額外檔案
-- **節拍**：Web Audio 排程 + `lookahead`，拍子誤差 < 10ms；評分容許 ±0.34 秒（對小朋友好寬鬆）
-- **離線**：Service Worker 會 cache 核心檔案；語音係「用過先 cache」，所以第一次玩某個字會有少少載入時間，之後就唔使再落載
+- **節拍**：Web Audio 排程 + lookahead，拍子誤差 < 10ms；評分容許 ±0.34 秒（對小朋友好寬鬆）
+- **返回導航**：每個畫面有固定「上一層」，唔會跳去奇怪畫面；結算頁有 ◀ 返主頁、再玩一次、揀第二個遊戲、去搵動物
+- **離線**：Service Worker 會 cache 核心檔案；語音係「用過先 cache」
 - **唔會收集任何個人資料**，冇分析、冇廣告、冇第三方追蹤
-- **動物「相片」**：為咗統一畫風同保持檔案細（全部內嵌 SVG，唔使載入相片），圖鑑用嘅係可愛卡通插畫而唔係真實相片。如果想換成真實動物相片，可以將 `artwork.js` 嘅 `Art.animal()` 改成回傳 `<img>`，再放相片去 `assets/img/animals/`（每隻動物一張 512×512 PNG）
+- **動物「相片」**：為咗統一畫風同保持檔案細，圖鑑用可愛卡通插畫。想換真實相片可以將 `Art.animal()` 改成回傳 `<img>`，再放相到 `assets/img/animals/`
 
-## 六、iOS / Android 注意
+## 七、iOS / Android 注意
 
 - iOS 第一次要有用戶點擊（按「開始遊戲」）之後先會有聲，屬正常
-- 如果電話靜音開關開咗（iPhone 側邊粒掣），網頁聲音可能會冇聲，記得熄咗佢
+- 如果 iPhone 側邊嘅靜音開關開咗，網頁聲音可能會冇聲
 - Android Chrome 第一次可能要等 1–2 秒載入語音
 
-## 七、授權 / 注意
+## 八、授權 / 注意
 
 - 圖案（SVG）為本專案原創，可自由用於私人用途
-- 語音由 Google Translate TTS 合成，僅供私人／家庭使用；如要公開發佈或商業使用，請自行替換為其他 TTS 或真人錄音
+- 語音由 Microsoft Edge 語音服務合成，僅供私人／家庭使用；如要公開發佈或商業使用，請自行替換為 Azure 正式 API／其他 TTS 或真人錄音
 - 動物冷知識內容為兒童向簡化描述

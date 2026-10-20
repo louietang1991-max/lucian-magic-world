@@ -488,3 +488,18 @@
   backdrop-filter: blur(6px);
 }
 .feed-title { flex: 1; text-align: center; font-size: 20px; }
+
+/* 結算頁 topbar */
+.result-top .topbar-title { color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.result-top .icon-btn.back { background: rgba(255,255,255,.92); }
+.btn.text {
+  background: transparent;
+  color: rgba(255,255,255,.85);
+  box-shadow: none;
+  min-height: 46px;
+  font-size: 16px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.result-wrap .btn.big { min-height: 58px; }
+#screen-result .result-wrap { gap: 10px; }

@@ -6,11 +6,16 @@
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs 8123",
-    "icons": "node tools/gen-icons.mjs",
     "audio": "node tools/gen-audio.mjs",
+    "audio:google": "node tools/gen-audio-google.mjs",
+    "audio:manifest": "node tools/gen-manifest-js.mjs",
+    "icons": "node tools/gen-icons.mjs",
+    "pack": "node tools/pack.mjs",
+    "review": "node tools/gen-review.mjs",
     "test": "node tools/test-e2e.mjs"
   },
   "devDependencies": {
+    "@andresaya/edge-tts": "^1.9.1",
     "jszip": "^3.10.2",
     "puppeteer-core": "^23.11.1"
   }

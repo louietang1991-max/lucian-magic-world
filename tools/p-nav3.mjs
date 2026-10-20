@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const f = path.join(ROOT, 'assets/js/core.js');
+let t = fs.readFileSync(f, 'utf8');
+const before = t;
+t = t.replace("      const go = t.closest('[data-go]');\n      if (go) {\n        e.preventDefault();", "      const goBtn = t.closest('[data-go]');\n      if (goBtn) {\n        e.preventDefault();");
+t = t.replace("        const id = go.getAttribute('data-go');", "        const id = goBtn.getAttribute('data-go');");
+if (t === before) throw new Error('no change');
+fs.writeFileSync(f, t);
+console.log('fixed shadowed go');

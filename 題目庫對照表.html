@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lucian 魔法世界 — 題目庫／圖鑑對照表</title>
+<style>
+  :root {
+    --ink: #2b2140;
+    --ink2: #6b5b8a;
+    --line: #e4dcf2;
+    --accent: #7c4dff;
+    --bg: #faf8ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 18px 20px 40px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "PingFang HK", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  header.top {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: .02em; }
+  .sub { color: var(--ink2); font-size: 12.5px; }
+  .howto {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 12px 0 18px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .howto b { color: var(--accent); }
+  .howto code {
+    background: #f1ecff;
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 11.5px;
+  }
+  h2 {
+    font-size: 16px;
+    margin: 22px 0 8px;
+    padding: 6px 10px;
+    background: linear-gradient(90deg, #efe8ff, #faf8ff);
+    border-left: 5px solid var(--accent);
+    border-radius: 4px;
+  }
+  h3 {
+    font-size: 13.5px;
+    margin: 16px 0 6px;
+    color: #4a3670;
+  }
+  h3 .count { color: var(--ink2); font-weight: 500; font-size: 11.5px; margin-left: 6px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: 8px;
+  }
+  .item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 6px 6px 7px;
+    text-align: center;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .item .pic {
+    width: 100%;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    background: #fdfbff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .item .pic svg { width: 100%; height: 100%; display: block; }
+  .item .id {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 99px;
+    padding: 1px 7px;
+    margin: 4px 0 2px;
+    letter-spacing: .02em;
+  }
+  .item .zh { font-size: 14px; font-weight: 800; line-height: 1.2; }
+  .item .py { font-size: 10px; color: var(--ink2); }
+  .item .en { font-size: 11.5px; font-weight: 700; color: #2a5fa8; word-break: break-word; }
+  .item .tag {
+    display: inline-block;
+    font-size: 9px;
+    color: #8a6d12;
+    background: #fff6dd;
+    border-radius: 99px;
+    padding: 1px 6px;
+    margin-top: 3px;
+  }
+  .item .tag.warn { color: #a8331f; background: #ffe9e3; }
+  .animal-card {
+    display: flex;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 7px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .animal-card .pic {
+    width: 108px;
+    height: 108px;
+    flex: 0 0 108px;
+    background: #fdfbff;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .animal-card .pic svg { width: 100%; height: 100%; }
+  .animal-card .info { flex: 1; min-width: 0; }
+  .animal-card .row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .animal-card .nm { font-size: 17px; font-weight: 900; }
+  .animal-card .en { font-size: 12.5px; font-weight: 800; color: #2a5fa8; text-transform: uppercase; letter-spacing: .04em; }
+  .animal-card .meta { font-size: 10.5px; color: var(--ink2); margin: 2px 0 4px; }
+  .animal-card .rar { font-size: 10px; color: #fff; padding: 1px 8px; border-radius: 99px; font-weight: 800; }
+  .animal-card ol { margin: 2px 0 0 16px; padding: 0; font-size: 11.5px; }
+  .animal-card ol li { margin-bottom: 1px; }
+  .phrase-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .phrase-table th, .phrase-table td { border-bottom: 1px solid var(--line); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .phrase-table th { background: #f4efff; font-size: 11px; color: #4a3670; }
+  .phrase-table td.k { font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; color: #7c4dff; white-space: nowrap; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--ink2); margin: 6px 0 12px; }
+  .legend span b { color: var(--ink); }
+  .r1 { background: #7ed957; } .r2 { background: #4aa8ff; } .r3 { background: #c36bff; } .r4 { background: #ffb300; }
+  .footer { margin-top: 26px; font-size: 10.5px; color: var(--ink2); border-top: 1px dashed var(--line); padding-top: 8px; }
+  @page { size: A4; margin: 10mm 9mm; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 10.5px; }
+    h2 { break-after: avoid; page-break-after: avoid; }
+    h3 { break-after: avoid; page-break-after: avoid; }
+    .grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .howto { break-inside: avoid; }
+  }
+</style>
+</head>
+<body data-ready="0">
+<header class="top">
+  <h1>Lucian 的魔法世界 — 題目庫／圖鑑對照表</h1>
+  <div class="sub" id="generated"></div>
+</header>
+
+<div class="howto">
+  <b>點樣同我講邊張圖／邊個字有問題？</b><br>
+  每個項目下面都有一個 <b>ID</b>（例如 <code>fruit-0</code>、<code>animal-fennec</code>、<code>p-good</code>），
+  直接話我「<code>fruit-0</code> 張圖唔似蘋果」或者「<code>animal-crab</code> 個名應該叫⋯」就得。<br>
+  ・題目庫共 <b id="cnt-topics"></b> 個主題、<b id="cnt-items"></b> 個字詞　・動物 <b id="cnt-animals"></b> 隻　・粵語句子 <b id="cnt-phrases"></b> 句<br>
+  ・⭐ 表示「同其他項目共用同一個圖案」或者「同科動物太似」，最需要你過目。
+</div>
+
+<h2>一、學習題目庫（第一部分）</h2>
+<div class="legend">
+  <span><b>ID</b>：主題-序號</span>
+  <span><b>zh</b>：中文顯示</span>
+  <span><b>粵</b>：粵語發音用字</span>
+  <span><b>py</b>：普通話拼音</span>
+  <span><b>en</b>：英文</span>
+</div>
+<div id="topics"></div>
+
+<h2>二、動物圖鑑（第二部分）</h2>
+<div class="legend">
+  <span>稀有度：<b class="rar r1" style="color:#fff;padding:1px 8px;border-radius:99px">普通</b>
+  <b class="rar r2" style="color:#fff;padding:1px 8px;border-radius:99px">少見</b>
+  <b class="rar r3" style="color:#fff;padding:1px 8px;border-radius:99px">稀有</b>
+  <b class="rar r4" style="color:#000;padding:1px 8px;border-radius:99px">傳說</b></span>
+  <span>每隻 4 條冷知識</span>
+</div>
+<div id="animals"></div>
+
+<h2>三、粵語句子（語音檔對照）</h2>
+<p class="sub">呢啲係遊戲入面會聽到嘅句子。如果覺得邊句唔自然、或者唔似廣東話，話我知個 ID 就得。</p>
+<table class="phrase-table">
+  <thead><tr><th style="width:150px">ID</th><th>句子</th></tr></thead>
+  <tbody id="phrases"></tbody>
+</table>
+
+<div class="footer" id="footer"></div>
+
+<script src="assets/js/data-animals.js"></script>
+<script src="assets/js/data-vocab.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/artwork.js"></script>
+<script src="assets/js/audio-manifest.js"></script>
+<script>
+(function () {
+  const PHRASES = {
+    'hi': '哈囉！我係魔法精靈，一齊玩啦！',
+    'tap-start': '撳個掣開始啦！',
+    'game-a-title': '聽聲音，揀圖案！',
+    'game-b-title': '睇圖案，揀字詞！',
+    'game-c-title': '睇字詞，揀圖案！',
+    'listen': '聽下係咩字？',
+    'listen-replay': '再聽一次！',
+    'choose': '揀一個啦！',
+    'good': '好叻呀！',
+    'great': '嘩！好犀利呀！',
+    'try-again': '唔緊要，再試一次啦！',
+    'wrong-gentle': '呢個唔係喎，再試一次啦。',
+    'all-done': '好叻呀！你完成咗啦！',
+    'you-got': '你攞到魔法生果呀！',
+    'well-done': '做得好！',
+    'back': '返去啦。',
+    'lets-go': '我哋出發啦！',
+    'fruits-earned': '你贏到魔法生果啦！',
+    'play-again': '再玩一次！',
+    'meet-animals': '一齊去搵動物啦！',
+    'find-shadow': '你見到動物嘅影子未呀？',
+    'wipe-sand': '用手指撥開啲沙，睇下係邊個？',
+    'found-animal': '你搵到動物啦！',
+    'feed-it': '餵佢食魔法生果啦！',
+    'throw-fruit': '用手指將魔法生果掟入圈圈裡面！',
+    'throw-more': '再掟多一個！',
+    'nice-throw': '掟得好準呀！',
+    'drum-time': '跟住個圈，一齊數拍子！',
+    'ready-count': '準備，一，二，三，四！',
+    'tap-now': '跟住拍子，撳個圈！',
+    'good-beat': '拍得好準呀！',
+    'animal-happy': '佢食得好開心呀！',
+    'reveal': '係咩動物呢？',
+    'now-you-know': '而家你識佢啦！',
+    'new-animal': '新嘅動物朋友呀！',
+    'rare-animal': '嘩！好稀有嘅動物呀！',
+    'fact': '冷知識時間！',
+    'done': '搞掂啦！',
+    'next-place': '去下一個地方啦！',
+    'visit-again': '再嚟呢度玩！',
+    'no-more': '我哋下次再嚟啦！',
+    'great-score': '好好分呀！',
+    'close': '閂咗佢。',
+    'settings-locked': '呢度係大人用嘅。',
+    'peek-grass': '啲動物匿埋喺草同樹後面，等佢哋出嚟嗰陣撳佢啦！',
+    'peek-water': '啲動物會喺水底浮上嚟，等佢浮上水面先撳佢啦！',
+    'wait-peek': '等佢出嚟先撳啦！',
+    'dig-hint': '用手指撥開啲沙，見到影子就撳佢！',
+  };
+
+  const dict = window.__AUDIO_MANIFEST || {};
+  const topics = { ...window.VOCAB, animal: window.buildAnimalTopic() };
+  const tEl = document.getElementById('topics');
+  const aEl = document.getElementById('animals');
+  const pEl = document.getElementById('phrases');
+
+  // 統計共用圖案
+  const artUse = {};
+  Object.entries(topics).forEach(([tid, t]) => {
+    t.items.forEach((it, i) => {
+      artUse[it.art] = (artUse[it.art] || 0) + 1;
+    });
+  });
+  const familyUse = {};
+  (window.ANIMAL_DATA || []).forEach((a) => {
+    if (a.family) familyUse[a.family] = (familyUse[a.family] || 0) + 1;
+  });
+
+  let itemCount = 0;
+  Object.entries(topics).forEach(([tid, t]) => {
+    const h = document.createElement('div');
+    h.innerHTML = `<h3>${t.emoji || ''} ${t.zh} · ${t.en}<span class="count">${t.items.length} 個${tid === 'animal' ? '（同圖鑑動物）' : ''}</span></h3>`;
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    t.items.forEach((it, i) => {
+      const id = tid + '-' + i;
+      const audioKey = tid === 'animal' ? 'a/' + it.art.slice(7) + '/yue' : 'v/' + tid + '/' + i + '/yue';
+      const hasAudio = !!dict[audioKey];
+      const shared = artUse[it.art] > 1;
+      const fam = tid === 'animal' ? familyUse[(window.ANIMAL_DATA || []).find((a) => it.art === 'animal:' + a.id)?.family] : 0;
+      const card = document.createElement('div');
+      card.className = 'item';
+      card.id = id;
+      card.innerHTML =
+        `<div class="pic">${window.Art.item(it)}</div>` +
+        `<div class="id">${id}</div>` +
+        `<div class="zh">${it.zh}</div>` +
+        `<div class="py">${it.py || ''}</div>` +
+        `<div class="en">${it.en || ''}</div>` +
+        (shared ? `<div class="tag warn">⭐ 圖案共用</div>` : '') +
+        (fam > 1 ? `<div class="tag warn">⭐ 同科有 ${fam} 隻</div>` : '') +
+        (hasAudio ? '' : `<div class="tag warn">⚠ 冇音檔</div>`);
+      grid.appendChild(card);
+      itemCount++;
+    });
+    h.appendChild(grid);
+    tEl.appendChild(h);
+  });
+
+  (window.ANIMAL_DATA || []).forEach((a) => {
+    const rar = window.RARITY[a.rarity] || window.RARITY[1];
+    const loc = (window.LOCATIONS || []).find((l) => l.id === a.loc) || {};
+    const card = document.createElement('div');
+    card.className = 'animal-card';
+    card.id = 'animal-' + a.id;
+    card.innerHTML =
+      `<div class="pic">${window.Art.animal(a.id)}</div>
+       <div class="info">
+         <div class="row1">
+           <span class="id" style="display:inline-block;font-size:9.5px;font-weight:700;color:#fff;background:#7c4dff;border-radius:99px;padding:1px 7px">animal-${a.id}</span>
+           <span class="nm">${a.zh}</span>
+           <span class="en">${a.en}</span>
+           <span class="rar" style="background:${rar.color}">${'★'.repeat(a.rarity)} ${rar.zh}</span>
+         </div>
+         <div class="meta">${loc.emoji || ''} ${loc.zh || ''}　拼音：${a.py || '—'}　粵語讀音：${a.yue || a.zh}</div>
+         <ol>${a.facts.map((f) => `<li>${f}</li>`).join('')}</ol>
+       </div>`;
+    aEl.appendChild(card);
+  });
+
+  Object.entries(PHRASES).forEach(([k, text]) => {
+    const tr = document.createElement('tr');
+    tr.id = 'p-' + k;
+    const has = !!dict['p/zh-HK/' + k];
+    tr.innerHTML = `<td class="k">p-${k}</td><td>${text}${has ? '' : ' <span style="color:#c0392b">（冇音檔）</span>'}</td>`;
+    pEl.appendChild(tr);
+  });
+
+  const dir = document.createElement('div');
+  Object.keys(dict).forEach((k) => {});
+  document.getElementById('generated').textContent =
+    '產生日期：' + new Date().toLocaleString('zh-HK') + '　·　語音檔：' + Object.keys(dict).length + ' 個';
+  document.getElementById('cnt-topics').textContent = Object.keys(topics).length;
+  document.getElementById('cnt-items').textContent = itemCount;
+  document.getElementById('cnt-animals').textContent = (window.ANIMAL_DATA || []).length;
+  document.getElementById('cnt-phrases').textContent = Object.keys(PHRASES).length;
+  document.getElementById('footer').textContent =
+    '粵語語音：Microsoft Edge Neural（zh-HK-HiuMaanNeural）・普通話：zh-CN-XiaoxiaoNeural・英語：en-US-JennyNeural　|　圖案：全部手繪 SVG（矢量，可無限放大）';
+  document.body.dataset.ready = '1';
+})();
+</script>
+</body>
+</html>

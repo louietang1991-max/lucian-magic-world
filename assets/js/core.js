@@ -116,9 +116,8 @@
       const el = document.getElementById('screen-' + prev);
       if (el) { el.classList.remove('active'); el.setAttribute('aria-hidden', 'true'); }
     }
-    if (!opts.replace && prev && prev !== id) screenStack.push(prev);
     currentScreen = id;
-    if (opts.resetStack) screenStack.length = 0;
+    screenStack.length = 0;
     const el = document.getElementById('screen-' + id);
     if (!el) { console.warn('no screen', id); return; }
     el.classList.add('active');
@@ -130,10 +129,29 @@
     if (h && h.enter) { try { h.enter(opts); } catch (e) { console.error(e); } }
   }
 
-  function back(fallback) {
-    const prev = screenStack.pop();
-    if (prev) go(prev, { replace: true });
-    else go(fallback || 'home', { replace: true });
+  /**
+   * 每個畫面固定嘅「上一層」——咁樣返上一頁永遠可預測，
+   * 唔會因為之前去過邊度而跳去奇怪嘅畫面。
+   */
+  const PARENT = {
+    home: null,
+    learn: 'home',
+    quiz: 'learn',
+    result: 'learn',
+    explore: 'home',
+    place: 'explore',
+    feed: 'place',
+    reveal: 'place',
+    album: 'home',
+    settings: 'home',
+  };
+
+  function back_(fallback) {
+    const p = PARENT[currentScreen];
+    screenStack.length = 0;
+    const target = p || fallback || 'home';
+    if (target === currentScreen) return;
+    go(target, { replace: true });
   }
 
   /* ------------------------------------------------------------------ popup */
@@ -251,15 +269,17 @@
         try { window.AudioKit && window.AudioKit.stop(); } catch (err) {}
         try { window.Metro && window.Metro.stop(); } catch (err) {}
         try { window.AudioKit && window.AudioKit.stopAmbient(); } catch (err) {}
-        window.Core.back(back.getAttribute('data-back'));
+        const dest = back.getAttribute('data-back');
+        if (dest && dest !== currentScreen) go(dest, { replace: true });
+        else back_();
         return;
       }
-      const go = t.closest('[data-go]');
-      if (go) {
+      const goBtn = t.closest('[data-go]');
+      if (goBtn) {
         e.preventDefault();
         try { window.AudioKit && window.AudioKit.tap(); } catch (err) {}
         try { haptic(); } catch (err) {}
-        const id = go.getAttribute('data-go');
+        const id = goBtn.getAttribute('data-go');
         if (id === currentScreen) return;
         window.Core.go(id);
       }
@@ -271,7 +291,7 @@
     $, $$, sleep, rnd, rndInt, pick, clamp, shuffle, uid,
     get state() { return state; },
     load, save, saveNow, DEFAULTS, KEY,
-    go, back, registerScreen, popup, confirmPopup, toast, T, speakKeyOf, isEnSpeak,
+    go, back: back_, registerScreen, popup, confirmPopup, toast, T, speakKeyOf, isEnSpeak,
     haptic, fmt, escapeHtml, starsSvg, bus,
     get screen() { return currentScreen; },
   };

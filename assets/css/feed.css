@@ -6,14 +6,14 @@
   background: var(--fbg);
   transition: background 0.5s;
 }
-#screen-feed.feed-beach { --fbg: linear-gradient(180deg, #a9e2ff 0%, #ffd89b 42%, #f0b86a 100%); }
-#screen-feed.feed-sea { --fbg: linear-gradient(180deg, #8ee4ff 0%, #4aa8e0 45%, #1a6fa8 100%); }
+#screen-feed.feed-beach { --fbg: linear-gradient(180deg, #79bfe8 0%, #e8b672 44%, #a8703a 100%); }
+#screen-feed.feed-sea { --fbg: linear-gradient(180deg, #6dbde0 0%, #2f8fc4 45%, #135c8a 100%); }
 #screen-feed.feed-underwater { --fbg: linear-gradient(180deg, #62d0f7 0%, #1565c0 55%, #0b3d91 100%); }
-#screen-feed.feed-river { --fbg: linear-gradient(180deg, #cdefff 0%, #8fd8c0 40%, #4caf50 100%); }
+#screen-feed.feed-river { --fbg: linear-gradient(180deg, #8fc4d8 0%, #5fa87e 42%, #2e6b32 100%); }
 #screen-feed.feed-forest { --fbg: linear-gradient(180deg, #b9e3a0 0%, #5aa85e 50%, #20512a 100%); }
-#screen-feed.feed-grass { --fbg: linear-gradient(180deg, #cdefff 0%, #ffe9a8 40%, #c8b23a 100%); }
-#screen-feed.feed-desert { --fbg: linear-gradient(180deg, #ffd08a 0%, #e8904a 50%, #a85a24 100%); }
-#screen-feed.feed-snow { --fbg: linear-gradient(180deg, #cfe9f8 0%, #eef8ff 50%, #d8ecf8 100%); }
+#screen-feed.feed-grass { --fbg: linear-gradient(180deg, #8fc4e0 0%, #d8c04a 42%, #7a6a18 100%); }
+#screen-feed.feed-desert { --fbg: linear-gradient(180deg, #e8a55c 0%, #c9762e 48%, #7a3e12 100%); }
+#screen-feed.feed-snow { --fbg: linear-gradient(180deg, #8fb8d0 0%, #cfe4f2 45%, #9dbdd4 100%); }
 #screen-feed.stage-throw { background: var(--fbg); }
 #screen-feed.stage-beat, #screen-feed.stage-tap {
   background: linear-gradient(180deg, rgba(42,27,74,.80) 0%, rgba(58,40,96,.72) 48%, rgba(28,18,53,.86) 100%), var(--fbg);
@@ -187,3 +187,13 @@
 .basket-fruits { font-size: 34px; gap: 4px; }
 .basket { height: 76px; align-items: flex-end; }
 .basket-fruits { top: -6px; }
+
+/* 餵食畫面：暗角（唔會擋到操作） */
+#screen-feed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(115% 78% at 50% 44%, rgba(20, 12, 40, 0) 34%, rgba(20, 12, 40, 0.28) 100%);
+}
