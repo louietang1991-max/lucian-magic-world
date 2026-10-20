@@ -5,3 +5,10 @@ tools/debug-*.mjs
 *.zip
 .DS_Store
 Thumbs.db
+
+# 原始 AI 生成圖（體積大，唔入 git；網頁用嘅 hero-web / cutout-webp 就有入）
+assets/img/animals/hero/
+assets/img/animals/cutout/
+assets/img/animals/cutout-final/
+assets/img/animals/cutout-web/
+assets/img/items-raw/

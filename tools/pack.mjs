@@ -17,10 +17,18 @@ for (const f of FILES) {
   const p = path.join(ROOT, f);
   if (fs.existsSync(p)) zip.file(f, fs.readFileSync(p));
 }
+const SKIP_DIRS = new Set([
+  'assets/img/animals/hero',
+  'assets/img/animals/cutout',
+  'assets/img/animals/cutout-final',
+  'assets/img/animals/cutout-web',
+  'assets/img/items-raw',
+]);
 function walk(dir, base) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
     const rel = base ? base + '/' + name : name;
+    if (SKIP_DIRS.has(rel)) continue;
     const st = fs.statSync(full);
     if (st.isDirectory()) walk(full, rel);
     else zip.file(rel, fs.readFileSync(full));
