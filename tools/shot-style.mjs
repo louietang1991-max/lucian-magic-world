@@ -1,0 +1,20 @@
+/* tools/shot-style.mjs — 畫風選擇頁截圖（俾最終回覆用） */
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import puppeteer from 'puppeteer-core';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const PORT = 8145;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const server = spawn(process.execPath, [path.join(ROOT, 'tools', 'serve.mjs'), String(PORT)], { stdio: 'ignore' });
+await sleep(500);
+const browser = await puppeteer.launch({ executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', headless: true, args: ['--no-sandbox', '--mute-audio'] });
+const page = await browser.newPage();
+await page.setViewport({ width: 1180, height: 1400, deviceScaleFactor: 1.4 });
+await page.goto(`http://127.0.0.1:${PORT}/${encodeURIComponent('畫風選擇.html')}`, { waitUntil: 'networkidle2' });
+await sleep(600);
+await page.screenshot({ path: path.join(ROOT, 'screenshots', 'style-options.png'), fullPage: true });
+console.log('ok');
+await browser.close();
+server.kill();

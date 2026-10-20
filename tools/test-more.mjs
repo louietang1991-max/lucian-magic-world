@@ -123,19 +123,31 @@ try {
     await page.evaluate(() => document.getElementById('feed-circle').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
     await sleep(750);
   }
+  // 等節奏面板 → 撳開始 → 等拍子
+  const tr = Date.now();
+  while (Date.now() - tr < 15000) {
+    if (await page.evaluate(() => window.Feed.F.stage === 'ready')) break;
+    await sleep(120);
+  }
+  await page.evaluate(() => document.getElementById('rhythm-start').click());
   const tb = Date.now();
   while (Date.now() - tb < 15000) {
     if (await page.evaluate(() => window.Feed.F.stage === 'beats')) break;
     await sleep(120);
   }
-  for (let i = 0; i < 4; i++) {
-    for (let k = 0; k < 40; k++) {
-      const t = await page.evaluate(() => window.Metro.toNext());
-      if (t < 0.05) break;
-      await sleep(25);
+  const activeN = await page.evaluate(() => window.Feed.F.pattern.active.length);
+  for (let i = 0; i < activeN; i++) {
+    for (let k = 0; k < 120; k++) {
+      const info = await page.evaluate(() => {
+        const m = window.Metro;
+        const p = m.position();
+        return { toNext: m.toNext(), nb: Math.ceil(p - 0.001), active: window.Feed.F.pattern.active };
+      });
+      if (info.toNext < 0.06 && info.active.includes(info.nb)) break;
+      await sleep(20);
     }
     await page.evaluate(() => document.getElementById('feed-circle').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
-    await sleep(180);
+    await sleep(120);
   }
   await waitFor(page, () => document.getElementById('screen-reveal').classList.contains('active'), 12000, 'reveal');
   await sleep(1200);

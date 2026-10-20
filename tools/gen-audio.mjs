@@ -84,6 +84,12 @@ const PHRASES = {
   'peek-water': '啲動物會喺水底浮上嚟，等佢浮上水面先撳佢啦！',
   'wait-peek': '等佢出嚟先撳啦！',
   'dig-hint': '用手指撥開啲沙，見到影子就撳佢！',
+  'count-123': '準備⋯⋯一，二，三！',
+  'start': '開始！',
+  'listen-beat': '聽下個拍子先！',
+  'ready-rhythm': '準備好未呀？想聽多一次就撳「聽節拍」，準備好就撳「開始」！',
+  'hands': '跟住隻手，一齊拍！',
+  'rest-beat': '呢拍休息，等下一拍啦！',
 };
 
 const EN_PHRASES = {
@@ -180,6 +186,14 @@ await Promise.all(Array.from({ length: CONC }, worker));
 /* ---------- manifest ---------- */
 const manifest = {};
 let totalBytes = 0;
+// MERGE_MANIFEST：只係重做部分語音時，保留舊有嘅項目
+const manifestPath = path.join(OUT, 'manifest.json');
+if (ONLY && fs.existsSync(manifestPath)) {
+  try {
+    const old = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    for (const k of Object.keys(old)) manifest[k] = old[k];
+  } catch (e) {}
+}
 for (const j of jobs) {
   const p = fileOf(j.key);
   if (!fs.existsSync(p)) continue;

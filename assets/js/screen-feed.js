@@ -8,7 +8,18 @@
   const A = () => window.AudioKit;
 
   const THROWS = 3;
-  const BEATS = 4;
+
+  /* 節拍模式：唔止一種拍子 */
+  const PATTERNS = [
+    { id: 'steady', zh: '平均四拍', bpm: 88, beats: 4, active: [0, 1, 2, 3] },
+    { id: 'skip', zh: '停一拍（1·2·_·4）', bpm: 84, beats: 4, active: [0, 1, 3] },
+    { id: 'waltz', zh: '三拍（1·2·3）', bpm: 96, beats: 3, active: [0, 1, 2] },
+  ];
+  function pickPattern() {
+    const base = Number(C.state.settings.tempo) || 88;
+    const p = PATTERNS[Math.floor(Math.random() * PATTERNS.length)];
+    return { ...p, bpm: Math.round(Math.max(60, Math.min(120, base + (p.bpm - 88)))) };
+  }
 
   const F = {
     animal: null,
@@ -16,8 +27,11 @@
     geo: null,
     fruits: [],             // 飛緊／落地
     score: { accuracy: 0, rhythm: 0 },
+    rawRhythm: 0,
+    pattern: PATTERNS[0],
+    demo: false,
     throwCount: 0,
-    beatTaps: new Array(BEATS).fill(null),
+    beatTaps: [],
     taps: 0,
     perfect: 0,
     raf: 0,
@@ -51,6 +65,15 @@
       circle.style.left = g.cx - g.r + 'px';
       circle.style.top = g.cy - g.r + 'px';
     }
+    // 跟拍雙手：放喺圈圈左右上方
+    const hands = document.querySelectorAll('#beat-hands .hand');
+    if (hands.length >= 2) {
+      const hy = g.cy - g.r * 1.12;
+      hands[0].style.left = Math.max(4, g.cx - g.r * 1.05 - 46) + 'px';
+      hands[0].style.top = hy + 'px';
+      hands[1].style.left = Math.min(window.innerWidth - 100, g.cx + g.r * 1.05 - 46) + 'px';
+      hands[1].style.top = hy + 'px';
+    }
     const animal = $('#feed-animal');
     if (animal) {
       animal.style.left = g.animal.x + 'px';
@@ -67,8 +90,11 @@
     F.fruits.forEach((f) => { try { f.el.remove(); } catch (e) {} });
     F.fruits = [];
     F.score = { accuracy: 0, rhythm: 0 };
+    F.rawRhythm = 0;
+    F.pattern = pickPattern();
+    F.demo = false;
     F.throwCount = 0;
-    F.beatTaps = new Array(BEATS).fill(null);
+    F.beatTaps = [];
     F.taps = 0;
     F.perfect = 0;
     clearTimers();
@@ -133,10 +159,11 @@
   function renderDots() {
     const dots = $('#beat-dots');
     if (!dots) return;
+    const p = F.pattern || PATTERNS[0];
     dots.innerHTML = '';
-    for (let i = 0; i < BEATS; i++) {
+    for (let i = 0; i < p.beats; i++) {
       const d = document.createElement('i');
-      d.className = 'beat-dot';
+      d.className = 'beat-dot' + (p.active.includes(i) ? '' : ' rest');
       dots.appendChild(d);
     }
   }
@@ -194,7 +221,7 @@
       const hint = $('#feed-hint');
       if (hint) hint.textContent = label;
       if (F.throwCount >= THROWS) {
-        later(startCountIn, 800);
+        later(showReady, 700);
         if (hint) hint.textContent = '準備跟拍子…';
       } else {
         later(() => { if (F.stage === 'throw') { tip('再掟多一個！', 1100); if (hint) hint.textContent = '將魔法生果掟入圈圈！'; } }, 520);
@@ -236,68 +263,199 @@
   }
 
   /* ================================================================ 節奏 */
-  function startCountIn() {
-    if (F.stage !== 'throw') return;
-    F.stage = 'countin';
+  function setStage(name) {
     const screen = document.getElementById('screen-feed');
-    if (screen) { screen.classList.remove('stage-throw'); screen.classList.add('stage-beat'); }
-    $$('#beat-dots .beat-dot').forEach((d) => (d.className = 'beat-dot count'));
-    const hint = $('#feed-hint');
-    if (hint) hint.textContent = '跟住個圈，準備數拍子…';
-    tip('跟住個圈嘅拍子！', 2400);
-    A().play('p/zh-HK/drum-time');
-    later(() => {
-      if (F.stage === 'done') return;
-      const bpm = C.state.settings.tempo || 90;
-      window.Metro.start({
-        bpm,
-        countIn: BEATS,
-        beats: BEATS,
-        window: 0.34,
-        onBeat,
-        onEnd: onRhythmEnd,
-      });
-      const h = $('#feed-hint');
-      if (h) h.textContent = '準備數拍子：一、二、三、四…';
-      A().play('p/zh-HK/ready-count');
-    }, 1400);
+    if (!screen) return;
+    screen.classList.remove('stage-throw', 'stage-ready', 'stage-beat', 'stage-tap', 'stage-eat');
+    screen.classList.add('stage-' + name);
   }
 
-  function onBeat(i, isCountIn) {
-    const dots = $$('#beat-dots .beat-dot');
-    circlePulse();
-    if (isCountIn) {
-      F.stage = 'countin';
-      dots.forEach((d, k) => { d.className = 'beat-dot count' + (k === i % BEATS ? ' now' : ''); });
-      A().countIn(i % 4 === 0 ? 1 : 2);
-      const c = $('#feed-circle');
-      if (c) c.classList.add('count');
-    } else {
-      if (F.stage !== 'beats') {
-        F.stage = 'beats';
-        const screen = document.getElementById('screen-feed');
-        if (screen) { screen.classList.remove('stage-beat'); screen.classList.add('stage-tap'); }
-        const hint = $('#feed-hint');
-        if (hint) hint.textContent = '撳個圈！跟住拍子！';
-        tip('撳圈圈！', 1500);
-        A().play('p/zh-HK/tap-now');
-        const c = $('#feed-circle');
-        if (c) c.classList.remove('count');
-        const lb = $('#fc-label');
-        if (lb) lb.textContent = '撳';
-      }
-      const k = i - BEATS;
-      dots.forEach((d, idx) => {
-        d.className = 'beat-dot' + (idx === k ? ' now' : (F.beatTaps[idx] != null ? ' hit' : ''));
+  function slamHands() {
+    const h = $('#beat-hands');
+    if (!h) return;
+    h.classList.remove('slam');
+    void h.offsetWidth;
+    h.classList.add('slam');
+  }
+
+  function showCount(text) {
+    const el = $('#count-pop');
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+  }
+
+  /** 掟完三個生果：出「聽節拍 / 開始」面板 */
+  function showReady() {
+    if (F.stage !== 'throw') return;
+    F.stage = 'ready';
+    F.pattern = pickPattern();
+    F.beatTaps = new Array(F.pattern.beats).fill(null);
+    F.rawRhythm = 0;
+    setStage('ready');
+    renderDots();
+    const hint = $('#feed-hint');
+    if (hint) hint.textContent = '準備好就撳「開始」！';
+    const panel = $('#rhythm-ready');
+    if (panel) panel.hidden = false;
+    const pp = $('#rr-pattern');
+    if (pp) pp.textContent = F.pattern.zh + '　·　' + F.pattern.bpm + ' BPM';
+    const hands = $('#beat-hands');
+    if (hands) hands.hidden = false;
+    const basket = $('#feed-basket');
+    if (basket) basket.style.display = 'none';
+    const ls = $('#rhythm-listen');
+    if (ls) ls.disabled = false;
+    A().play('p/zh-HK/ready-rhythm');
+    tip('想聽多次就撳「聽節拍」', 2600);
+  }
+
+  function setReadyButtons(disabled) {
+    const ls = $('#rhythm-listen');
+    const st = $('#rhythm-start');
+    if (ls) ls.disabled = disabled;
+    if (st) st.disabled = disabled;
+  }
+
+  /** 聽節拍：示範一次（唔計分） */
+  function listenBeat() {
+    if (F.stage !== 'ready') return;
+    F.stage = 'demo';
+    F.demo = true;
+    setReadyButtons(true);
+    A().play('p/zh-HK/listen-beat');
+    const hint = $('#feed-hint');
+    if (hint) hint.textContent = '聽下個拍子…';
+    const p = F.pattern;
+    renderDots();
+    later(() => {
+      if (F.stage === 'done') return;
+      if (F.stage !== 'demo') { F.demo = false; return; }
+      const ok = window.Metro.start({
+        bpm: p.bpm,
+        countIn: 0,
+        beats: p.beats,
+        window: 0.34,
+        onBeat: onDemoBeat,
+        onEnd: () => {
+          F.demo = false;
+          F.stage = 'ready';
+          setReadyButtons(false);
+          const h = $('#feed-hint');
+          if (h) h.textContent = '準備好就撳「開始」！';
+        },
       });
-      A().beat(i % 4 === 0 ? 1400 : 1200);
+      if (!ok) { F.demo = false; F.stage = 'ready'; setReadyButtons(false); }
+    }, 1000);
+  }
+
+  function onDemoBeat(i) {
+    const p = F.pattern;
+    const active = p.active.includes(i);
+    const dots = $$('#beat-dots .beat-dot');
+    dots.forEach((d, idx) => {
+      d.className = 'beat-dot' + (p.active.includes(idx) ? '' : ' rest') + (idx === i ? ' now' : '');
+    });
+    if (active) {
+      circlePulse();
+      slamHands();
+      A().beat(i === 0 ? 1400 : 1200);
+    } else {
+      A().tick();
+    }
+  }
+
+  /** 開始：數 1、2、3 先正式開始 */
+  function startBeats() {
+    if (F.stage !== 'ready') return;
+    F.stage = 'count';
+    const panel = $('#rhythm-ready');
+    if (panel) panel.hidden = true;
+    setStage('beat');
+    const hint = $('#feed-hint');
+    if (hint) hint.textContent = '準備⋯⋯';
+    A().play('p/zh-HK/count-123');
+    const nums = ['1', '2', '3'];
+    nums.forEach((n, i) => {
+      later(() => {
+        if (F.stage === 'done') return;
+        showCount(n);
+        A().countIn(i === 0 ? 1 : 2);
+        slamHands();
+      }, i * 640);
+    });
+    later(() => {
+      if (F.stage === 'done') return;
+      showCount('開始！');
+    }, nums.length * 640);
+    later(() => {
+      if (F.stage === 'done') return;
+      beginMetro();
+    }, nums.length * 640 + 720);
+  }
+
+  function beginMetro() {
+    F.stage = 'beats';
+    document.querySelectorAll('.throw-fruit').forEach((el) => el.classList.add('eaten'));
+    setStage('tap');
+    const hint = $('#feed-hint');
+    const p = F.pattern;
+    if (hint) hint.textContent = '跟住拍子撳圈圈！';
+    tip('跟住拍子撳！', 1600);
+    A().play('p/zh-HK/tap-now');
+    const lb = $('#fc-label');
+    if (lb) lb.textContent = '撳';
+    renderDots();
+    const ok = window.Metro.start({
+      bpm: p.bpm,
+      countIn: 0,
+      beats: p.beats,
+      window: 0.34,
+      onBeat,
+      onEnd: onRhythmEnd,
+    });
+    if (!ok) {
+      // 冇 audio context：照樣用計時器行（極少數情況）
+      F.stage = 'beats';
+    }
+  }
+
+  function onBeat(i) {
+    const p = F.pattern;
+    const active = p.active.includes(i);
+    const dots = $$('#beat-dots .beat-dot');
+    dots.forEach((d, idx) => {
+      let cls = 'beat-dot' + (p.active.includes(idx) ? '' : ' rest');
+      if (idx === i) cls += ' now';
+      if (F.beatTaps[idx] != null && F.beatTaps[idx] > 0) cls += ' hit';
+      d.className = cls;
+    });
+    if (active) {
+      circlePulse();
+      slamHands();
+      A().beat(i === 0 ? 1400 : 1200);
+    } else {
+      // 休息拍：細細聲 tick，圈唔閃
+      A().tick();
     }
   }
 
   function tapCircle() {
     if (F.stage === 'throw') { throwFruit(null); return; }
     if (F.stage !== 'beats') return;
+    const p = F.pattern;
     const rate = window.Metro.rateNow();
+    const beat = clamp(rate.beat, 0, p.beats - 1);
+    // 撳咗喺「休息拍」上面
+    if (!p.active.includes(beat)) {
+      C.haptic();
+      A().tick();
+      slamHands();
+      flyScore(F.geo.cx + rnd(-30, 30), F.geo.cy - F.geo.r - 16, '呢拍休息', '#c9b8e8');
+      return;
+    }
     let pts = 0, label = '', good = false;
     if (rate.dist <= 0.08) { pts = 10; label = 'PERFECT!'; good = true; F.perfect++; }
     else if (rate.dist <= 0.15) { pts = 7; label = 'GREAT!'; good = true; }
@@ -305,11 +463,11 @@
     else if (rate.dist <= 0.34) { pts = 2; label = 'OK'; }
     else { label = '再試吓'; }
     F.taps++;
-    const beat = clamp(rate.beat - BEATS, 0, BEATS - 1);
     if (pts > (F.beatTaps[beat] == null ? -1 : F.beatTaps[beat])) F.beatTaps[beat] = pts;
-    F.score.rhythm += pts;
+    F.rawRhythm += pts;
     C.haptic();
     A().tap();
+    slamHands();
     if (good) A().star();
     const g = F.geo;
     const ball = document.createElement('div');
@@ -324,14 +482,18 @@
     flyScore(g.cx + rnd(-40, 40), g.cy - g.r - 16, label, good ? '#7dffb0' : pts > 0 ? '#ffe066' : '#ffb3c1');
     circlePulse();
     const dots = $$('#beat-dots .beat-dot');
-    if (dots[beat] && pts > 0) dots[beat].className = 'beat-dot hit';
+    if (dots[beat] && pts > 0) dots[beat].className = 'beat-dot' + (p.active.includes(beat) ? '' : ' rest') + ' hit';
   }
 
   function onRhythmEnd() {
     if (F.stage === 'done') return;
+    // 把拍子分數標準化到 40 分滿分
+    const maxRaw = 10 * F.pattern.active.length;
+    F.score.rhythm = maxRaw ? Math.round((F.rawRhythm / maxRaw) * 40) : 0;
     F.stage = 'eat';
-    const screen = document.getElementById('screen-feed');
-    if (screen) { screen.classList.remove('stage-tap'); screen.classList.add('stage-eat'); }
+    setStage('eat');
+    const panel = $('#rhythm-ready');
+    if (panel) panel.hidden = true;
     const hint = $('#feed-hint');
     if (hint) hint.textContent = '好叻呀！';
     tip('動物食得好開心呀！', 2000);
@@ -480,6 +642,11 @@
       window.addEventListener('pointerup', up);
       window.addEventListener('pointercancel', () => { drag = null; basket.classList.remove('pulling'); });
     }
+    const ls = $('#rhythm-listen');
+    if (ls) ls.addEventListener('click', () => { A().tap(); listenBeat(); });
+    const st = $('#rhythm-start');
+    if (st) st.addEventListener('click', () => { A().tap(); startBeats(); });
+
     const quit = $('#feed-quit');
     if (quit) quit.addEventListener('click', () => {
       window.Metro.stop();
@@ -533,7 +700,11 @@
       A().stop();
       const t = $('#feed-tip'); if (t) t.classList.remove('show');
       const screen = document.getElementById('screen-feed');
-      if (screen) screen.classList.remove('stage-throw', 'stage-beat', 'stage-tap', 'stage-eat');
+      if (screen) screen.classList.remove('stage-throw', 'stage-ready', 'stage-beat', 'stage-tap', 'stage-eat');
+      const panel = $('#rhythm-ready'); if (panel) panel.hidden = true;
+      const hands = $('#beat-hands'); if (hands) hands.hidden = true;
+      const basket = $('#feed-basket'); if (basket) basket.style.display = '';
+      const cp = $('#count-pop'); if (cp) cp.classList.remove('show');
       F.fruits.forEach((f) => { try { f.el.remove(); } catch (e) {} });
       F.fruits = [];
     },

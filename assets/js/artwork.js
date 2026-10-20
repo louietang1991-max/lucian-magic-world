@@ -888,15 +888,55 @@
     heart: () => path('M100 164 q-64 -40 -64 -80 q0 -36 32 -36 q20 0 32 22 q12 -22 32 -22 q32 0 32 36 q0 40 -64 80 Z', '#ff5d8f'),
     oval: () => ellipse(100, 108, 68, 44, '#6a4c93'),
     rectangle: () => rrect(30, 64, 140, 88, 16, '#ff924c'),
-    /* 身體部位（用可愛面／手腳） */
-    eyes: () => `${circle(100, 108, 66, '#ffe0b2')}${ellipse(72, 98, 20, 26, '#fff', 'stroke="#3a2f4a" stroke-width="3"')}${ellipse(128, 98, 20, 26, '#fff', 'stroke="#3a2f4a" stroke-width="3"')}${circle(72, 102, 11, '#3a2f4a')}${circle(128, 102, 11, '#3a2f4a')}${circle(67, 96, 4, '#fff')}${circle(123, 96, 4, '#fff')}${path('M52 74 q20 -10 40 0', '#3a2f4a', 'stroke-width="6" fill="none" stroke-linecap="round"')}${path('M108 74 q20 -10 40 0', '#3a2f4a', 'stroke-width="6" fill="none" stroke-linecap="round"')}${path('M78 140 q22 16 44 0', '#d4736b', 'stroke-width="5" fill="none" stroke-linecap="round"')}`,
-    ears: () => `${circle(100, 112, 62, '#ffe0b2')}${path('M44 96 q-22 -34 2 -44 q26 -8 34 26 Z', '#ffcf9e')}${path('M156 96 q22 -34 -2 -44 q-26 -8 -34 26 Z', '#ffcf9e')}${path('M52 88 q-12 -20 2 -26 q14 -4 18 16 Z', '#ffb3c1')}${path('M148 88 q12 -20 -2 -26 q-14 -4 -18 16 Z', '#ffb3c1')}${circle(100, 176, 0, '#000')}${path('M66 120 q10 10 20 0', '#3a2f4a', 'stroke-width="4" fill="none" stroke-linecap="round"')}`,
-    nose: () => `${circle(100, 112, 60, '#ffe0b2')}${path('M100 78 q30 22 22 44 q-6 18 -22 18 q-16 0 -22 -18 q-8 -22 22 -44 Z', '#ffb38a')}${circle(90, 104, 6, '#c97b5a')}${circle(110, 104, 6, '#c97b5a')}${path('M88 132 q12 8 24 0', '#d4736b', 'stroke-width="5" fill="none" stroke-linecap="round"')}${circle(76, 120, 10, '#ff9ab8', 'opacity=".5"')}${circle(124, 120, 10, '#ff9ab8', 'opacity=".5"')}`,
-    mouth: () => `${circle(100, 106, 64, '#ffe0b2')}${path('M64 112 q36 46 72 0 q-36 14 -72 0 Z', '#e05a72')}${path('M72 116 q28 8 56 0', '#fff', 'stroke-width="8" fill="none" stroke-linecap="round"')}${circle(80, 88, 6, '#3a2f4a')}${circle(120, 88, 6, '#3a2f4a')}`,
-    hand: () => `${path('M72 170 q-20 0 -20 -22 l0 -44 q0 -10 10 -10 q10 0 10 10 l0 -20 q0 -10 10 -10 q10 0 10 10 l0 -8 q0 -10 10 -10 q10 0 10 10 l0 12 q0 -10 10 -10 q10 0 10 10 l0 54 q0 24 -22 24 Z', '#ffcf9e')}${stroke('M74 100 l0 30 M94 96 l0 34 M114 104 l0 26', '#e8b184', 3)}`,
-    foot: () => `${path('M84 130 q-30 0 -34 -24 q-4 -22 12 -34 q30 -22 62 0 q16 12 12 34 q-4 24 -34 24 Z', '#ffcf9e')}${[0, 1, 2, 3, 4].map((i) => circle(70 + i * 15, 138, 11, '#ffcf9e')).join('')}${[0, 1, 2, 3, 4].map((i) => circle(70 + i * 15, 140, 7, '#ffb38a', 'opacity=".5"')).join('')}`,
-    hair: () => `${circle(100, 116, 60, '#ffe0b2')}${path('M40 104 q0 -66 60 -66 q60 0 60 66 q-8 -32 -24 -34 q-10 14 -36 14 q-26 0 -36 -14 q-16 2 -24 34 Z', '#4a2c1a')}${circle(78, 118, 6, '#3a2f4a')}${circle(122, 118, 6, '#3a2f4a')}${path('M84 142 q16 10 32 0', '#d4736b', 'stroke-width="4" fill="none" stroke-linecap="round"')}`,
-    teeth: () => `${path('M44 96 q0 -40 56 -40 q56 0 56 40 q0 30 -56 30 q-56 0 -56 -30 Z', '#ff9ab8')}${[[72, 70], [100, 64], [128, 70]].map(([x, y]) => rrect(x - 12, y, 24, 22, 5, '#fff')).join('')}${rrect(88, 100, 24, 26, 6, '#fff')}${path('M44 96 q56 22 112 0 l0 10 q-56 24 -112 0 Z', '#e0708c', 'opacity=".5"')}`,
+    /* 身體部位：用「大頭臉 + 突出部位」嘅畫法，一眼睇得出係邊個部位 */
+    eyes: () => {
+      const base = circle(100, 112, 62, "#ffe0b2") + path("M38 96 q0 -46 62 -46 q62 0 62 46 q0 10 -8 10 q-8 0 -10 -10 q-6 -26 -44 -26 q-38 0 -44 26 q-2 10 -10 10 q-8 0 -8 -10 Z", "#4a2c1a");
+      const feat = ellipse(74, 110, 22, 26, "#fff", 'stroke="#3a2f4a" stroke-width="3.5"') + ellipse(126, 110, 22, 26, "#fff", 'stroke="#3a2f4a" stroke-width="3.5"') + circle(74, 114, 12, "#3a2f4a") + circle(126, 114, 12, "#3a2f4a") + circle(68, 106, 5, "#fff") + circle(120, 106, 5, "#fff") + circle(78, 120, 2.5, "#fff") + circle(130, 120, 2.5, "#fff");
+      const ring = `<circle cx="74" cy="110" r="34" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/><circle cx="126" cy="110" r="34" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return base + path("M78 148 q22 16 44 0", "#d4736b", 'stroke-width="5" fill="none" stroke-linecap="round"') + feat + ring;
+    },
+    ears: () => {
+      const base = circle(100, 112, 58, "#ffe0b2") + path("M38 96 q0 -44 62 -44 q62 0 62 44 q0 10 -8 10 q-8 0 -10 -10 q-6 -26 -44 -26 q-38 0 -44 26 q-2 10 -10 10 q-8 0 -8 -10 Z", "#4a2c1a");
+      const ears = path("M52 92 q-34 -30 -10 -46 q26 -14 44 24 Z", "#ffcf9e") + path("M148 92 q34 -30 10 -46 q-26 -14 -44 24 Z", "#ffcf9e") + path("M56 86 q-18 -22 -2 -30 q16 -4 22 20 Z", "#ffb3c1") + path("M144 86 q18 -22 2 -30 q-16 -4 -22 20 Z", "#ffb3c1");
+      const feat = circle(78, 112, 8, "#3a2f4a") + circle(122, 112, 8, "#3a2f4a") + path("M86 138 q14 12 28 0", "#d4736b", 'stroke-width="5" fill="none" stroke-linecap="round"');
+      const ring = `<circle cx="44" cy="70" r="34" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/><circle cx="156" cy="70" r="34" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return ears + base + feat + ring;
+    },
+    nose: () => {
+      const base = circle(100, 112, 60, "#ffe0b2") + path("M38 96 q0 -46 62 -46 q62 0 62 46 q0 10 -8 10 q-8 0 -10 -10 q-6 -26 -44 -26 q-38 0 -44 26 q-2 10 -10 10 q-8 0 -8 -10 Z", "#4a2c1a");
+      const feat = path("M100 84 q26 20 19 38 q-5 15 -19 15 q-14 0 -19 -15 q-7 -18 19 -38 Z", "#ffb38a") + ellipse(92, 110, 6, 8, "#c97b5a") + ellipse(108, 110, 6, 8, "#c97b5a");
+      const ring = `<circle cx="100" cy="110" r="36" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return base + circle(76, 118, 10, "#ff9ab8", 'opacity=".5"') + circle(124, 118, 10, "#ff9ab8", 'opacity=".5"') + path("M86 146 q14 8 28 0", "#d4736b", 'stroke-width="5" fill="none" stroke-linecap="round"') + feat + ring;
+    },
+    mouth: () => {
+      const base = circle(100, 106, 62, "#ffe0b2") + path("M38 90 q0 -46 62 -46 q62 0 62 46 q0 10 -8 10 q-8 0 -10 -10 q-6 -26 -44 -26 q-38 0 -44 26 q-2 10 -10 10 q-8 0 -8 -10 Z", "#4a2c1a");
+      const feat = path("M58 116 q42 52 84 0 q-42 18 -84 0 Z", "#e05a72") + path("M70 120 q30 10 60 0", "#fff", 'stroke-width="9" fill="none" stroke-linecap="round"') + path("M88 150 q12 -6 24 0 q-12 8 -24 0 Z", "#c94a63");
+      const ring = `<ellipse cx="100" cy="130" rx="52" ry="34" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return base + circle(76, 92, 7, "#3a2f4a") + circle(124, 92, 7, "#3a2f4a") + feat + ring;
+    },
+    hand: () => {
+      const palm = path("M64 176 q-22 0 -22 -24 l0 -46 q0 -11 11 -11 q11 0 11 11 l0 -22 q0 -11 11 -11 q11 0 11 11 l0 -10 q0 -11 11 -11 q11 0 11 11 l0 14 q0 -11 11 -11 q11 0 11 11 l0 58 q0 26 -24 26 Z", "#ffcf9e");
+      const lines = stroke("M75 104 l0 32 M97 100 l0 36 M119 108 l0 28", "#e8b184", 3);
+      const ring = `<circle cx="96" cy="120" r="62" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return palm + lines + ring;
+    },
+    foot: () => {
+      const foot = path("M84 128 q-32 0 -36 -26 q-4 -24 13 -36 q32 -24 66 0 q17 12 13 36 q-4 26 -36 26 Z", "#ffcf9e") + [0,1,2,3,4].map((i) => circle(70 + i * 15, 138, 12, "#ffcf9e")).join("") + [0,1,2,3,4].map((i) => circle(70 + i * 15, 140, 7, "#ffb38a", 'opacity=".55"')).join("");
+      const ring = `<ellipse cx="100" cy="120" rx="70" ry="52" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return foot + ring;
+    },
+    hair: () => {
+      const base = circle(100, 118, 58, "#ffe0b2");
+      const feat = path("M40 106 q0 -66 60 -66 q60 0 60 66 q-8 -32 -24 -34 q-10 14 -36 14 q-26 0 -36 -14 q-16 2 -24 34 Z", "#4a2c1a") + path("M60 58 q10 -14 26 -8 q-8 12 -26 8 Z", "#6b4423") + path("M140 58 q-10 -14 -26 -8 q8 12 26 8 Z", "#6b4423");
+      const ring = `<ellipse cx="100" cy="72" rx="66" ry="42" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return base + feat + circle(78, 122, 7, "#3a2f4a") + circle(122, 122, 7, "#3a2f4a") + path("M86 146 q14 10 28 0", "#d4736b", 'stroke-width="5" fill="none" stroke-linecap="round"') + ring;
+    },
+    teeth: () => {
+      const mouth = path("M40 84 q60 -26 120 0 q0 66 -60 66 q-60 0 -60 -66 Z", "#ff7f9c");
+      const teeth = rrect(62, 88, 26, 24, 6, "#fff") + rrect(92, 84, 26, 26, 6, "#fff") + rrect(122, 88, 26, 24, 6, "#fff") + rrect(82, 122, 36, 26, 7, "#fff");
+      const ring = `<circle cx="100" cy="112" r="64" fill="none" stroke="#ff3b6b" stroke-width="5" stroke-dasharray="10 7"/>`;
+      return mouth + teeth + path("M40 84 q60 22 120 0 l0 10 q-60 22 -120 0 Z", "#e0708c", 'opacity=".55"') + ring;
+    },
     /* 屋企 */
     door: () => `${rrect(58, 40, 84, 132, 10, '#8a5a2b')}${rrect(68, 52, 64, 52, 6, '#a8763f')}${rrect(68, 114, 64, 46, 6, '#a8763f')}${circle(128, 112, 7, '#ffd166')}${rrect(48, 168, 104, 12, 6, '#6b4423')}`,
     window: () => `${rrect(42, 42, 116, 116, 10, '#8a5a2b')}${rrect(54, 54, 92, 92, 4, '#bfe6ff')}${path('M100 54 l0 92 M54 100 l92 0', '#8a5a2b', 'stroke-width="8"')}${path('M54 100 q30 -26 60 0 q30 26 48 46 l0 0', '#a8dcff')}${circle(128, 74, 12, '#ffe9a8')}`,
@@ -930,7 +970,7 @@
     if (it.art && it.art.startsWith('animal:')) {
       return animal(it.art.slice(7), opts);
     }
-    if (it.art && it.art.startsWith('n')) {
+    if (it.art && /^n\d+$/.test(it.art)) {
       // 數字：大大個數字 + 小圓點
       const n = it.n || parseInt(it.art.slice(1), 10);
       const dots = [];
