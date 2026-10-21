@@ -275,9 +275,9 @@
 }
 .prompt-pic svg { width: 128px; height: 128px; }
 
-.answers { flex: 1; display: grid; gap: 12px; min-height: 0; }
-.answers.cols-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-.answers.cols-1 { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); }
+.answers { flex: 1; display: grid; gap: 12px; min-height: 0; margin-block: auto; }
+.answers.cols-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; max-height: min(60vh, 500px); }
+.answers.cols-1 { grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); max-height: min(66vh, 560px); }
 .answer {
   position: relative;
   display: flex;
@@ -520,22 +520,32 @@ img.ai-shadow {
 }
 /* 圖鑑 / 題目卡：用裁切圖 */
 .album-card .ac-art img.ai-cutout { width: 100%; height: 100%; object-fit: contain; }
-/* 答案卡：一定要見齊全圖（包括有背景嘅 hero 圖），唔可以裁 */
+/* 答案卡：圖要細細粒、見齊全圖（同 SVG 一樣有上限，唔會撐爆卡） */
 .answer .ans-pic img,
 .answer .ans-pic img.ai-hero,
 .answer .ans-pic img.ai-item {
-  width: 82%;
-  height: 82%;
+  width: auto;
+  height: auto;
+  max-width: 72%;
+  max-height: 72%;
+  max-inline-size: 132px;
+  max-block-size: 132px;
   object-fit: contain;
   object-position: center;
   border-radius: 14px;
+  margin: auto;
 }
 .prompt-pic img,
 .prompt-pic img.ai-hero,
 .prompt-pic img.ai-item {
-  width: 90%;
-  height: 90%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  max-inline-size: 150px;
+  max-block-size: 150px;
   object-fit: contain;
+  margin: auto;
 }
 .reveal-art img.ai-hero { width: 100%; height: 100%; object-fit: contain; border-radius: 24px; background: #fff8e8; }
 .feed-animal img.ai-cutout { width: 100%; height: 100%; object-fit: contain; }
