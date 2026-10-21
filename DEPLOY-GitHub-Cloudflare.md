@@ -57,9 +57,14 @@ git push
    |---|---|
    | Production branch | `main` |
    | Framework preset | `None` |
-   | Build command | **留空** |
-   | Build output directory | `/`（或者留空） |
+   | Build command | `node build.mjs` |
+   | Build output directory | `dist` |
    | Root directory | 留空 |
+
+   > ⚠️ **一定要填 `node build.mjs` + `dist`**。因為 Cloudflare 會自動 `npm install`，
+   > 如果 output directory 設做 `/`，就會連 `node_modules`（入面 `workerd` 有 134MB）一齊上載，
+   > 出錯：`Asset too large. Cloudflare Workers supports assets with sizes of up to 25 MiB`。
+   > `build.mjs` 只會複製網站真正需要嘅檔案去 `dist/`（約 18MB）。
 
 5. 撳 **Save and Deploy**
 
@@ -81,6 +86,8 @@ Cloudflare Pages → 你嘅 project → **Custom domains** → **Set up a domain
 | `sw.js` | Service Worker，第二次開就完全離線玩；改版時記得改 `VERSION`（已經升到 v2.0.0） |
 | `manifest.webmanifest` | PWA：可以「加到主畫面」 |
 | `.nojekyll` | 唔使用 GitHub Pages，但留住都冇壞 |
+| `build.mjs` | Cloudflare Pages 建置用：只複製網站檔案去 `dist/`（避免 node_modules 被當資產） |
+| `dist/` | 建置輸出（唔會入 git，`.gitignore` 已經排除） |
 
 > 之前嘅 `netlify.toml` 已經刪咗，改用 `_headers`（Netlify 同 Cloudflare 都各自有自己嘅 header 格式）。
 
@@ -88,9 +95,13 @@ Cloudflare Pages → 你嘅 project → **Custom domains** → **Set up a domain
 
 ## 四、常見問題
 
+**Q：Build 失敗，話 `Asset too large ... workerd ... 134 MiB`？**
+- Build **output directory** 要係 `dist`（唔係 `/`），Build command 要係 `node build.mjs`
+- 改完去 **Deployments** → 右邊 **Retry deployment**
+
 **Q：Cloudflare Pages 顯示 404 / 白畫面？**
-- 檢查 **Build output directory** 係 `/` 或空
-- 檢查 repo 根目錄真係有 `index.html`
+- 檢查 **Build output directory** 係 `dist`
+- 檢查 build log 最後有 `[build] dist/ ready: ... files`
 
 **Q：更新完但係手機仲係舊版？**
 - Service Worker 會 cache，等 10–30 秒再開，或者喺瀏覽器設定清 site data

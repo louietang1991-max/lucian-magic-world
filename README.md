@@ -23,7 +23,7 @@
    git push -u origin main
    ```
 3. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → 揀呢個 repo
-4. **Build command 留空**、**Build output directory**: `/` → Save and Deploy
+4. **Build command**: `node build.mjs`、**Build output directory**: `dist` → Save and Deploy
 5. 完成後網址：`https://<project>.pages.dev`（可以再加自訂網域）
 
 > 之後每次 `git push`，Cloudflare 會自動重新部署。
@@ -48,7 +48,7 @@ git push -u origin main
 等 1 分鐘就有 `https://<你嘅帳號>.github.io/lucian-magic-world/`。
 
 ### 方法 C：Cloudflare Pages / Vercel
-- Cloudflare Pages：Framework preset 揀 **None**，Build command 留空，Output directory 填 `/`
+- Cloudflare Pages：Framework preset **None**，Build command `node build.mjs`，Output directory `dist`
 - Vercel：Import 個 repo，Framework 揀 **Other**，其餘留空
 
 ### 手機加到主畫面（似 App 咁全螢幕玩）
