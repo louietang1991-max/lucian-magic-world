@@ -26,7 +26,7 @@ fs.mkdirSync(OUT, { recursive: true });
 /* ---------- 載入資料檔 ---------- */
 const ctx = { window: {}, console };
 vm.createContext(ctx);
-for (const f of ['assets/js/data-animals.js', 'assets/js/data-vocab.js']) {
+for (const f of [...["assets/js/data-animals.js","assets/js/animals-beach.js","assets/js/animals-sea.js","assets/js/animals-underwater.js","assets/js/animals-river.js","assets/js/animals-forest.js","assets/js/animals-grass.js","assets/js/animals-desert.js","assets/js/animals-snow.js"], 'assets/js/data-vocab.js']) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 }
 const ANIMALS = ctx.window.ANIMAL_DATA;

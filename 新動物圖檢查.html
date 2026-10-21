@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head><meta charset="utf-8" /><title>新動物圖檢查</title>
+<style>
+  body { font-family: "PingFang HK","Microsoft JhengHei",sans-serif; background:#faf8ff; color:#2b2140; margin:0; padding:12px; }
+  h2 { font-size:14px; margin:12px 0 6px; }
+  .grid { display:grid; grid-template-columns:repeat(8, 1fr); gap:6px; }
+  figure { margin:0; background:#fff; border-radius:8px; padding:4px; }
+  figure img { width:100%; aspect-ratio:1; object-fit:contain; display:block; border-radius:6px; }
+  figcaption { font-size:10px; text-align:center; color:#6b5b8a; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/js/data-animals.js"></script>
+<script src="assets/js/animals-beach.js"></script>
+<script src="assets/js/animals-sea.js"></script>
+<script src="assets/js/animals-underwater.js"></script>
+<script src="assets/js/animals-river.js"></script>
+<script src="assets/js/animals-forest.js"></script>
+<script src="assets/js/animals-grass.js"></script>
+<script src="assets/js/animals-desert.js"></script>
+<script src="assets/js/animals-snow.js"></script>
+<script>
+  const NEW_IDS = new Set(["hermitcrab","clam","seasnail","pelican","sandpiper","urchin","sanddollar","horseshoecrab","shrimp","mussel","sandcrab","orca","swordfish","sailfish","mantaray","sunfish","tuna","albatross","hammerhead","stingray","marlin","barracuda","squid","morayeel","pufferfish","angelfish","butterflyfish","seadragon","cuttlefish","lobster","lionfish","parrotfish","seaanemone","nautilus","otter","beaver","catfish","koi","dragonfly","heron","watersnake","crayfish","riverturtle","minnow","eel","toad","deer","wolf","raccoon","hedgehog","boar","woodpecker","butterfly","rabbit","forestsnake","badger","chipmunk","cheetah","hyena","rhino","hippo","warthog","ostrich","meerkat","antelope","buffalo","gazelle","baboon","vulture","gecko","oryx","jerboa","cobra","tortoise","jackrabbit","roadrunner","armadillo","tarantula","dungbeetle","sandcat","hornedlizard","arcticfox","walrus","reindeer","narwhal","beluga","husky","snowleopard","marmot","puffin","arctichare","lynx","yak","ermine"]);
+  const root = document.getElementById('root');
+  const locs = window.LOCATIONS;
+  for (const l of locs) {
+    const items = window.ANIMAL_DATA.filter((a) => a.loc === l.id && NEW_IDS.has(a.id));
+    if (!items.length) continue;
+    const h = document.createElement('h2');
+    h.textContent = l.zh + ' · ' + l.en + ' (' + items.length + ')';
+    root.appendChild(h);
+    const g = document.createElement('div');
+    g.className = 'grid';
+    for (const a of items) {
+      const fig = document.createElement('figure');
+      fig.innerHTML = `<img src="assets/img/animals/cutout-webp/${a.id}.webp" loading="lazy"><figcaption>${a.zh}</figcaption>`;
+      g.appendChild(fig);
+    }
+    root.appendChild(g);
+  }
+</script>
+</body>
+</html>

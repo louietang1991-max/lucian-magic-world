@@ -1,50 +1,131 @@
 /* 自動產生：AI 圖索引（動物 hero / cutout / 題目圖） */
 window.AI_INDEX = {
  "heroes": {
+  "albatross": [
+   "assets/img/animals/hero-web/albatross_s1.jpg"
+  ],
+  "angelfish": [
+   "assets/img/animals/hero-web/angelfish_s1.jpg"
+  ],
+  "antelope": [
+   "assets/img/animals/hero-web/antelope_s1.jpg"
+  ],
+  "arcticfox": [
+   "assets/img/animals/hero-web/arcticfox_s1.jpg"
+  ],
+  "arctichare": [
+   "assets/img/animals/hero-web/arctichare_s1.jpg"
+  ],
+  "armadillo": [
+   "assets/img/animals/hero-web/armadillo_s1.jpg"
+  ],
+  "baboon": [
+   "assets/img/animals/hero-web/baboon_s1.jpg"
+  ],
+  "badger": [
+   "assets/img/animals/hero-web/badger_s1.jpg"
+  ],
+  "barracuda": [
+   "assets/img/animals/hero-web/barracuda_s1.jpg"
+  ],
   "bear": [
    "assets/img/animals/hero-web/bear_s1.jpg",
    "assets/img/animals/hero-web/bear_s2.jpg",
    "assets/img/animals/hero-web/bear_s3.jpg"
+  ],
+  "beaver": [
+   "assets/img/animals/hero-web/beaver_s1.jpg"
   ],
   "bee": [
    "assets/img/animals/hero-web/bee_s1.jpg",
    "assets/img/animals/hero-web/bee_s2.jpg",
    "assets/img/animals/hero-web/bee_s3.jpg"
   ],
+  "beluga": [
+   "assets/img/animals/hero-web/beluga_s1.jpg"
+  ],
+  "boar": [
+   "assets/img/animals/hero-web/boar_s1.jpg"
+  ],
+  "buffalo": [
+   "assets/img/animals/hero-web/buffalo_s1.jpg"
+  ],
+  "butterflyfish": [
+   "assets/img/animals/hero-web/butterflyfish_s1.jpg"
+  ],
+  "butterfly": [
+   "assets/img/animals/hero-web/butterfly_s1.jpg"
+  ],
   "camel": [
    "assets/img/animals/hero-web/camel_s1.jpg",
    "assets/img/animals/hero-web/camel_s2.jpg",
    "assets/img/animals/hero-web/camel_s3.jpg"
+  ],
+  "catfish": [
+   "assets/img/animals/hero-web/catfish_s1.jpg"
+  ],
+  "cheetah": [
+   "assets/img/animals/hero-web/cheetah_s1.jpg"
+  ],
+  "chipmunk": [
+   "assets/img/animals/hero-web/chipmunk_s1.jpg"
+  ],
+  "clam": [
+   "assets/img/animals/hero-web/clam_s1.jpg"
   ],
   "clownfish": [
    "assets/img/animals/hero-web/clownfish_s1.jpg",
    "assets/img/animals/hero-web/clownfish_s2.jpg",
    "assets/img/animals/hero-web/clownfish_s3.jpg"
   ],
+  "cobra": [
+   "assets/img/animals/hero-web/cobra_s1.jpg"
+  ],
   "crab": [
    "assets/img/animals/hero-web/crab_s1.jpg",
    "assets/img/animals/hero-web/crab_s2.jpg",
    "assets/img/animals/hero-web/crab_s3.jpg"
+  ],
+  "crayfish": [
+   "assets/img/animals/hero-web/crayfish_s1.jpg"
   ],
   "crocodile": [
    "assets/img/animals/hero-web/crocodile_s1.jpg",
    "assets/img/animals/hero-web/crocodile_s2.jpg",
    "assets/img/animals/hero-web/crocodile_s3.jpg"
   ],
+  "cuttlefish": [
+   "assets/img/animals/hero-web/cuttlefish_s1.jpg"
+  ],
+  "deer": [
+   "assets/img/animals/hero-web/deer_s1.jpg"
+  ],
   "dolphin": [
    "assets/img/animals/hero-web/dolphin_s1.jpg",
    "assets/img/animals/hero-web/dolphin_s2.jpg",
    "assets/img/animals/hero-web/dolphin_s3.jpg"
+  ],
+  "dragonfly": [
+   "assets/img/animals/hero-web/dragonfly_s1.jpg"
   ],
   "duck": [
    "assets/img/animals/hero-web/duck_s1.jpg",
    "assets/img/animals/hero-web/duck_s2.jpg",
    "assets/img/animals/hero-web/duck_s3.jpg"
   ],
+  "dungbeetle": [
+   "assets/img/animals/hero-web/dungbeetle_s1.jpg"
+  ],
+  "eel": [
+   "assets/img/animals/hero-web/eel_s1.jpg"
+  ],
   "elephant": [
    "assets/img/animals/hero-web/elephant_s1.jpg",
    "assets/img/animals/hero-web/elephant_s2.jpg",
    "assets/img/animals/hero-web/elephant_s3.jpg"
+  ],
+  "ermine": [
+   "assets/img/animals/hero-web/ermine_s1.jpg"
   ],
   "fennec": [
    "assets/img/animals/hero-web/fennec_s1.jpg",
@@ -61,6 +142,9 @@ window.AI_INDEX = {
    "assets/img/animals/hero-web/flyingfish_s2.jpg",
    "assets/img/animals/hero-web/flyingfish_s3.jpg"
   ],
+  "forestsnake": [
+   "assets/img/animals/hero-web/forestsnake_s1.jpg"
+  ],
   "fox": [
    "assets/img/animals/hero-web/fox_s1.jpg",
    "assets/img/animals/hero-web/fox_s2.jpg",
@@ -71,35 +155,131 @@ window.AI_INDEX = {
    "assets/img/animals/hero-web/frog_s2.jpg",
    "assets/img/animals/hero-web/frog_s3.jpg"
   ],
+  "gazelle": [
+   "assets/img/animals/hero-web/gazelle_s1.jpg"
+  ],
+  "gecko": [
+   "assets/img/animals/hero-web/gecko_s1.jpg"
+  ],
   "giraffe": [
    "assets/img/animals/hero-web/giraffe_s1.jpg",
    "assets/img/animals/hero-web/giraffe_s2.jpg",
    "assets/img/animals/hero-web/giraffe_s3.jpg"
+  ],
+  "hammerhead": [
+   "assets/img/animals/hero-web/hammerhead_s1.jpg"
+  ],
+  "hedgehog": [
+   "assets/img/animals/hero-web/hedgehog_s1.jpg"
+  ],
+  "hermitcrab": [
+   "assets/img/animals/hero-web/hermitcrab_s1.jpg"
+  ],
+  "heron": [
+   "assets/img/animals/hero-web/heron_s1.jpg"
+  ],
+  "hippo": [
+   "assets/img/animals/hero-web/hippo_s1.jpg"
+  ],
+  "hornedlizard": [
+   "assets/img/animals/hero-web/hornedlizard_s1.jpg"
+  ],
+  "horseshoecrab": [
+   "assets/img/animals/hero-web/horseshoecrab_s1.jpg"
+  ],
+  "husky": [
+   "assets/img/animals/hero-web/husky_s1.jpg"
+  ],
+  "hyena": [
+   "assets/img/animals/hero-web/hyena_s1.jpg"
+  ],
+  "jackrabbit": [
+   "assets/img/animals/hero-web/jackrabbit_s1.jpg"
   ],
   "jellyfish": [
    "assets/img/animals/hero-web/jellyfish_s1.jpg",
    "assets/img/animals/hero-web/jellyfish_s2.jpg",
    "assets/img/animals/hero-web/jellyfish_s3.jpg"
   ],
+  "jerboa": [
+   "assets/img/animals/hero-web/jerboa_s1.jpg"
+  ],
+  "koi": [
+   "assets/img/animals/hero-web/koi_s1.jpg"
+  ],
+  "lionfish": [
+   "assets/img/animals/hero-web/lionfish_s1.jpg"
+  ],
   "lion": [
    "assets/img/animals/hero-web/lion_s1.jpg",
    "assets/img/animals/hero-web/lion_s2.jpg",
    "assets/img/animals/hero-web/lion_s3.jpg"
+  ],
+  "lobster": [
+   "assets/img/animals/hero-web/lobster_s1.jpg"
+  ],
+  "lynx": [
+   "assets/img/animals/hero-web/lynx_s1.jpg"
+  ],
+  "mantaray": [
+   "assets/img/animals/hero-web/mantaray_s1.jpg"
+  ],
+  "marlin": [
+   "assets/img/animals/hero-web/marlin_s1.jpg"
+  ],
+  "marmot": [
+   "assets/img/animals/hero-web/marmot_s1.jpg"
+  ],
+  "meerkat": [
+   "assets/img/animals/hero-web/meerkat_s1.jpg"
+  ],
+  "minnow": [
+   "assets/img/animals/hero-web/minnow_s1.jpg"
   ],
   "monkey": [
    "assets/img/animals/hero-web/monkey_s1.jpg",
    "assets/img/animals/hero-web/monkey_s2.jpg",
    "assets/img/animals/hero-web/monkey_s3.jpg"
   ],
+  "morayeel": [
+   "assets/img/animals/hero-web/morayeel_s1.jpg"
+  ],
+  "mussel": [
+   "assets/img/animals/hero-web/mussel_s1.jpg"
+  ],
+  "narwhal": [
+   "assets/img/animals/hero-web/narwhal_s1.jpg"
+  ],
+  "nautilus": [
+   "assets/img/animals/hero-web/nautilus_s1.jpg"
+  ],
   "octopus": [
    "assets/img/animals/hero-web/octopus_s1.jpg",
    "assets/img/animals/hero-web/octopus_s2.jpg",
    "assets/img/animals/hero-web/octopus_s3.jpg"
   ],
+  "orca": [
+   "assets/img/animals/hero-web/orca_s1.jpg"
+  ],
+  "oryx": [
+   "assets/img/animals/hero-web/oryx_s1.jpg"
+  ],
+  "ostrich": [
+   "assets/img/animals/hero-web/ostrich_s1.jpg"
+  ],
+  "otter": [
+   "assets/img/animals/hero-web/otter_s1.jpg"
+  ],
   "owl": [
    "assets/img/animals/hero-web/owl_s1.jpg",
    "assets/img/animals/hero-web/owl_s2.jpg",
    "assets/img/animals/hero-web/owl_s3.jpg"
+  ],
+  "parrotfish": [
+   "assets/img/animals/hero-web/parrotfish_s1.jpg"
+  ],
+  "pelican": [
+   "assets/img/animals/hero-web/pelican_s1.jpg"
   ],
   "penguin": [
    "assets/img/animals/hero-web/penguin_s1.jpg",
@@ -111,20 +291,65 @@ window.AI_INDEX = {
    "assets/img/animals/hero-web/polarbear_s2.jpg",
    "assets/img/animals/hero-web/polarbear_s3.jpg"
   ],
+  "pufferfish": [
+   "assets/img/animals/hero-web/pufferfish_s1.jpg"
+  ],
+  "puffin": [
+   "assets/img/animals/hero-web/puffin_s1.jpg"
+  ],
+  "rabbit": [
+   "assets/img/animals/hero-web/rabbit_s1.jpg"
+  ],
+  "raccoon": [
+   "assets/img/animals/hero-web/raccoon_s1.jpg"
+  ],
   "rattlesnake": [
    "assets/img/animals/hero-web/rattlesnake_s1.jpg",
    "assets/img/animals/hero-web/rattlesnake_s2.jpg",
    "assets/img/animals/hero-web/rattlesnake_s3.jpg"
+  ],
+  "reindeer": [
+   "assets/img/animals/hero-web/reindeer_s1.jpg"
+  ],
+  "rhino": [
+   "assets/img/animals/hero-web/rhino_s1.jpg"
+  ],
+  "riverturtle": [
+   "assets/img/animals/hero-web/riverturtle_s1.jpg"
+  ],
+  "roadrunner": [
+   "assets/img/animals/hero-web/roadrunner_s1.jpg"
+  ],
+  "sailfish": [
+   "assets/img/animals/hero-web/sailfish_s1.jpg"
   ],
   "salmon": [
    "assets/img/animals/hero-web/salmon_s1.jpg",
    "assets/img/animals/hero-web/salmon_s2.jpg",
    "assets/img/animals/hero-web/salmon_s3.jpg"
   ],
+  "sandcat": [
+   "assets/img/animals/hero-web/sandcat_s1.jpg"
+  ],
+  "sandcrab": [
+   "assets/img/animals/hero-web/sandcrab_s1.jpg"
+  ],
+  "sanddollar": [
+   "assets/img/animals/hero-web/sanddollar_s1.jpg"
+  ],
+  "sandpiper": [
+   "assets/img/animals/hero-web/sandpiper_s1.jpg"
+  ],
   "scorpion": [
    "assets/img/animals/hero-web/scorpion_s1.jpg",
    "assets/img/animals/hero-web/scorpion_s2.jpg",
    "assets/img/animals/hero-web/scorpion_s3.jpg"
+  ],
+  "seaanemone": [
+   "assets/img/animals/hero-web/seaanemone_s1.jpg"
+  ],
+  "seadragon": [
+   "assets/img/animals/hero-web/seadragon_s1.jpg"
   ],
   "seagull": [
    "assets/img/animals/hero-web/seagull_s1.jpg",
@@ -141,15 +366,27 @@ window.AI_INDEX = {
    "assets/img/animals/hero-web/seal_s2.jpg",
    "assets/img/animals/hero-web/seal_s3.jpg"
   ],
+  "seasnail": [
+   "assets/img/animals/hero-web/seasnail_s1.jpg"
+  ],
   "shark": [
    "assets/img/animals/hero-web/shark_s1.jpg",
    "assets/img/animals/hero-web/shark_s2.jpg",
    "assets/img/animals/hero-web/shark_s3.jpg"
   ],
+  "shrimp": [
+   "assets/img/animals/hero-web/shrimp_s1.jpg"
+  ],
+  "snowleopard": [
+   "assets/img/animals/hero-web/snowleopard_s1.jpg"
+  ],
   "snowyowl": [
    "assets/img/animals/hero-web/snowyowl_s1.jpg",
    "assets/img/animals/hero-web/snowyowl_s2.jpg",
    "assets/img/animals/hero-web/snowyowl_s3.jpg"
+  ],
+  "squid": [
+   "assets/img/animals/hero-web/squid_s1.jpg"
   ],
   "squirrel": [
    "assets/img/animals/hero-web/squirrel_s1.jpg",
@@ -161,15 +398,60 @@ window.AI_INDEX = {
    "assets/img/animals/hero-web/starfish_s2.jpg",
    "assets/img/animals/hero-web/starfish_s3.jpg"
   ],
+  "stingray": [
+   "assets/img/animals/hero-web/stingray_s1.jpg"
+  ],
+  "sunfish": [
+   "assets/img/animals/hero-web/sunfish_s1.jpg"
+  ],
+  "swordfish": [
+   "assets/img/animals/hero-web/swordfish_s1.jpg"
+  ],
+  "tarantula": [
+   "assets/img/animals/hero-web/tarantula_s1.jpg"
+  ],
+  "toad": [
+   "assets/img/animals/hero-web/toad_s1.jpg"
+  ],
+  "tortoise": [
+   "assets/img/animals/hero-web/tortoise_s1.jpg"
+  ],
+  "tuna": [
+   "assets/img/animals/hero-web/tuna_s1.jpg"
+  ],
   "turtle": [
    "assets/img/animals/hero-web/turtle_s1.jpg",
    "assets/img/animals/hero-web/turtle_s2.jpg",
    "assets/img/animals/hero-web/turtle_s3.jpg"
   ],
+  "urchin": [
+   "assets/img/animals/hero-web/urchin_s1.jpg"
+  ],
+  "vulture": [
+   "assets/img/animals/hero-web/vulture_s1.jpg"
+  ],
+  "walrus": [
+   "assets/img/animals/hero-web/walrus_s1.jpg"
+  ],
+  "warthog": [
+   "assets/img/animals/hero-web/warthog_s1.jpg"
+  ],
+  "watersnake": [
+   "assets/img/animals/hero-web/watersnake_s1.jpg"
+  ],
   "whale": [
    "assets/img/animals/hero-web/whale_s1.jpg",
    "assets/img/animals/hero-web/whale_s2.jpg",
    "assets/img/animals/hero-web/whale_s3.jpg"
+  ],
+  "wolf": [
+   "assets/img/animals/hero-web/wolf_s1.jpg"
+  ],
+  "woodpecker": [
+   "assets/img/animals/hero-web/woodpecker_s1.jpg"
+  ],
+  "yak": [
+   "assets/img/animals/hero-web/yak_s1.jpg"
   ],
   "zebra": [
    "assets/img/animals/hero-web/zebra_s1.jpg",
@@ -178,40 +460,134 @@ window.AI_INDEX = {
   ]
  },
  "cutouts": [
+  "albatross",
+  "angelfish",
+  "antelope",
+  "arcticfox",
+  "arctichare",
+  "armadillo",
+  "baboon",
+  "badger",
+  "barracuda",
   "bear",
+  "beaver",
   "bee",
+  "beluga",
+  "boar",
+  "buffalo",
+  "butterfly",
+  "butterflyfish",
   "camel",
+  "catfish",
+  "cheetah",
+  "chipmunk",
+  "clam",
   "clownfish",
+  "cobra",
   "crab",
+  "crayfish",
   "crocodile",
+  "cuttlefish",
+  "deer",
   "dolphin",
+  "dragonfly",
   "duck",
+  "dungbeetle",
+  "eel",
   "elephant",
+  "ermine",
   "fennec",
   "fiddlercrab",
   "flyingfish",
+  "forestsnake",
   "fox",
   "frog",
+  "gazelle",
+  "gecko",
   "giraffe",
+  "hammerhead",
+  "hedgehog",
+  "hermitcrab",
+  "heron",
+  "hippo",
+  "hornedlizard",
+  "horseshoecrab",
+  "husky",
+  "hyena",
+  "jackrabbit",
   "jellyfish",
+  "jerboa",
+  "koi",
   "lion",
+  "lionfish",
+  "lobster",
+  "lynx",
+  "mantaray",
+  "marlin",
+  "marmot",
+  "meerkat",
+  "minnow",
   "monkey",
+  "morayeel",
+  "mussel",
+  "narwhal",
+  "nautilus",
   "octopus",
+  "orca",
+  "oryx",
+  "ostrich",
+  "otter",
   "owl",
+  "parrotfish",
+  "pelican",
   "penguin",
   "polarbear",
+  "pufferfish",
+  "puffin",
+  "rabbit",
+  "raccoon",
   "rattlesnake",
+  "reindeer",
+  "rhino",
+  "riverturtle",
+  "roadrunner",
+  "sailfish",
   "salmon",
+  "sandcat",
+  "sandcrab",
+  "sanddollar",
+  "sandpiper",
   "scorpion",
+  "seaanemone",
+  "seadragon",
   "seagull",
   "seahorse",
   "seal",
+  "seasnail",
   "shark",
+  "shrimp",
+  "snowleopard",
   "snowyowl",
+  "squid",
   "squirrel",
   "starfish",
+  "stingray",
+  "sunfish",
+  "swordfish",
+  "tarantula",
+  "toad",
+  "tortoise",
+  "tuna",
   "turtle",
+  "urchin",
+  "vulture",
+  "walrus",
+  "warthog",
+  "watersnake",
   "whale",
+  "wolf",
+  "woodpecker",
+  "yak",
   "zebra"
  ],
  "items": {

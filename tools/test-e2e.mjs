@@ -205,7 +205,7 @@ async function main() {
     await sleep(700);
     await shot(page, 'album');
     const cards = await page.evaluate(() => document.querySelectorAll('.album-card').length);
-    assert(cards === 35, '圖鑑有 35 隻動物 (' + cards + ')');
+    assert(cards >= 120, '圖鑑有 ' + cards + ' 隻動物（每個地方 16 種）');
     const unlocked = await page.evaluate(() => document.querySelectorAll('.album-card:not(.locked)').length);
     assert(unlocked >= 1, '有已解鎖動物 (' + unlocked + ')');
 

@@ -22,46 +22,13 @@ const FORCE = process.argv.includes('--force');
 /* ---------- 載入動物資料 ---------- */
 const ctx = { window: {}, console };
 vm.createContext(ctx);
-vm.runInContext(fs.readFileSync(path.join(ROOT, 'assets/js/data-animals.js'), 'utf8'), ctx, { filename: 'data-animals.js' });
+for (const af of ["assets/js/data-animals.js","assets/js/animals-beach.js","assets/js/animals-sea.js","assets/js/animals-underwater.js","assets/js/animals-river.js","assets/js/animals-forest.js","assets/js/animals-grass.js","assets/js/animals-desert.js","assets/js/animals-snow.js"]) vm.runInContext(fs.readFileSync(path.join(ROOT, af), 'utf8'), ctx, { filename: af });
 const ANIMALS = ctx.window.ANIMAL_DATA;
 
-/* ---------- 每隻動物嘅外形描述（英文） ---------- */
+/* ---------- 每隻動物嘅外形描述（英文）：兩份 JSON 合併 ---------- */
 const ANATOMY = {
-  crab: 'a hard red shell, two big claws raised, eight small legs and eyes on short stalks',
-  starfish: 'a five-pointed orange starfish body with a bumpy texture and a cute face in the centre',
-  seagull: 'a white bird body, grey wings, orange beak and orange legs',
-  turtle: 'a green patterned shell, four flippers and a small cute head',
-  fiddlercrab: 'one huge yellow claw and a small sandy body with eyes on stalks',
-  dolphin: 'a smooth blue dolphin body, rounded snout, dorsal fin, flippers and tail',
-  whale: 'a huge round blue whale body, wide smiling mouth, blowhole and big tail fluke',
-  seal: 'a round grey seal body with flippers, whiskers and big shiny eyes',
-  flyingfish: 'a blue fish with very large wing-like fins spread out',
-  octopus: 'a purple round head and eight curly tentacles with pink suckers',
-  clownfish: 'an orange fish with white stripes outlined in black and small fins',
-  jellyfish: 'a glowing translucent dome with long soft tentacles',
-  seahorse: 'an orange seahorse with a curled tail, long snout and small dorsal fin',
-  shark: 'a grey shark with a tall dorsal fin, wide mouth with friendly teeth and a big tail',
-  duck: 'a yellow duck with an orange beak, webbed feet and small wings',
-  frog: 'a green frog with two big round eyes on top, a wide smile and long legs',
-  crocodile: 'a green crocodile with a long snout, small friendly teeth, scaly back and tail',
-  salmon: 'a pink-orange fish with fins and a forked tail',
-  bear: 'a brown bear with round ears, big soft paws and a round muzzle',
-  fox: 'an orange fox with pointed ears, white muzzle and a big bushy tail',
-  squirrel: 'a brown squirrel with a huge fluffy tail and small ears',
-  owl: 'a brown owl with huge round eyes, ear tufts and a small orange beak',
-  bee: 'a yellow and black striped bee with translucent wings and antennae',
-  lion: 'a golden lion with a big fluffy mane and a tufted tail',
-  zebra: 'a white zebra body with black stripes, a short mane and small hooves',
-  giraffe: 'a very long neck, yellow body with brown patches and small ossicones',
-  elephant: 'a grey elephant with big ears, a long trunk and small tusks',
-  monkey: 'a brown monkey with round ears and a long curled tail',
-  camel: 'a tan camel with a hump, long neck and long legs',
-  fennec: 'a small pale fox with huge ears and big shiny eyes',
-  scorpion: 'a brown scorpion with two pincers and a curved tail with a stinger',
-  rattlesnake: 'a coiled tan snake with patterned scales and a rattle tail',
-  penguin: 'a black and white penguin with an orange beak, orange feet and flippers',
-  polarbear: 'a big white polar bear with soft paws and a black nose',
-  snowyowl: 'a white owl with bright yellow eyes and small ear tufts',
+  ...JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/animal-anatomy.json'), 'utf8')),
+  ...JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/animal-anatomy2.json'), 'utf8')),
 };
 
 /* ---------- 每個地方嘅背景 ---------- */
@@ -87,9 +54,11 @@ function seedOf(id, k) {
 const REF_IMAGE = 'crab.png';
 function makeWorkflow(animal, seed) {
   const bg = BG[animal.loc] || BG.underwater;
-  const anatomy = ANATOMY[animal.id] || `a cute ${animal.en.toLowerCase()} body with animal features`;
+  const anatomy = ANATOMY[animal.id] || `a cute ${animal.en.toLowerCase()} with its own animal features`;
   const prompt = `Keep the exact same 3D rendered cartoon art style, glossy toy-like shading, soft studio lighting and children's app quality as the reference image. Replace the subject with a cute cartoon ${animal.en.toUpperCase()} character. It is an ANIMAL character with ${anatomy}; not a human, not a baby, no human skin, no clothes. Background: ${bg}. Full body centred, ultra clean high quality 3D render, kids app illustration.`;
   let neg = 'human, human baby, child, human face, human skin, person, costume, onesie, clothes, text, watermark, signature, deformed, extra limbs, blurry, low quality';
+  const crustacean = ['crab', 'fiddlercrab', 'hermitcrab', 'horseshoecrab', 'sandcrab', 'lobster', 'shrimp', 'crayfish'].includes(animal.id);
+  if (!crustacean) neg += ', crab, lobster, seashell, claws, pincers, exoskeleton';
   if (animal.loc !== 'underwater' && animal.loc !== 'sea') neg += ', underwater, bubbles, seaweed, coral, blue water background';
   if (animal.loc !== 'snow') neg += ', snow';
   return {

@@ -20,10 +20,10 @@ const FORCE = process.argv.includes('--force');
 
 const ctx = { window: {}, console };
 vm.createContext(ctx);
-vm.runInContext(fs.readFileSync(path.join(ROOT, 'assets/js/data-animals.js'), 'utf8'), ctx, { filename: 'data-animals.js' });
+for (const af of ["assets/js/data-animals.js","assets/js/animals-beach.js","assets/js/animals-sea.js","assets/js/animals-underwater.js","assets/js/animals-river.js","assets/js/animals-forest.js","assets/js/animals-grass.js","assets/js/animals-desert.js","assets/js/animals-snow.js"]) vm.runInContext(fs.readFileSync(path.join(ROOT, af), 'utf8'), ctx, { filename: af });
 const ANIMALS = ctx.window.ANIMAL_DATA;
 
-const ANATOMY = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'animal-anatomy.json'), 'utf8'));
+const ANATOMY = { ...JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'animal-anatomy.json'), 'utf8')), ...JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'animal-anatomy2.json'), 'utf8')) };
 
 function seedOf(id) {
   let h = 2166136261;
