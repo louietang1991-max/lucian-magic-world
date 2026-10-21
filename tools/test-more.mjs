@@ -194,18 +194,18 @@ try {
     on: document.querySelectorAll('#set-topics .chip.on').length,
   }));
   assert(chipInfo.chips >= 9, '題目庫有 ' + chipInfo.chips + ' 個主題');
-  // 加開「數字」
+  // 加開「形狀」
   await page.evaluate(() => {
-    const chip = Array.from(document.querySelectorAll('#set-topics .chip')).find((c) => c.textContent.includes('數字'));
+    const chip = Array.from(document.querySelectorAll('#set-topics .chip')).find((c) => c.textContent.includes('形狀'));
     if (chip) chip.click();
   });
   await sleep(300);
   const nowOn = await page.evaluate(() => window.Core.state.settings.topics.includes('number'));
-  assert(nowOn, '可以加入「數字」題目庫');
+  assert(nowOn, '可以加入「形狀」題目庫');
   await shot(page, 'settings-more');
   // 揀返出嚟
   await page.evaluate(() => {
-    const chip = Array.from(document.querySelectorAll('#set-topics .chip')).find((c) => c.textContent.includes('數字'));
+    const chip = Array.from(document.querySelectorAll('#set-topics .chip')).find((c) => c.textContent.includes('形狀'));
     if (chip) chip.click();
   });
   await sleep(200);

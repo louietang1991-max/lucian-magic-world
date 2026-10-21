@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head><meta charset="utf-8" /><title>題目圖檢查</title>
+<style>
+  body { font-family: "PingFang HK","Microsoft JhengHei",sans-serif; background:#faf8ff; color:#2b2140; margin:0; padding:14px; }
+  h2 { font-size:15px; margin:14px 0 6px; }
+  .grid { display:grid; grid-template-columns:repeat(8, 1fr); gap:8px; }
+  figure { margin:0; background:#fff; border-radius:8px; padding:4px; }
+  figure img { width:100%; aspect-ratio:1; object-fit:contain; display:block; border-radius:6px; }
+  figcaption { font-size:10px; text-align:center; color:#6b5b8a; margin-top:2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="assets/js/data-vocab.js"></script>
+<script>
+  const V = window.VOCAB;
+  const root = document.getElementById('root');
+  for (const [tid, t] of Object.entries(V)) {
+    const items = t.items.map((it, i) => ({ ...it, i })).filter((it) => it.img);
+    if (!items.length) continue;
+    const h = document.createElement('h2');
+    h.textContent = tid + ' · ' + t.zh + ' (' + items.length + ')';
+    root.appendChild(h);
+    const g = document.createElement('div');
+    g.className = 'grid';
+    for (const it of items) {
+      const fig = document.createElement('figure');
+      fig.innerHTML = `<img src="assets/img/items/${tid}/${it.i}.webp" onerror="this.src='assets/img/items/${tid}/${it.i}.jpg'" loading="lazy"><figcaption>${it.zh}</figcaption>`;
+      g.appendChild(fig);
+    }
+    root.appendChild(g);
+  }
+</script>
+</body>
+</html>

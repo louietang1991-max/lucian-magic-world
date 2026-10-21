@@ -30,7 +30,8 @@
       textLang: 'zh',          // zh 中文 / en English
       rate: 0.9,               // 語速（對小朋友慢啲）
       tempo: 90,               // 第二部分拍子 BPM
-      topics: ['animal', 'fruit', 'vehicle', 'body'],
+      topics: ['animal', 'fruit', 'veg', 'vehicle', 'color', 'number', 'body', 'nature', 'adj', 'position', 'people', 'food', 'verb', 'item', 'measure'],
+      topicsV: 2,
       sfx: true,
       autoNext: true,
       easyMode: true,          // 答錯可再試，唔扣魔法生果
@@ -74,6 +75,13 @@
     s.rate = clamp(Number(s.rate) || 0.9, 0.6, 1.2);
     s.tempo = clamp(Number(s.tempo) || 90, 60, 120);
     if (!Array.isArray(s.topics) || !s.topics.length) s.topics = DEFAULTS.settings.topics.slice();
+    // 題庫升級：v1 只有 9 個主題，v2 加咗自然／形容詞／位置／人物／食物／動詞／量詞
+    if (Number(s.topicsV || 1) < 2) {
+      for (const id of ['nature', 'adj', 'position', 'people', 'food', 'verb', 'item', 'measure', 'animal', 'fruit', 'veg', 'vehicle', 'color', 'number', 'body']) {
+        if (!s.topics.includes(id)) s.topics.push(id);
+      }
+      s.topicsV = 2;
+    }
     const p = state.progress;
     p.fruits = clamp(Number(p.fruits) || 0, 0, 999);
     if (!p.collected || typeof p.collected !== 'object') p.collected = {};

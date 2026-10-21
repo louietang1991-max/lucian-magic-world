@@ -56,7 +56,7 @@
       all.forEach((t) => {
         const b = document.createElement('button');
         b.className = 'chip' + (s.topics.includes(t.id) ? ' on' : '');
-        b.innerHTML = `${t.emoji || ''} ${C.escapeHtml(t.zh)}`;
+        b.innerHTML = `${t.emoji || ''} ${C.escapeHtml(C.zh(t.zh))}`;
         b.addEventListener('click', () => {
           const on = s.topics.includes(t.id);
           if (on) {

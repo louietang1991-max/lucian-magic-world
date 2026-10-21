@@ -1013,7 +1013,13 @@
       }
       return `<svg class="art item-art" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><text x="100" y="96" text-anchor="middle" font-size="72" font-weight="900" fill="${opts.color || '#3a86ff'}" font-family="system-ui,sans-serif">${n}</text>${dots.join('')}</svg>`;
     }
-    const fn = ITEMS[it.art] || ITEMS.apple;
+    const fn = ITEMS[it.art];
+    if (!fn) {
+      // 冇圖（例如量詞）：顯示大字
+      const txt = window.Core && window.Core.zh ? window.Core.zh(it.zh) : it.zh;
+      const esc = (window.Core && window.Core.escapeHtml) ? window.Core.escapeHtml(txt) : txt;
+      return `<div class="art item-art art-word-fallback" aria-hidden="true">${esc}</div>`;
+    }
     let inner;
     try { inner = fn(it); } catch (e) { console.warn('item draw fail', it.art, e); inner = ITEMS.apple(it); }
     return `<svg class="art item-art" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;

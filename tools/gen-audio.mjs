@@ -32,7 +32,7 @@ for (const f of ['assets/js/data-animals.js', 'assets/js/data-vocab.js']) {
 const ANIMALS = ctx.window.ANIMAL_DATA;
 const VOCAB = ctx.window.VOCAB;
 const ANIMAL_TOPIC = ctx.window.buildAnimalTopic();
-const ALL_TOPICS = { ...VOCAB, animal: ANIMAL_TOPIC };
+const ALL_TOPICS = { ...VOCAB, zoo: ANIMAL_TOPIC };
 
 /* ---------- 粵語句子 ---------- */
 const PHRASES = {
@@ -41,6 +41,7 @@ const PHRASES = {
   'game-a-title': '聽聲音，揀圖案！',
   'game-b-title': '睇圖案，揀字詞！',
   'game-c-title': '睇字詞，揀圖案！',
+  'game-d-title': '聽粵語，揀字詞！',
   'listen': '聽下係咩字？',
   'listen-replay': '再聽一次！',
   'choose': '揀一個啦！',
@@ -112,7 +113,6 @@ const jobs = [];
 const add = (key, text, lang) => { if (text) jobs.push({ key, text: String(text), lang }); };
 
 for (const [tid, topic] of Object.entries(ALL_TOPICS)) {
-  if (tid === 'animal') continue;
   topic.items.forEach((it, i) => {
     add(`v/${tid}/${i}/yue`, it.yue || it.zh, 'yue');
     add(`v/${tid}/${i}/man`, it.zh, 'man');

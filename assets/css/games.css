@@ -706,3 +706,7 @@
 .spot-wrap.mode-dig.revealed .shadow-spot::before { opacity: 0.9; }
 .spot-wrap.mode-dig .sp-badge { opacity: 0; transition: opacity 0.35s; }
 .spot-wrap.mode-dig.revealed .sp-badge { opacity: 1; }
+
+.gr-icon.gr-d { background: linear-gradient(160deg, #ffe0b2, #ffb74d); }
+.prompt-listen { font-size: clamp(52px, 16vw, 96px); line-height: 1; display: block; text-align: center; animation: listenPulse 1.6s ease-in-out infinite; }
+@keyframes listenPulse { 0%, 100% { transform: scale(1); opacity: .95; } 50% { transform: scale(1.08); opacity: 1; } }

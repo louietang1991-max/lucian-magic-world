@@ -11,7 +11,19 @@
     A: { id: 'A', name: '聽聲音，揀圖案', answerKind: 'picture' },
     B: { id: 'B', name: '睇圖案，揀字詞', answerKind: 'word' },
     C: { id: 'C', name: '睇字詞，揀圖案', answerKind: 'picture' },
+    D: { id: 'D', name: '聽粵語，揀字詞', answerKind: 'word' },
   };
+
+  /** 呢個 mode 用唔用有圖嘅題目 */
+  function itemOk(it, mode) {
+    if (mode === 'D') {
+      // 聽聲揀字：全部字都用得；英文模式跳過量詞（英文難對應）
+      if (C.state.settings.textLang === 'en' && it.zhOnly) return false;
+      return true;
+    }
+    if (it.zhOnly) return false; // 量詞冇圖，只喺 D 出現
+    return true;
+  }
 
   const Q = {
     mode: 'A',
@@ -31,10 +43,10 @@
   function allTopics() {
     const list = [];
     for (const [id, t] of Object.entries(window.VOCAB)) {
-      list.push({ id, zh: t.zh, en: t.en, emoji: t.emoji, items: t.items, artType: t.artType });
+      list.push({ id, zh: t.zh, en: t.en, emoji: t.emoji, items: t.items, artType: t.artType, zhOnly: !!t.zhOnly });
     }
     const at = window.buildAnimalTopic();
-    list.unshift({ id: 'animal', zh: at.zh, en: at.en, emoji: at.emoji, items: at.items, artType: 'animal' });
+    list.push({ id: 'zoo', zh: at.zh, en: at.en, emoji: at.emoji, items: at.items, artType: 'animal' });
     return list;
   }
 
@@ -69,36 +81,40 @@
   function wordHtml(item) {
     const lang = C.state.settings.textLang;
     if (lang === 'en') return `<div class="ans-word"><span class="ans-en">${C.escapeHtml(item.en)}</span></div>`;
-    return `<div class="ans-word"><span class="ans-han">${C.escapeHtml(item.zh)}</span>${item.py ? `<span class="ans-py">${C.escapeHtml(item.py)}</span>` : ''}</div>`;
+    return `<div class="ans-word"><span class="ans-han">${C.escapeHtml(C.zh(item.zh))}</span>${item.py ? `<span class="ans-py">${C.escapeHtml(item.py)}</span>` : ''}</div>`;
   }
   function bigWordHtml(item) {
     if (C.state.settings.textLang === 'en') {
       return `<span class="prompt-text"><span style="font-size:clamp(30px,9vw,52px);font-weight:900;color:#2a5fa8">${C.escapeHtml(item.en)}</span></span>`;
     }
-    return `<span class="prompt-text"><span class="han-big">${C.escapeHtml(item.zh)}</span></span>
+    return `<span class="prompt-text"><span class="han-big">${C.escapeHtml(C.zh(item.zh))}</span></span>
             <span class="prompt-sub">${C.escapeHtml(item.py || '')}</span>`;
   }
 
   /* ------------------------------------------------------------------ 出題 */
-  function buildQueue() {
+  function buildQueue(mode) {
+    const m = mode || Q.mode;
     const topics = pickTopics();
     const pool = [];
-    for (const t of topics) {
-      t.items.forEach((it, i) => {
-        pool.push({ ...it, topicId: t.id, topicZh: t.zh, index: i });
+    const push = (list, tid, tidZh, zhOnly) => {
+      list.forEach((it, i) => {
+        const item = { ...it, topicId: tid, topicZh: tidZh, index: i, zhOnly: !!zhOnly || !!it.zhOnly };
+        if (itemOk(item, m)) pool.push(item);
       });
-    }
+    };
+    for (const tp of topics) push(tp.items, tp.id, tp.zh, tp.zhOnly);
+    if (!pool.length) for (const tp of allTopics()) push(tp.items, tp.id, tp.zh, tp.zhOnly);
     return shuffle(pool);
   }
 
   function flatten(topicList) {
     const out = [];
-    for (const t of topicList) t.items.forEach((it, i) => out.push({ ...it, topicId: t.id, topicZh: t.zh, index: i }));
-    return out;
+    for (const t of topicList) t.items.forEach((it, i) => out.push({ ...it, topicId: t.id, topicZh: t.zh, index: i, zhOnly: !!t.zhOnly || !!it.zhOnly }));
+    return out.filter((it) => itemOk(it, Q.mode));
   }
 
   function nextQuestion() {
-    if (!Q.queue.length) Q.queue = buildQueue();
+    if (!Q.queue.length) Q.queue = buildQueue(Q.mode);
     const target = Q.queue.pop();
     const topics = pickTopics();
     const sameTopic = topics.find((t) => t.id === target.topicId);
@@ -153,12 +169,17 @@
 
     // 題目提示
     const prompt = $('#quiz-prompt');
-    const showSpeaker = Q.mode === 'A';
+    const showSpeaker = Q.mode === 'A' || Q.mode === 'D';
     const speaker = $('#quiz-speaker');
     if (speaker) speaker.style.display = showSpeaker ? 'grid' : 'none';
     const pt = $('#quiz-prompt-text');
     const ps = $('#quiz-prompt-sub');
-    if (Q.mode === 'A') {
+    if (Q.mode === 'D') {
+      pt.innerHTML = '';
+      ps.textContent = C.state.settings.textLang === 'en' ? 'Listen! Which word?' : '聽下係邊個字？';
+      $('#quiz-speaker').classList.add('playing');
+      playWord(target).then(() => { const s = $('#quiz-speaker'); if (s) s.classList.remove('playing'); });
+    } else if (Q.mode === 'A') {
       pt.innerHTML = '';
       ps.textContent = '聽下係咩？揀正確嘅圖案！';
       $('#quiz-speaker').classList.add('playing');
@@ -185,7 +206,7 @@
 
     // 答案
     const ansEl = $('#quiz-answers');
-    const picAnswers = Q.mode !== 'B';
+    const picAnswers = Q.mode === 'A' || Q.mode === 'C';
     ansEl.className = 'answers ' + (picAnswers ? 'cols-2' : (C.state.settings.textLang === 'en' ? 'cols-1' : 'cols-2'));
     ansEl.innerHTML = '';
     options.forEach((it) => {
@@ -321,7 +342,7 @@
     Q.correctCount = 0;
     Q.attempts = 0;
     Q.fruits = 0;
-    Q.queue = buildQueue();
+    Q.queue = buildQueue(mode);
     C.go('quiz');
     A().pop();
     setTimeout(() => {
@@ -337,7 +358,7 @@
     if (!prev) return;
     const ts = pickTopics();
     prev.innerHTML = '<div class="tp-title">今次嘅題目庫</div><div class="topic-chips">' +
-      ts.map((t) => `<span class="topic-chip"><span class="tc-e">${t.emoji || ''}</span>${C.escapeHtml(t.zh)}</span>`).join('') +
+      ts.map((t) => `<span class="topic-chip"><span class="tc-e">${t.emoji || ''}</span>${C.escapeHtml(C.zh(t.zh))}</span>`).join('') +
       '</div>';
   }
 
