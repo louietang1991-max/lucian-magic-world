@@ -13,7 +13,8 @@
     "pack": "node tools/pack.mjs",
     "review": "node tools/gen-review.mjs",
     "test": "node tools/test-e2e.mjs",
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "check-headers": "node tools/check-headers.mjs"
   },
   "devDependencies": {
     "@andresaya/edge-tts": "^1.9.1",

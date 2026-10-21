@@ -1,22 +1,20 @@
-/*
-  Cloudflare Pages headers
-  - 靜態資源長快取（檔名有 hash／內容唔變）
-  - HTML / sw.js / manifest 唔好快取，確保更新即時見到
-*/
+# Cloudflare _headers
+# 注意：只可以用 # 做註解，唔可以有 /* */ 註解區塊
+# 每條規則格式：第一行寫路徑，之後每行「Header-Name: value」
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
-/index.html
+/
   Cache-Control: public, max-age=0, must-revalidate
 
-/
+/index.html
   Cache-Control: public, max-age=0, must-revalidate
 
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
-  Service-Worker-Allowed: /
 
 /manifest.webmanifest
   Cache-Control: public, max-age=600
