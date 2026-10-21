@@ -9,6 +9,14 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let bad = 0;
 const err = (m) => { console.error('❌ ' + m); bad++; };
 
+/* ---------- BOM 檢查 ---------- */
+for (const f of ['_headers', '_redirects', 'wrangler.toml', 'manifest.webmanifest']) {
+  const p = path.join(ROOT, f);
+  if (!fs.existsSync(p)) continue;
+  const b = fs.readFileSync(p);
+  if (b[0] === 0xef && b[1] === 0xbb && b[2] === 0xbf) err(`${f} 有 UTF-8 BOM，Cloudflare 會解析失敗（要另存做無 BOM UTF-8）`);
+}
+
 /* ---------- _headers ---------- */
 const hf = path.join(ROOT, '_headers');
 if (!fs.existsSync(hf)) {

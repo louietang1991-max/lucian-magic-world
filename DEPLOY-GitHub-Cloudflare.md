@@ -140,8 +140,8 @@ Cloudflare Pages → 你嘅 project → **Custom domains** → **Set up a domain
 
 | 檔案 | 作用 |
 |---|---|
-| `_headers` | Cloudflare Pages 專用：設定 cache（mp3／圖長快取、HTML／sw.js 唔快取）同安全 header |
-| `_redirects` | 留空（靜態網站唔需要 redirect） |
+| `_headers` | Cloudflare 用（**只可以用 `#` 註解、檔案唔可以有 BOM**）：設定 cache（mp3／圖長快取、HTML／sw.js 唔快取）同安全 header |
+| ~~`_redirects`~~ | 已刪除（靜態網站唔需要；SPA fallback 由 `wrangler.toml` 的 `not_found_handling` 負責） |
 | `sw.js` | Service Worker，第二次開就完全離線玩；改版時記得改 `VERSION`（已經升到 v2.0.0） |
 | `manifest.webmanifest` | PWA：可以「加到主畫面」 |
 | `.nojekyll` | 唔使用 GitHub Pages，但留住都冇壞 |

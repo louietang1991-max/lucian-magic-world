@@ -19,7 +19,6 @@ const ROOT_FILES = [
   'sw.js',
   'manifest.webmanifest',
   '_headers',
-  '_redirects',
   '.nojekyll',
   'favicon.ico',
   'robots.txt',
