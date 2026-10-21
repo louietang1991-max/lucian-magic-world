@@ -46,6 +46,65 @@ git push
 
 ---
 
+## 二、Cloudflare Workers（靜態資產）設定 — 如果你係揀「Workers」
+
+Cloudflare 有兩條路：**Pages** 同 **Workers（Static Assets）**。兩者個 UI 唔同：
+
+| | Pages | Workers |
+|---|---|---|
+| 有冇「Build output directory」 | ✅ 有 | ❌ **冇**（由 `wrangler.toml` 嘅 `assets.directory` 決定） |
+| 有冇「Framework preset」 | ✅ 有 | ❌ **冇** |
+| 建置設定位置 | Settings → Build & deployments | Settings → **Build** → Build configuration |
+| 部署指令 | 自動上載 output directory | `npx wrangler deploy`（預設） |
+
+所以你搵唔到「Build output directory / Framework preset」係正常嘅 —— 你個 project 係 **Worker**，唔係 Pages。
+
+### Worker 嘅正確設定
+
+1. Worker project → **Settings** → **Build** → **Build configuration**（或「Edit configuration」）
+2. 填：
+
+   | 設定 | 值 |
+   |---|---|
+   | Build command | `node build.mjs` |
+   | Deploy command | `npx wrangler deploy`（預設，唔使改） |
+   | Root directory | 留空 |
+
+3. Repo 入面已經有 `wrangler.toml`：
+
+   ```toml
+   name = "lucian-magic-world"
+   compatibility_date = "2025-01-01"
+
+   [assets]
+   directory = "./dist"
+   not_found_handling = "single-page-application"
+   ```
+
+   → `build.mjs` 產生 `dist/`，wrangler 只會上載 `dist/`（18MB），
+     唔會再將 `node_modules/workerd`（134MB）當成資產，所以唔會再出
+     `Asset too large ... up to 25 MiB`。
+
+   > ⚠️ `name` 一定要同你 Cloudflare 入面個 Worker 名一樣。
+   > 如果個 Worker 叫第二個名（例如 `lucian-game`），改 `wrangler.toml` 個 `name`，
+   > 否則佢會開一個新 Worker 而唔係更新你原本嗰個。
+
+4. 撳 **Save** → **Deployments** → **Retry deployment**
+
+### 想轉用 Pages？（另一個選擇）
+
+Pages 個 UI 反而簡單啲（有 output directory 欄位）：
+
+1. Workers & Pages → **Create** → **Pages** → **Connect to Git** → 揀同一個 repo
+2. Build command：`node build.mjs`
+3. Build output directory：`dist`
+4. Framework preset：`None`
+5. Save and Deploy
+
+兩個做法結果一樣，網址都會係 `https://<project>.pages.dev` 或 `https://<worker>.<你的帳戶>.workers.dev`。
+
+---
+
 ## 二、Cloudflare Pages 設定
 
 1. 去 https://dash.cloudflare.com/ → 左邊 **Workers & Pages**
@@ -94,6 +153,9 @@ Cloudflare Pages → 你嘅 project → **Custom domains** → **Set up a domain
 ---
 
 ## 四、常見問題
+
+**Q：搵唔到「Build output directory」同「Framework preset」？**
+- 你個 project 係 **Worker**，唔係 Pages；Workers 冇呢兩個欄位（見上面第二節）
 
 **Q：Build 失敗，話 `Asset too large ... workerd ... 134 MiB`？**
 - Build **output directory** 要係 `dist`（唔係 `/`），Build command 要係 `node build.mjs`
