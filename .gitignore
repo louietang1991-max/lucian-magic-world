@@ -2,13 +2,28 @@ node_modules/
 tools/shots/
 tools/patch*.mjs
 tools/debug-*.mjs
+tools/probe-*.mjs
+tools/p-*.mjs
 *.zip
 .DS_Store
 Thumbs.db
 
-# 原始 AI 生成圖（體積大，唔入 git；網頁用嘅 hero-web / cutout-webp 就有入）
+# 原始 AI 生成圖（體積大；網頁用嘅 hero-web / cutout-webp 就有入）
 assets/img/animals/hero/
 assets/img/animals/cutout/
 assets/img/animals/cutout-final/
 assets/img/animals/cutout-web/
 assets/img/items-raw/
+
+# 開發／參考素材（唔上 GitHub）
+screenshots/
+參考/
+reference art/
+風格樣本/
+風格樣本2/
+樣本語音/
+題目庫對照表.pdf
+題目圖檢查.html
+畫風選擇.html
+畫風樣本2.html
+粵語語音樣本.html

@@ -230,8 +230,8 @@
       const hint = $('#feed-hint');
       if (hint) hint.textContent = label;
       if (F.throwCount >= THROWS) {
-        later(showReady, 700);
-        if (hint) hint.textContent = '準備跟拍子…';
+        later(showEat, 700);
+        if (hint) hint.textContent = '動物好開心呀！';
       } else {
         later(() => { if (F.stage === 'throw') { tip('再掟多一個！', 1100); if (hint) hint.textContent = '將魔法生果掟入圈圈！'; } }, 520);
       }
@@ -512,6 +512,28 @@
     if (dots[beat] && pts > 0) dots[beat].className = 'beat-dot' + (p.active.includes(beat) ? '' : ' rest') + ' hit';
   }
 
+  /** 食嘢 → 揭曉（唔再玩拍子） */
+  function showEat() {
+    if (F.stage === 'done' || F.stage === 'eat') return;
+    F.stage = 'eat';
+    setStage('eat');
+    const panel = $('#rhythm-ready');
+    if (panel) panel.hidden = true;
+    const hit = $('#beat-hit');
+    if (hit) hit.hidden = true;
+    const hint = $('#feed-hint');
+    if (hint) hint.textContent = '好叻呀！';
+    tip('動物食得好開心呀！', 2000);
+    const animal = $('#feed-animal');
+    if (animal) animal.classList.add('revealed', 'eating');
+    A().crunch();
+    later(() => A().crunch(), 340);
+    later(() => A().levelUp(), 700);
+    A().play('p/zh-HK/animal-happy');
+    spawnHearts();
+    later(goReveal, 2200);
+  }
+
   function onRhythmEnd() {
     if (F.stage === 'done') return;
     // 把拍子分數標準化到 40 分滿分
@@ -555,7 +577,7 @@
     clearTimers();
     const a = F.animal;
     if (!a) { C.go('explore'); return; }
-    const total = clamp(Math.round(F.score.accuracy + F.score.rhythm), 0, 100);
+    const total = clamp(Math.round((F.score.accuracy / 60) * 100), 0, 100);
     const stars = clamp(window.Game.scoreToStars(total), 0, 3);
     const facts = window.Game.starsToFacts(stars);
     const isNew = window.Profile.recordAnimal(a.id, stars, facts);
@@ -587,7 +609,7 @@
     const st = $('#reveal-stars');
     if (st) st.innerHTML = C.starsSvg(stars, 3);
     const sc = $('#reveal-score');
-    if (sc) sc.textContent = `掟生果 ${F.score.accuracy}/60 分 ＋ 拍子 ${F.score.rhythm}/40 分 ＝ ${total} 分`;
+    if (sc) sc.textContent = `魔法生果準確度 ${F.score.accuracy}/60 ＝ ${total} 分`;
     const fl = $('#reveal-facts');
     if (fl) {
       fl.innerHTML = '';

@@ -1,4 +1,4 @@
-/* tools/test-e2e.mjs — 用手機尺寸嘅 Chrome 行一次全流程，收集錯誤 + 截圖
+﻿/* tools/test-e2e.mjs — 用手機尺寸嘅 Chrome 行一次全流程，收集錯誤 + 截圖
  * 用法: node tools/test-e2e.mjs
  */
 import fs from 'node:fs';
@@ -169,65 +169,20 @@ async function main() {
       await sleep(900);
     }
     await shot(page, 'feed-beat');
-    // 掟完 3 個 → 出「聽節拍 / 開始」面板
-    const tReady = Date.now();
-    while (Date.now() - tReady < 12000) {
+    await shot(page, 'feed-eat-prep');
+    // 掟完 3 個 → 動物食嘢 → 揭曉（已冇拍子環節）
+    const tEat = Date.now();
+    let eatSeen = false;
+    while (Date.now() - tEat < 20000) {
       const st = await page.evaluate(() => window.Feed && window.Feed.F.stage);
-      if (st === 'ready') break;
-      await sleep(120);
-    }
-    assert(await page.evaluate(() => window.Feed.F.stage === 'ready'), '掟完生果 → 出節奏面板');
-    assert(await page.evaluate(() => !document.getElementById('rhythm-ready').hidden), '見到「聽節拍 / 開始」兩個掣');
-    // 試「聽節拍」（而家會先數 1、2、3 再示範）
-    await page.evaluate(() => document.getElementById('rhythm-listen').click());
-    await sleep(400);
-    assert(await page.evaluate(() => window.Feed.F.stage === 'count'), '聽節拍之前都會數 1、2、3');
-    const tDemo = Date.now();
-    let demoSeen = false;
-    while (Date.now() - tDemo < 12000) {
-      if (await page.evaluate(() => window.Feed.F.stage === 'demo')) { demoSeen = true; break; }
-      await sleep(120);
-    }
-    assert(demoSeen, '撳「聽節拍」會示範一次');
-    const tDemo2 = Date.now();
-    while (Date.now() - tDemo2 < 12000) {
-      if (await page.evaluate(() => window.Feed.F.stage === 'ready')) break;
+      if (st === 'eat' || st === 'done') { eatSeen = true; break; }
       await sleep(150);
     }
-    assert(await page.evaluate(() => window.Feed.F.stage === 'ready'), '示範完會返到待開始');
-    // 撳開始 → 數 1 2 3
-    await page.evaluate(() => document.getElementById('rhythm-start').click());
-    await sleep(400);
-    assert(await page.evaluate(() => window.Feed.F.stage === 'count'), '撳開始先數 1、2、3');
-    await shot(page, 'feed-count');
-    // 等拍子階段開始，然後跟拍子撳
-    const tBeat = Date.now();
-    while (Date.now() - tBeat < 15000) {
-      const st = await page.evaluate(() => window.Feed && window.Feed.F.stage);
-      if (st === 'beats') break;
-      await sleep(120);
-    }
-    const beatOk = await page.evaluate(() => window.Feed.F.stage);
-    assert(beatOk === 'beats', '入到拍子階段 (stage=' + beatOk + ')');
-    const activeCount = await page.evaluate(() => window.Feed.F.pattern.active.length);
-    for (let i = 0; i < activeCount; i++) {
-      // 等到「下一個有效拍」先撳（休息拍唔撳）
-      for (let k = 0; k < 120; k++) {
-        const info = await page.evaluate(() => {
-          const m = window.Metro;
-          const p = m.position();
-          return { toNext: m.toNext(), nextBeat: Math.ceil(p - 0.001), active: window.Feed.F.pattern.active };
-        });
-        if (info.toNext < 0.06 && info.active.includes(info.nextBeat)) break;
-        await sleep(20);
-      }
-      await page.evaluate(() => document.getElementById('feed-circle').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 1 })));
-      await sleep(120);
-    }
-    console.log('  [debug] raw rhythm =', await page.evaluate(() => window.Feed.F.rawRhythm));
-    const rhythmScore = await page.evaluate(() => window.Feed.F.rawRhythm);
-    assert(rhythmScore > 0, '拍子遊戲有分 (' + rhythmScore + ')');
-    await sleep(1200);
+    assert(eatSeen, '掟完生果 → 餵動物食嘢');
+    const noRhythm = await page.evaluate(() => !document.getElementById('rhythm-ready') && !document.getElementById('beat-hands'));
+    assert(noRhythm, '拍子環節已移除（冇節奏面板／雙手）');
+    await sleep(600);
+    await shot(page, 'feed-eat');
     await shot(page, 'feed-eat');
     await waitFor(page, () => document.getElementById('screen-reveal').classList.contains('active'), 12000, 'reveal screen');
     await sleep(1600);

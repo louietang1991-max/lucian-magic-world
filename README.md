@@ -1,16 +1,35 @@
 # Lucian 的魔法世界 · Magic World
 
-為 3 歲小朋友而設嘅**中／英／普學習 + 動物餵食節奏遊戲**，純 HTML5，手機直向操作，支援離線玩（PWA）。
+為 3 歲小朋友而設嘅**中／英／普學習 + 搵動物餵食遊戲**，純 HTML5，手機直向操作，支援離線玩（PWA）。
 
 > 所有圖案都係手繪 SVG，所有語音都係預先合成嘅 MP3 音檔（499 段，用 Microsoft Edge Neural 語音），唔需要上網都可以玩。
 
 ---
 
+> **部署**：GitHub → Cloudflare Pages，詳細步驟睇 [DEPLOY-GitHub-Cloudflare.md](DEPLOY-GitHub-Cloudflare.md)
+
 ## 一、點樣放上網（最快 3 分鐘）
 
 整個資料夾就係一個靜態網站，冇 build step、冇 server-side code。以下任揀一個：
 
-### 方法 A：Netlify Drop（最簡單，唔使 git）
+### 方法 A：GitHub + Cloudflare Pages（推薦，詳細步驟見 `DEPLOY-GitHub-Cloudflare.md`）
+
+1. 喺 GitHub 開一個新 repo（唔好加 README / .gitignore）
+2. 本地：
+   ```powershell
+   cd "C:\Users\louie\OneDrive\Desktop\DSH\Lucian game"
+   git remote add origin https://github.com/你的用戶名/lucian-magic-world.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → 揀呢個 repo
+4. **Build command 留空**、**Build output directory**: `/` → Save and Deploy
+5. 完成後網址：`https://<project>.pages.dev`（可以再加自訂網域）
+
+> 之後每次 `git push`，Cloudflare 會自動重新部署。
+> Repo 已經設定好 `_headers`（cache）同 `_redirects`，唔使再設定其他嘢。
+
+### 方法 B：Netlify Drop（最簡單，唔使 git）
 1. 去 <https://app.netlify.com/drop>
 2. 將**整個資料夾**（或者打包好嘅 `lucian-magic-world.zip`）拖入去
 3. 即刻有條 `https://xxxx.netlify.app` 嘅網址，用手機開就得
@@ -96,11 +115,9 @@ git push -u origin main
 - 未探頭時撳 → 影子會搖一搖 + 語音提示「等佢出嚟先撳啦！」
 - 撳到影子 → **餵食畫面**：
   - **掟 3 個魔法生果入圈圈**（撳圈或由生果籃向上拉瞄準），越中間越高分（最多 60 分）
-  - **跟節拍**：掟完生果 → 出「🔊 聽節拍 / ▶ 開始」面板
-    - 撳「聽節拍」可以聽多幾次（唔計分）
-    - 撳「開始」會先數 **1、2、3** 先正式開始
-    - 節拍模式有 3 種（每次隨機）：平均四拍 / 停一拍（1·2·_·4）/ 三拍
-    - 畫面左右有**一對手跟住拍子拍落嚟**，圈圈亦會跟拍子閃；跟住撳圈圈（最多 40 分）
+  - **餵食**：掟完 3 個魔法生果 → 動物即刻食（播咬嘢聲、心心飄起）→ 揭曉獎勵卡
+    - （拍子小遊戲已經移除）
+    - 分數＝掟生果準確度換算成 100 分制；越準越多星、解鎖越多冷知識
   - 無論成功失敗，動物都會**現身**、食得好開心，代表餵食成功
 - 分數 → 星星 → 解鎖**動物冷知識**（最多 4 條）＋圖鑑星級
 - 儲齊 **35 隻動物** 圖鑑；餵過嘅動物會用彩色留喺場景度
@@ -115,7 +132,7 @@ git push -u origin main
 - **發音語言**：粵語 / 普通話 / English（影響遊戲 A 同所有動物名讀音）
 - **文字語言**：中文（附拼音）/ English（影響遊戲 B、C 顯示嘅字）
 - **語速**：0.6x – 1.2x
-- **節奏速度**：60 – 120 BPM（預設 90，覺得太快可以調慢）
+- **（節奏速度已停用）**：拍子小遊戲已移除，呢個設定保留但唔會影響遊戲
 - **音效開關**
 - **答啱自動去下一題**
 - **輕鬆模式**（答錯可以再試）
@@ -157,7 +174,7 @@ index.html                 入口（所有畫面嘅 HTML）
 題目庫對照表.html / .pdf    題目庫＋圖鑑對照（家長核對用，唔需要上傳）
 manifest.webmanifest       PWA 設定
 sw.js                      Service Worker（離線快取）
-netlify.toml               Netlify 用嘅 cache header 設定
+_headers                   Cloudflare Pages 用嘅 cache／安全 header 設定
 assets/css/                theme.css / layout.css / games.css / feed.css
 assets/js/
   data-animals.js          35 隻動物（名、稀有度、冷知識、family）
@@ -165,7 +182,7 @@ assets/js/
   artwork.js               全部 SVG 手繪圖案（動物 + 物品）
   audio.js                 音檔播放 + Web Audio 音效合成
   audio-manifest.js        語音清單（fetch manifest.json 失敗時嘅後備）
-  rhythm.js                節拍器（精準排程）
+  rhythm.js                節拍器（已停用，留俾日後）
   core.js                  狀態 / 畫面切換 / 返回導航 / 小工具
   screen-*.js              每個畫面
 assets/audio/              499 段預先合成語音 + manifest.json
@@ -186,7 +203,7 @@ lucian-magic-world.zip     👈 直接上傳用嘅打包檔
 
 - **語音**：Microsoft Edge（Azure Neural）合成，粵語 `zh-HK-HiuMaanNeural`、普通話 `zh-CN-XiaoxiaoNeural`、英語 `en-US-JennyNeural`，語速 −8~10%、音調 +2Hz（小朋友聽得清楚啲）。**預先合成成 MP3**，所以所有手機發音一致
 - **音效**：Web Audio API 即時合成（拍子聲、過關音樂、咬嘢聲），冇額外檔案
-- **節拍**：Web Audio 排程 + lookahead，拍子誤差 < 10ms；評分容許 ±0.34 秒（對小朋友好寬鬆）
+- **音效**：Web Audio 即時合成；語音用 Microsoft Edge Neural TTS（944 段）
 - **返回導航**：每個畫面有固定「上一層」，唔會跳去奇怪畫面；結算頁有 ◀ 返主頁、再玩一次、揀第二個遊戲、去搵動物
 - **離線**：Service Worker 會 cache 核心檔案；語音係「用過先 cache」
 - **唔會收集任何個人資料**，冇分析、冇廣告、冇第三方追蹤

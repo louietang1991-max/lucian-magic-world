@@ -125,37 +125,11 @@ try {
     await sleep(760);
   }
   await sleep(300);
-  // 等節奏面板
-  for (let k = 0; k < 100; k++) {
-    if (await page.evaluate(() => window.Feed.F.stage === 'ready')) break;
+  // 等動物食嘢（已冇拍子環節）
+  for (let k = 0; k < 120; k++) {
+    if (await page.evaluate(() => window.Feed.F.stage === 'eat' || window.Feed.F.stage === 'done')) break;
     await sleep(120);
   }
-  await shot(page, 'feed-ready');
-  await page.evaluate(() => document.getElementById('rhythm-start').click());
-  await sleep(500);
-  await shot(page, 'feed-countin');
-  const t0 = Date.now();
-  while (Date.now() - t0 < 15000) {
-    if (await page.evaluate(() => window.Feed.F.stage === 'beats' || window.Feed.F.stage === 'eat' || window.Feed.F.stage === 'done')) break;
-    await sleep(100);
-  }
-  await sleep(500);
-  await shot(page, 'feed-tap');
-  const walkActive = await page.evaluate(() => window.Feed.F.pattern.active.length);
-  for (let k = 0; k < walkActive; k++) {
-    for (let n = 0; n < 120; n++) {
-      const info = await page.evaluate(() => {
-        const m = window.Metro;
-        const p = m.position();
-        return { toNext: m.toNext(), nextBeat: Math.ceil(p - 0.001), active: window.Feed.F.pattern.active };
-      });
-      if (info.toNext < 0.06 && info.active.includes(info.nextBeat)) break;
-      await sleep(20);
-    }
-    await page.evaluate(() => document.getElementById('feed-circle').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
-    await sleep(120);
-  }
-  await sleep(900);
   await shot(page, 'feed-eat');
   await waitFor(page, () => document.getElementById('screen-reveal').classList.contains('active'), 12000, 'reveal');
   await sleep(1600);
