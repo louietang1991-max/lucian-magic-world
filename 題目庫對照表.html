@@ -82,7 +82,7 @@
     border-radius: 8px;
     overflow: hidden;
   }
-  .item .pic svg { width: 100%; height: 100%; display: block; }
+  .item .pic svg, .item .pic img { width: 100%; height: 100%; display: block; object-fit: contain; }
   .item .id {
     display: inline-block;
     font-size: 9.5px;
@@ -128,7 +128,7 @@
     place-items: center;
     overflow: hidden;
   }
-  .animal-card .pic svg { width: 100%; height: 100%; }
+  .animal-card .pic svg, .animal-card .pic img { width: 100%; height: 100%; display: block; object-fit: contain; }
   .animal-card .info { flex: 1; min-width: 0; }
   .animal-card .row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .animal-card .nm { font-size: 17px; font-weight: 900; }
@@ -201,6 +201,7 @@
 <script src="assets/js/data-animals.js"></script>
 <script src="assets/js/data-vocab.js"></script>
 <script src="assets/js/core.js"></script>
+<script src="assets/js/ai-index.js"></script>
 <script src="assets/js/artwork.js"></script>
 <script src="assets/js/audio-manifest.js"></script>
 <script>
@@ -296,7 +297,7 @@
       card.className = 'item';
       card.id = id;
       card.innerHTML =
-        `<div class="pic">${window.Art.item(it)}</div>` +
+        `<div class="pic">${window.Art.item({ ...it, topicId: tid, index: i })}</div>` +
         `<div class="id">${id}</div>` +
         `<div class="zh">${it.zh}</div>` +
         `<div class="py">${it.py || ''}</div>` +

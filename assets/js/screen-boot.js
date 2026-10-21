@@ -13,6 +13,7 @@
       if (this.started) return;
       this.started = true;
       C.load();
+      if (window.I18N) setTimeout(() => window.I18N.applyLang(), 30);
       refreshFruitBars();
       bindGlobal();
       await this.loadAudio();

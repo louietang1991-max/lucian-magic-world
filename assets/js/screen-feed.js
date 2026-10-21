@@ -124,7 +124,7 @@
 
   function renderTop() {
     const t = $('#feed-title');
-    if (t) t.textContent = '餵 ' + (F.animal ? F.animal.zh : '動物');
+    if (t) t.textContent = (C.state.settings.textLang === 'en' ? 'Feed ' : '餵 ') + (F.animal ? C.animalName(F.animal) : '動物');
     updateBasket();
   }
 
@@ -564,7 +564,7 @@
     const art = $('#reveal-art');
     if (art) art.innerHTML = window.Art.animal(a.id, { kind: 'hero' });
     const nm = $('#reveal-name');
-    if (nm) nm.textContent = a.zh;
+    if (nm) nm.textContent = C.animalName(a);
     const en = $('#reveal-en');
     if (en) en.textContent = a.en;
     const st = $('#reveal-stars');
@@ -579,7 +579,7 @@
         const row = document.createElement('div');
         row.className = 'fact-row' + (unlocked ? '' : ' locked');
         row.style.animationDelay = (0.15 + i * 0.12) + 's';
-        row.innerHTML = `<span class="fr-ico">${unlocked ? '💡' : '🔒'}</span><span>${unlocked ? C.escapeHtml(f) : '再餵多幾次，解鎖更多冷知識…'}</span>`;
+        row.innerHTML = `<span class="fr-ico">${unlocked ? '💡' : '🔒'}</span><span>${unlocked ? C.escapeHtml(C.zh(f)) : '再餵多幾次，解鎖更多冷知識…'}</span>`;
         fl.appendChild(row);
         if (unlocked) later(() => { if (C.screen === 'reveal') A().play(`f/${a.id}/${i}`); }, 900 + i * 2800);
       });

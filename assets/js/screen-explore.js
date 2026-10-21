@@ -55,7 +55,7 @@
       btn.className = 'map-card theme-' + l.theme;
       btn.innerHTML = `
         <span class="mc-emoji">${l.emoji}</span>
-        <span class="mc-zh">${l.zh}</span>
+        <span class="mc-zh">${C.placeName(l)}</span>
         <span class="mc-en">${l.en}</span>
         <div class="mc-prog"><i style="width:${Math.round((got / Math.max(1, list.length)) * 100)}%"></i></div>
         ${got === list.length ? '<span class="mc-done">🌟</span>' : ''}`;
@@ -257,7 +257,7 @@
     deco.innerHTML = '';
     deco.appendChild(decoFor(loc));
 
-    $('#place-name').textContent = loc.zh + ' ' + loc.emoji;
+    $('#place-name').textContent = C.placeName(loc);
     updatePlaceCount();
 
     const mode = Explore.mode;
@@ -304,7 +304,7 @@
         done.style.setProperty('--sz', spot.size + 'px');
         done.style.setProperty('--rot', spot.rot + 'deg');
         done.innerHTML = '<span class="sp-art">' + window.Art.animal(spot.animal.id) + '</span>' +
-          '<span class="sp-badge visited-badge">💕 ' + spot.animal.zh + '</span>';
+          '<span class="sp-badge visited-badge">💕 ' + C.animalName(spot.animal) + '</span>';
         layer.appendChild(done);
         spot.el = done;
         return;
@@ -558,7 +558,7 @@
       let changed = false;
       boxes.forEach((b) => {
         if (b.s.revealedWipe || b.s.found) return;
-        if (regionCover(b.x, b.y, b.r) > 0.5) {
+        if (regionCover(b.x, b.y, b.r) > 0.22) {
           b.s.revealedWipe = true;
           changed = true;
           if (b.s.el) {
@@ -566,7 +566,11 @@
             b.s.el.classList.remove('hidden-under');
             b.s.el.classList.add('revealed');
           }
-          if (b.s.wrap) b.s.wrap.classList.add('revealed');
+          if (b.s.wrap) {
+            b.s.wrap.classList.add('revealed');
+            b.s.wrap.classList.add('revealed-pop');
+            setTimeout(() => b.s.wrap.classList.remove('revealed-pop'), 700);
+          }
           A().pop();
           C.haptic();
           const h = $('#place-hint');
@@ -608,7 +612,7 @@
       for (let i = 1; i <= steps; i++) clear(lastX + (dx * i) / steps, lastY + (dy * i) / steps);
       lastX = x; lastY = y;
       checks++;
-      if (checks % 4 === 0) {
+      if (checks % 2 === 0) {
         checkSpots();
         // 颳得夠多就由佢全部開（唔想小朋友刮到手軟）
         if (!allClearDone && totalCover() > 0.55) {

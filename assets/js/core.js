@@ -70,7 +70,7 @@
     // 基本校正
     const s = state.settings;
     if (!['yue', 'man', 'en'].includes(s.speakLang)) s.speakLang = 'yue';
-    if (!['zh', 'en'].includes(s.textLang)) s.textLang = 'zh';
+    if (!['zh', 'zhs', 'en'].includes(s.textLang)) s.textLang = 'zh';
     s.rate = clamp(Number(s.rate) || 0.9, 0.6, 1.2);
     s.tempo = clamp(Number(s.tempo) || 90, 60, 120);
     if (!Array.isArray(s.topics) || !s.topics.length) s.topics = DEFAULTS.settings.topics.slice();
@@ -127,6 +127,8 @@
     }
     const h = screenHooks[id];
     if (h && h.enter) { try { h.enter(opts); } catch (e) { console.error(e); } }
+    // 每次轉畫面之後套用顯示語言
+    try { if (window.I18N && window.I18N.applyLang) setTimeout(() => window.I18N.applyLang(), 0); } catch (e) {}
   }
 
   /**
@@ -217,10 +219,28 @@
   }
 
   /* ------------------------------------------------------------------- text */
-  // 依語言俾字詞：zh / en
+  // 依語言俾字詞：zh（繁）/ zhs（簡）/ en
+  function zh(text) {
+    const s = text == null ? '' : String(text);
+    if (state.settings.textLang === 'zhs' && window.toSimp) return window.toSimp(s);
+    return s;
+  }
   function T(item) {
     if (!item) return '';
-    return state.settings.textLang === 'en' ? (item.en || item.zh) : (item.zh || item.en);
+    if (state.settings.textLang === 'en') return item.en || item.zh;
+    return zh(item.zh || item.en);
+  }
+  /** 動物名：英／繁／簡 */
+  function animalName(a) {
+    if (!a) return '';
+    if (state.settings.textLang === 'en') return a.en || a.zh;
+    return zh(a.zh || a.en);
+  }
+  /** 地點名 */
+  function placeName(loc) {
+    if (!loc) return '';
+    if (state.settings.textLang === 'en') return loc.en || loc.zh;
+    return zh(loc.zh || loc.en);
   }
   function speakKeyOf(item, kind) {
     // kind: 'audio' — 用邊個語言發音
@@ -291,7 +311,7 @@
     $, $$, sleep, rnd, rndInt, pick, clamp, shuffle, uid,
     get state() { return state; },
     load, save, saveNow, DEFAULTS, KEY,
-    go, back: back_, registerScreen, popup, confirmPopup, toast, T, speakKeyOf, isEnSpeak,
+    go, back: back_, registerScreen, popup, confirmPopup, toast, T, zh, animalName, placeName, speakKeyOf, isEnSpeak,
     haptic, fmt, escapeHtml, starsSvg, bus,
     get screen() { return currentScreen; },
   };

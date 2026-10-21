@@ -996,6 +996,10 @@
       return animal(it.art.slice(7), Object.assign({ kind: 'hero' }, opts));
     }
     // 題目圖：有 AI 圖就用（key = topic/index）
+    if (it.topicId != null && it.index != null && AI.items) {
+      const k = it.topicId + '/' + it.index;
+      if (AI.items[k]) return aiImg(AI.items[k], 'ai-item', it.en || it.zh);
+    }
     if (it._aiKey && AI.items && AI.items[it._aiKey]) {
       return aiImg(AI.items[it._aiKey], 'ai-item', it.en || it.zh);
     }

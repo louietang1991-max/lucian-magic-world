@@ -72,7 +72,7 @@
     }
     // 發音語言
     seg('set-speak', s.speakLang, (v) => { s.speakLang = v; C.save(); window.AudioKit.tap(); });
-    seg('set-text', s.textLang, (v) => { s.textLang = v; C.save(); window.AudioKit.tap(); });
+    seg('set-text', s.textLang, (v) => { s.textLang = v; C.save(); window.AudioKit.tap(); if (window.I18N) window.I18N.applyLang(); });
     // 語速
     const rate = $('#set-rate');
     const rateVal = $('#set-rate-val');

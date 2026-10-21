@@ -66,7 +66,7 @@
       card.innerHTML = `
         <span class="ac-rar"></span>
         <span class="ac-art">${window.Art.animal(a.id, { shadow: !rec })}</span>
-        <span class="ac-name">${rec ? C.escapeHtml(a.zh) : '？？？'}</span>
+        <span class="ac-name">${rec ? C.escapeHtml(C.animalName(a)) : '？？？'}</span>
         <span class="ac-en">${rec ? C.escapeHtml(a.en) : '???'}</span>
         <span class="ac-stars">${rec ? C.starsSvg(photoStars(rec), 5) : ''}</span>
         ${rec ? '' : '<span class="ac-lock">🔒</span>'}`;
@@ -82,12 +82,12 @@
     const facts = rec.facts || 1;
     const rows = a.facts.map((f, i) => {
       const on = i < facts;
-      return `<div class="fact-row${on ? '' : ' locked'}"><span class="fr-ico">${on ? '💡' : '🔒'}</span><span>${on ? C.escapeHtml(f) : '未解鎖'}</span></div>`;
+      return `<div class="fact-row${on ? '' : ' locked'}"><span class="fr-ico">${on ? '💡' : '🔒'}</span><span>${on ? C.escapeHtml(C.zh(f)) : '未解鎖'}</span></div>`;
     }).join('');
     const p = C.popup(`<div class="popup-card animal-sheet" style="max-height:86vh;overflow-y:auto">
         <button class="sheet-close" data-close aria-label="閂">✕</button>
         <div class="as-art">${window.Art.animal(a.id)}</div>
-        <div class="as-name">${C.escapeHtml(a.zh)}</div>
+        <div class="as-name">${C.escapeHtml(C.animalName(a))}</div>
         <div class="as-en">${C.escapeHtml(a.en)}</div>
         <div class="reveal-rarity" style="position:static;margin-top:2px;background:${rar.color}">${'★'.repeat(a.rarity)} ${rar.zh}</div>
         <div style="margin-top:6px">${C.starsSvg(ps, 5)}</div>

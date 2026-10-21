@@ -700,3 +700,9 @@
   bottom: -10px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
 }
+
+/* 刮刮卡地點：未撥開之前唔好見到稀有度圈同 NEW 牌 */
+.spot-wrap.mode-dig .shadow-spot::before { opacity: 0; transition: opacity 0.35s; }
+.spot-wrap.mode-dig.revealed .shadow-spot::before { opacity: 0.9; }
+.spot-wrap.mode-dig .sp-badge { opacity: 0; transition: opacity 0.35s; }
+.spot-wrap.mode-dig.revealed .sp-badge { opacity: 1; }
