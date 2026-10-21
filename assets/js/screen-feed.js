@@ -51,7 +51,7 @@
       W, H, r,
       cx: W / 2,
       cy: circleY,
-      animal: { x: W / 2, y: Math.max(H * 0.225, 140), s: Math.min(W * 0.66, H * 0.30) },
+      animal: { x: W / 2, y: Math.max(H * 0.27, 200), s: Math.min(W * 0.60, H * 0.27) },
       basket: { x: W / 2, y: H - Math.max(100, H * 0.135) },
     };
     return F.geo;
@@ -65,14 +65,22 @@
       circle.style.left = g.cx - g.r + 'px';
       circle.style.top = g.cy - g.r + 'px';
     }
-    // 跟拍雙手：大隻、由左右下方包住圈圈
+    // 跟拍撳區：比圈大一圈（小朋友撳手／邊緣都中）
+    const hit = $('#beat-hit');
+    if (hit) {
+      const hs = Math.max(g.r * 2.9, 210);
+      hit.style.width = hit.style.height = hs + 'px';
+      hit.style.left = g.cx - hs / 2 + 'px';
+      hit.style.top = g.cy - hs / 2 + 'px';
+    }
+    // 跟拍雙手：細啲、放喺圈外面
     const hands = document.querySelectorAll('#beat-hands .hand');
     if (hands.length >= 2) {
-      const hw = Math.min(window.innerWidth * 0.42, 210);
-      const hy = g.cy - hw * 0.55;
-      hands[0].style.left = Math.max(-hw * 0.12, g.cx - g.r - hw * 0.82) + 'px';
+      const hw = Math.min(window.innerWidth * 0.34, 176);
+      const hy = g.cy - hw * 0.42;
+      hands[0].style.left = Math.max(-hw * 0.2, g.cx - g.r - hw * 0.95) + 'px';
       hands[0].style.top = hy + 'px';
-      hands[1].style.left = Math.min(window.innerWidth - hw * 0.88, g.cx + g.r - hw * 0.18) + 'px';
+      hands[1].style.left = Math.min(window.innerWidth - hw * 0.8, g.cx + g.r - hw * 0.05) + 'px';
       hands[1].style.top = hy + 'px';
     }
     const animal = $('#feed-animal');
@@ -269,6 +277,9 @@
     if (!screen) return;
     screen.classList.remove('stage-throw', 'stage-ready', 'stage-beat', 'stage-tap', 'stage-eat');
     screen.classList.add('stage-' + name);
+    // 撳區只喺正式拍子階段開，避免擋住「聽節拍 / 開始」掣同掟生果
+    const hit = $('#beat-hit');
+    if (hit) hit.hidden = !(name === 'tap' || name === 'beat');
   }
 
   function slamHands() {
@@ -346,11 +357,17 @@
           F.stage = 'ready';
           setStage('ready');
           setReadyButtons(false);
+          const rp = $('#rhythm-ready');
+          if (rp) rp.hidden = false; // 示範完要出返「開始」掣
           const h = $('#feed-hint');
           if (h) h.textContent = '準備好就撳「開始」！';
         },
       });
-      if (!ok) { F.demo = false; F.stage = 'ready'; setReadyButtons(false); }
+      if (!ok) {
+        F.demo = false; F.stage = 'ready'; setReadyButtons(false);
+        const rp2 = $('#rhythm-ready');
+        if (rp2) rp2.hidden = false;
+      }
     });
   }
 
@@ -601,6 +618,14 @@
 
   /* ================================================================== 輸入 */
   function bind() {
+    const hitTap = (e) => {
+      e.preventDefault();
+      if (F.stage === 'beats') tapCircle();
+    };
+    const hit = $('#beat-hit');
+    if (hit) {
+      hit.addEventListener('pointerdown', hitTap, { passive: false });
+    }
     const circle = $('#feed-circle');
     if (circle) {
       circle.addEventListener('pointerdown', (e) => {

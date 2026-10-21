@@ -558,7 +558,7 @@
       let changed = false;
       boxes.forEach((b) => {
         if (b.s.revealedWipe || b.s.found) return;
-        if (regionCover(b.x, b.y, b.r) > 0.22) {
+        if (regionCover(b.x, b.y, b.r) > 0.14) {
           b.s.revealedWipe = true;
           changed = true;
           if (b.s.el) {
@@ -595,10 +595,29 @@
       if (h) h.textContent = '撳個影子，餵動物食嘢！';
     }
 
+    /* 撳已揭開嘅影子（沙未刮完都可以撳） */
+    const spotAt = (x, y) => {
+      for (const b of boxes) {
+        if (!b.s.revealedWipe || b.s.found) continue;
+        const dx = x - b.x, dy = y - b.y;
+        if (Math.hypot(dx, dy) <= Math.max(b.r * 1.5, 78)) return b;
+      }
+      return null;
+    };
+    let downX = 0, downY = 0, moved = 0;
     const onDown = (e) => {
-      drawing = true;
       const r = cv.getBoundingClientRect();
-      lastX = e.clientX - r.left; lastY = e.clientY - r.top;
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      downX = lastX = x; downY = lastY = y; moved = 0;
+      const b = spotAt(x, y);
+      if (b) {
+        // 撳落已揭開嘅影子 → 直接餵食，唔需要刮乾淨
+        if (b.s.el) b.s.el.click();
+        drawing = false;
+        e.preventDefault();
+        return;
+      }
+      drawing = true;
       clear(lastX, lastY);
       e.preventDefault();
     };
@@ -608,6 +627,7 @@
       const x = e.clientX - r.left, y = e.clientY - r.top;
       const dx = x - lastX, dy = y - lastY;
       const dist = Math.hypot(dx, dy);
+      moved += dist;
       const steps = Math.max(1, Math.floor(dist / 14));
       for (let i = 1; i <= steps; i++) clear(lastX + (dx * i) / steps, lastY + (dy * i) / steps);
       lastX = x; lastY = y;
@@ -622,9 +642,19 @@
       }
       e.preventDefault();
     };
-    const onUp = () => {
+    const onUp = (e) => {
+      const wasDrawing = drawing;
       drawing = false;
       checkSpots();
+      if (!wasDrawing) return;
+      // 撳一下就夠：細幅度撳已經揭開嘅影子 → 直接餵食
+      const r = cv.getBoundingClientRect();
+      const x = (e && e.clientX != null ? e.clientX - r.left : downX);
+      const y = (e && e.clientY != null ? e.clientY - r.top : downY);
+      if (moved < 22) {
+        const b = spotAt(x, y) || spotAt(downX, downY);
+        if (b && b.s.el) b.s.el.click();
+      }
     };
     cv.addEventListener('pointerdown', onDown);
     cv.addEventListener('pointermove', onMove);
