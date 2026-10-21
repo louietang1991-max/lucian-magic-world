@@ -23,12 +23,13 @@ reference art/
 風格樣本2/
 樣本語音/
 題目庫對照表.pdf
+題目庫對照表.html
 題目圖檢查.html
+動物圖-選擇.html
 畫風選擇.html
 畫風樣本2.html
 粵語語音樣本.html
-dist/
-# �u��̿�]�b�Y���a�ΡF���W GitHub �N���|Ĳ�o Cloudflare npm install / node_modules�^
-package.json
-package-lock.json
 
+# 建置輸出
+dist/
+.wrangler/

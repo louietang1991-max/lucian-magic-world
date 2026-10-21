@@ -1,0 +1,18 @@
+# wrangler.toml — Cloudflare Workers（靜態資產）設定
+#
+# 用途：如果 Cloudflare 係用「Workers」而唔係「Pages」，佢會用 wrangler 部署，
+#       靜態檔案嘅來源由下面 [assets] 決定。設做 ./dist 就只會上載 build.mjs
+#       整理出嚟嘅網站檔案，唔會連 node_modules（workerd 134MB）一齊上載。
+#
+# ⚠️ name 要同 Cloudflare Workers 入面個 Worker 名一樣；
+#    如果唔同（例如佢叫 lucian-game），改下面 name 做返嗰個名。
+
+name = "lucian-magic-world"
+compatibility_date = "2025-01-01"
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+
+[observability]
+enabled = true
