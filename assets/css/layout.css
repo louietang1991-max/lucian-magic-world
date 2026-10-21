@@ -520,8 +520,25 @@ img.ai-shadow {
 }
 /* 圖鑑 / 題目卡：用裁切圖 */
 .album-card .ac-art img.ai-cutout { width: 100%; height: 100%; object-fit: contain; }
-.answer .ans-pic img.ai-item { width: 86%; height: 86%; object-fit: contain; }
-.prompt-pic img.ai-item { width: 84%; height: 84%; }
-.reveal-art img.ai-hero { width: 100%; height: 100%; object-fit: cover; border-radius: 24px; }
+/* 答案卡：一定要見齊全圖（包括有背景嘅 hero 圖），唔可以裁 */
+.answer .ans-pic img,
+.answer .ans-pic img.ai-hero,
+.answer .ans-pic img.ai-item {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 14px;
+}
+.prompt-pic img,
+.prompt-pic img.ai-hero,
+.prompt-pic img.ai-item {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+.reveal-art img.ai-hero { width: 100%; height: 100%; object-fit: contain; border-radius: 24px; background: #fff8e8; }
 .feed-animal img.ai-cutout { width: 100%; height: 100%; object-fit: contain; }
 .reveal-art { overflow: hidden; border-radius: 24px; }
+/* 圖鑑詳情：都要見齊 */
+.animal-sheet .as-art img { width: 100%; height: 100%; object-fit: contain; }
