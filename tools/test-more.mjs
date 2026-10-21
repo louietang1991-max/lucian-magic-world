@@ -77,7 +77,7 @@ try {
   const bInfo = await page.evaluate(() => ({
     han: document.querySelectorAll('#quiz-answers .ans-han').length,
     en: document.querySelectorAll('#quiz-answers .ans-en').length,
-    pic: !!document.querySelector('.prompt-pic svg'),
+    pic: !!document.querySelector('.prompt-pic svg, .prompt-pic img'),
   }));
   assert(bInfo.han === 4, '遊戲 B 有 4 個中文字選項');
   assert(bInfo.pic, '遊戲 B 題目有圖');
