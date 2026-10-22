@@ -552,3 +552,23 @@ img.ai-shadow {
 .reveal-art { overflow: hidden; border-radius: 24px; }
 /* 圖鑑詳情：都要見齊 */
 .animal-sheet .as-art img { width: 100%; height: 100%; object-fit: contain; }
+
+/* 冇圖時嘅後備（用 emoji，唔會亂出隻熊） */
+.animal-emoji {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: clamp(26px, 8vw, 54px);
+  line-height: 1;
+}
+.answer .ans-pic .animal-emoji { font-size: clamp(30px, 11vw, 58px); }
+.animal-generic-shadow {
+  display: block;
+  width: 72%;
+  height: 72%;
+  margin: auto;
+  border-radius: 50%;
+  background: #2a2320;
+  opacity: 0.85;
+}

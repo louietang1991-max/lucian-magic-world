@@ -32,8 +32,24 @@ if (fs.existsSync(ITEMS)) {
     }
   }
 }
+/* 版本號 = 最新圖片時間（改圖／加圖就會轉，令瀏覽器唔會用舊 cache） */
+let newest = 0;
+const scan = (d) => {
+  if (!fs.existsSync(d)) return;
+  for (const f of fs.readdirSync(d)) {
+    const full = path.join(d, f);
+    const st = fs.statSync(full);
+    if (st.isDirectory()) scan(full);
+    else newest = Math.max(newest, Math.floor(st.mtimeMs));
+  }
+};
+scan(HERO);
+scan(CUT);
+scan(ITEMS);
+const version = String(newest || Date.now()).slice(-9);
+
 const js = `/* 自動產生：AI 圖索引（動物 hero / cutout / 題目圖） */
-window.AI_INDEX = ${JSON.stringify({ heroes, cutouts, items: itemImgs }, null, 1)};
+window.AI_INDEX = ${JSON.stringify({ version, heroes, cutouts, items: itemImgs }, null, 1)};
 `;
 fs.writeFileSync(path.join(ROOT, 'assets/js/ai-index.js'), js);
 console.log(`[ai-index] heroes=${Object.keys(heroes).length} cutouts=${cutouts.length} items=${Object.keys(itemImgs).length}`);

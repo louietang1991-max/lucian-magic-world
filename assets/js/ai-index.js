@@ -1,5 +1,6 @@
 /* 自動產生：AI 圖索引（動物 hero / cutout / 題目圖） */
 window.AI_INDEX = {
+ "version": "627164006",
  "heroes": {
   "albatross": [
    "assets/img/animals/hero-web/albatross_s1.jpg"

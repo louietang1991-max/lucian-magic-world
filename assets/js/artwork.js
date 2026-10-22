@@ -967,8 +967,9 @@
     if (!aiCut.has(id)) return null;
     return 'assets/img/animals/cutout-webp/' + id + '.webp';
   }
+  function aiVer() { return AI.version ? '?v=' + AI.version : ''; }
   function aiImg(src, cls, alt) {
-    return '<img class="art ' + (cls || '') + '" src="' + src + '" alt="' + (alt || '') + '" draggable="false" loading="lazy">';
+    return '<img class="art ' + (cls || '') + '" src="' + src + aiVer() + '" alt="' + (alt || '') + '" draggable="false" loading="lazy">';
   }
 
   function animal(id, opts) {
@@ -981,7 +982,14 @@
       const src = aiCutoutSrc(id);
       if (src) return aiImg(src, 'ai-cutout' + (opts.shadow ? ' ai-shadow' : ''), id);
     }
-    const fn = ANIMALS[id] || ANIMALS.bear;
+    const fn = ANIMALS[id];
+    if (!fn) {
+      /* 冇 AI 圖又冇 SVG：用 emoji 代替（唔好亂出隻熊） */
+      const a = (window.ANIMAL_DATA || []).find((x) => x.id === id);
+      const em = (a && a.emoji) || '🐾';
+      if (opts.shadow) return '<span class="art animal-art animal-generic-shadow" aria-hidden="true"></span>';
+      return `<span class="art animal-art animal-emoji" aria-hidden="true">${em}</span>`;
+    }
     S.shadow = !!opts.shadow;
     let inner;
     try { inner = fn(); } catch (e) { console.warn('animal draw fail', id, e); inner = ANIMALS.bear(); }

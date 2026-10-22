@@ -5,7 +5,7 @@
  *   - 靜態資源（css/js/圖示）：stale-while-revalidate
  *   - 語音 mp3：cache-first（immutable，唔會變）
  * ============================================================================= */
-const VERSION = 'lucian-magic-v2.0.0';
+const VERSION = 'lucian-magic-v3.0.0';
 const CORE = [
   './',
   './index.html',
@@ -96,7 +96,19 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // 靜態：stale-while-revalidate
+  // JS / CSS：network-first（改版即時見到，唔會食舊 code）
+  if (/\.(js|css)$/.test(url.pathname) || url.pathname.endsWith('webmanifest')) {
+    e.respondWith(
+      fetch(req).then((res) => {
+        const copy = res.clone();
+        caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+        return res;
+      }).catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // 圖：cache-first 但會背景更新
   if (isStatic(url)) {
     e.respondWith(
       caches.match(req).then((hit) => {
