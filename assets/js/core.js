@@ -168,6 +168,38 @@
   }
   function recordFeeding() { bumpDay('f'); save(); }
 
+  /** 清走 Service Worker + Cache Storage，然後硬性重新載入（帶 fresh 參數破 HTTP cache） */
+  async function clearAppCache() {
+    const out = { sw: 0, cache: 0, ok: false };
+    try {
+      if (navigator.serviceWorker) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) {
+          try { if (r.active) r.active.postMessage({ type: 'clear' }); } catch (e) {}
+          await r.unregister();
+          out.sw++;
+        }
+      }
+    } catch (e) { console.warn('sw clear fail', e); }
+    try {
+      if (window.caches) {
+        const keys = await caches.keys();
+        for (const k of keys) { await caches.delete(k); out.cache++; }
+      }
+    } catch (e) { console.warn('cache clear fail', e); }
+    try { sessionStorage.clear(); } catch (e) {}
+    out.ok = true;
+    return out;
+  }
+
+  /** 硬性重新載入：唔同 URL（破 cache）＋ 唔留 history */
+  function hardReload() {
+    const url = location.pathname + '?fresh=' + Date.now();
+    try { location.replace(url); } catch (e) { location.href = url; }
+    // 保險：1.5 秒後仲未走就強制 reload
+    setTimeout(() => { try { location.reload(); } catch (e) {} }, 1500);
+  }
+
   function go(id, opts) {
     opts = opts || {};
     if (currentScreen === id && !opts.force) {
@@ -380,7 +412,7 @@
     get state() { return state; },
     load, save, saveNow, DEFAULTS, KEY,
     go, back: back_, registerScreen, popup, confirmPopup, toast, T, zh, animalName, placeName, speakKeyOf, isEnSpeak,
-    dayKey, stats, recordItem, recordFeeding,
+    dayKey, stats, recordItem, recordFeeding, clearAppCache, hardReload,
     haptic, fmt, escapeHtml, starsSvg, bus,
     get screen() { return currentScreen; },
   };

@@ -10,7 +10,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'lucian-magic-world.zip');
 const zip = new JSZip();
 
-const FILES = ['index.html', 'manifest.webmanifest', 'sw.js', '_headers', '.nojekyll', 'README.md', 'DEPLOY-GitHub-Cloudflare.md'];
+const FILES = ['index.html', '字卡.html', 'manifest.webmanifest', 'sw.js', '_headers', '.nojekyll', 'README.md', 'DEPLOY-GitHub-Cloudflare.md'];
 const DIRS = ['assets'];
 
 for (const f of FILES) {

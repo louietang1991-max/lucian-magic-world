@@ -16,6 +16,7 @@ const DIST = path.join(ROOT, 'dist');
 /* 根目錄要复制嘅檔案 */
 const ROOT_FILES = [
   'index.html',
+  '字卡.html',
   'sw.js',
   'manifest.webmanifest',
   '_headers',

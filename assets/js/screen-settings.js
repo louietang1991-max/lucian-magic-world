@@ -133,23 +133,22 @@
     });
 
     const cc = $('#set-clearcache');
-    if (cc) cc.addEventListener('click', async () => {
-      C.haptic();
-      cc.disabled = true;
-      cc.textContent = '清理中…';
-      try {
-        if ('serviceWorker' in navigator) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(regs.map((r) => r.unregister()));
-        }
-        if (window.caches) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map((k) => caches.delete(k)));
-        }
-      } catch (e) { console.warn('clear cache failed', e); }
-      const url = location.pathname + '?fresh=' + Date.now();
-      location.replace(url);
-    });
+    if (cc) {
+      cc.onclick = async () => {
+        const note = $('#set-cache-note');
+        cc.disabled = true;
+        const old = cc.textContent;
+        cc.textContent = '🧹 清理中…';
+        if (note) note.textContent = '正在清除快取，清完會自動重新載入…';
+        C.haptic();
+        let r = { sw: 0, cache: 0 };
+        try { r = await C.clearAppCache(); } catch (e) { console.warn(e); }
+        if (note) note.textContent = '已清除 ' + r.sw + ' 個 Service Worker、' + r.cache + ' 個快取，重新載入中…';
+        setTimeout(() => C.hardReload(), 500);
+        // 如果 2 秒後都冇 reload，就還原個掣俾家長再試
+        setTimeout(() => { cc.disabled = false; cc.textContent = old; }, 2500);
+      };
+    }
     const reset = $('#set-reset');
     if (reset) {
       reset.onclick = () => {
@@ -205,6 +204,8 @@
       window.Game.hideTip();
       if (!unlocked) { showContent(false); makeLock(); }
       else showContent(true);
+      const body = document.getElementById('settings-body');
+      if (body) body.scrollTop = 0;
     },
     leave() { /* 離開後重新上鎖 */ unlocked = false; },
   });

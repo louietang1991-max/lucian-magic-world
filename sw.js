@@ -5,7 +5,7 @@
  *   - 靜態資源（css/js/圖示）：stale-while-revalidate
  *   - 語音 mp3：cache-first（immutable，唔會變）
  * ============================================================================= */
-const VERSION = 'lucian-magic-v3.0.0';
+const VERSION = 'lucian-magic-v3.0.0-rjwix5j';
 const CORE = [
   './',
   './index.html',
@@ -56,6 +56,14 @@ self.addEventListener('install', (e) => {
   );
 });
 
+self.addEventListener('message', (e) => {
+  const d = e.data || {};
+  if (d.type === 'clear') {
+    caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k)))).catch(() => {});
+  }
+  if (d.type === 'skip-waiting') self.skipWaiting();
+});
+
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
@@ -87,7 +95,7 @@ self.addEventListener('fetch', (e) => {
   // 導航：network-first
   if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(req).then((res) => {
+      fetch(req, { cache: 'no-store' }).then((res) => {
         const copy = res.clone();
         caches.open(VERSION).then((c) => c.put('./index.html', copy)).catch(() => {});
         return res;

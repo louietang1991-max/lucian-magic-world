@@ -13,11 +13,11 @@
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="apple-touch-icon" href="assets/img/icon-180.png" />
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml" />
-<link rel="stylesheet" href="assets/css/theme.css" />
-<link rel="stylesheet" href="assets/css/layout.css" />
-<link rel="stylesheet" href="assets/css/games.css" />
-<link rel="stylesheet" href="assets/css/feed.css" />
-  <link rel="stylesheet" href="assets/css/report.css" />
+<link rel="stylesheet" href="assets/css/theme.css?v=jwix5j" />
+<link rel="stylesheet" href="assets/css/layout.css?v=jwix5j" />
+<link rel="stylesheet" href="assets/css/games.css?v=jwix5j" />
+<link rel="stylesheet" href="assets/css/feed.css?v=jwix5j" />
+  <link rel="stylesheet" href="assets/css/report.css?v=jwix5j" />
 </head>
 <body>
 <div id="app">
@@ -239,6 +239,13 @@
       </div>
       <div class="set-content" id="set-content" hidden>
         <div class="set-group">
+          <h3>家長工具</h3>
+          <button class="btn ghost" id="set-report">📊 家長報告</button>
+          <button class="btn ghost" id="set-cards">🖨️ 列印字卡</button>
+          <button class="btn ghost" id="set-clearcache">🧹 清除快取並重新載入</button>
+          <p class="set-note" id="set-cache-note">見到舊圖片／舊版面就撳呢個；撳完會自動重新載入（唔會影響進度）。</p>
+        </div>
+        <div class="set-group">
           <h3>題目庫（學習遊戲用）</h3>
           <div class="chips" id="set-topics"></div>
           <p class="set-note">可以揀多個主題；「動物」會用第二部分嘅動物。</p>
@@ -277,10 +284,6 @@
         <div class="set-group">
           <h3>進度</h3>
           <p class="set-note" id="set-progress-note"></p>
-          <button class="btn ghost" id="set-report">📊 家長報告</button>
-          <button class="btn ghost" id="set-cards">🖨️ 列印字卡（PDF）</button>
-          <button class="btn ghost" id="set-clearcache">🧹 清除快取並重新載入</button>
-          <p class="set-note">見到舊圖片／舊版面就撳呢個（唔會影響進度）</p>
           <button class="btn danger" id="set-reset">清除所有進度</button>
         </div>
         <div class="set-group">
@@ -307,34 +310,34 @@
   <div id="rotate-hint"><div class="rh-inner"><span>📱</span><p>請將手機打直玩</p></div></div>
 </div>
 
-<script src="assets/js/debug-trap.js"></script>
-<script src="assets/js/data-animals.js"></script>
-<script src="assets/js/animals-beach.js"></script>
-<script src="assets/js/animals-sea.js"></script>
-<script src="assets/js/animals-underwater.js"></script>
-<script src="assets/js/animals-river.js"></script>
-<script src="assets/js/animals-forest.js"></script>
-<script src="assets/js/animals-grass.js"></script>
-<script src="assets/js/animals-desert.js"></script>
-<script src="assets/js/animals-snow.js"></script>
-<script src="assets/js/data-vocab.js"></script>
-<script src="assets/js/zhs-map.js"></script>
-<script src="assets/js/ai-index.js"></script>
-<script src="assets/js/core.js"></script>
-<script src="assets/js/artwork.js"></script>
-<script src="assets/js/audio-manifest.js"></script>
-<script src="assets/js/audio.js"></script>
-<script src="assets/js/rhythm.js"></script>
-<script src="assets/js/screen-home.js"></script>
-<script src="assets/js/screen-settings.js"></script>
-<script src="assets/js/screen-learn.js"></script>
-<script src="assets/js/screen-explore.js"></script>
-<script src="assets/js/screen-feed.js"></script>
-<script src="assets/js/screen-album.js"></script>
-<script src="assets/js/app.js"></script>
-<script src="assets/js/i18n.js"></script>
-<script src="assets/js/music.js"></script>
-<script src="assets/js/screen-report.js"></script>
-<script src="assets/js/screen-boot.js"></script>
+<script src="assets/js/debug-trap.js?v=jwix5j"></script>
+<script src="assets/js/data-animals.js?v=jwix5j"></script>
+<script src="assets/js/animals-beach.js?v=jwix5j"></script>
+<script src="assets/js/animals-sea.js?v=jwix5j"></script>
+<script src="assets/js/animals-underwater.js?v=jwix5j"></script>
+<script src="assets/js/animals-river.js?v=jwix5j"></script>
+<script src="assets/js/animals-forest.js?v=jwix5j"></script>
+<script src="assets/js/animals-grass.js?v=jwix5j"></script>
+<script src="assets/js/animals-desert.js?v=jwix5j"></script>
+<script src="assets/js/animals-snow.js?v=jwix5j"></script>
+<script src="assets/js/data-vocab.js?v=jwix5j"></script>
+<script src="assets/js/zhs-map.js?v=jwix5j"></script>
+<script src="assets/js/ai-index.js?v=jwix5j"></script>
+<script src="assets/js/core.js?v=jwix5j"></script>
+<script src="assets/js/artwork.js?v=jwix5j"></script>
+<script src="assets/js/audio-manifest.js?v=jwix5j"></script>
+<script src="assets/js/audio.js?v=jwix5j"></script>
+<script src="assets/js/rhythm.js?v=jwix5j"></script>
+<script src="assets/js/screen-home.js?v=jwix5j"></script>
+<script src="assets/js/screen-settings.js?v=jwix5j"></script>
+<script src="assets/js/screen-learn.js?v=jwix5j"></script>
+<script src="assets/js/screen-explore.js?v=jwix5j"></script>
+<script src="assets/js/screen-feed.js?v=jwix5j"></script>
+<script src="assets/js/screen-album.js?v=jwix5j"></script>
+<script src="assets/js/app.js?v=jwix5j"></script>
+<script src="assets/js/i18n.js?v=jwix5j"></script>
+<script src="assets/js/music.js?v=jwix5j"></script>
+<script src="assets/js/screen-report.js?v=jwix5j"></script>
+<script src="assets/js/screen-boot.js?v=jwix5j"></script>
 </body>
 </html>
