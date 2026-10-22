@@ -132,39 +132,73 @@
   }
 
   /* ----------------------------------------------------- 遮擋物（草／水草／樹叢） */
+  /* 遮住影子嘅前景植物：幾棵分開嘅植物，中間留空隙（影子會喺空隙見到） */
   function occluderSvg(theme) {
-    // 注意：圖案要填滿整個 viewBox（0–100），咁「遮擋高度」先等於真實覆蓋高度
     if (theme === 'underwater') {
-      return `<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M4 100 Q0 46 10 4 Q14 -2 18 6 Q14 52 14 100 Z" fill="#1b7a5a"/>
-        <path d="M22 100 Q16 44 28 8 Q33 0 37 12 Q30 56 32 100 Z" fill="#2e9e74"/>
-        <path d="M44 100 Q40 40 52 6 Q57 -2 61 10 Q54 54 56 100 Z" fill="#1b7a5a"/>
-        <path d="M66 100 Q62 46 74 10 Q79 2 83 14 Q76 56 78 100 Z" fill="#3cb389"/>
-        <path d="M86 100 Q84 52 92 16 Q96 6 100 16 Q94 60 96 100 Z" fill="#2e9e74"/>
-        <ellipse cx="30" cy="72" rx="16" ry="10" fill="#43aa8b" opacity=".85"/>
-        <ellipse cx="70" cy="58" rx="14" ry="9" fill="#43aa8b" opacity=".85"/>
+      return `<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="occ">
+        <defs>
+          <linearGradient id="sw1" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#126b4d"/><stop offset=".5" stop-color="#35b07a"/><stop offset="1" stop-color="#8ce8b4"/>
+          </linearGradient>
+          <linearGradient id="sw2" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#1a7a58"/><stop offset=".55" stop-color="#4ac48b"/><stop offset="1" stop-color="#b8f5cf"/>
+          </linearGradient>
+        </defs>
+        <g>
+          <path d="M5 100 C2 78 4 58 10 40 C12 34 16 36 15 43 C10 62 9 80 12 100 Z" fill="url(#sw1)"/>
+          <path d="M17 100 C14 70 17 44 25 22 C28 15 33 18 31 27 C24 48 22 74 26 100 Z" fill="url(#sw2)"/>
+          <path d="M35 100 C33 80 37 60 45 42 C48 36 52 39 50 46 C43 64 41 82 45 100 Z" fill="url(#sw1)"/>
+          <path d="M59 100 C57 72 61 46 70 26 C73 19 78 22 76 31 C69 52 66 76 70 100 Z" fill="url(#sw2)"/>
+          <path d="M81 100 C79 80 83 58 90 40 C93 34 97 37 95 44 C89 62 87 82 91 100 Z" fill="url(#sw1)"/>
+          <ellipse cx="18" cy="97" rx="20" ry="7" fill="#0e5c42" opacity=".75"/>
+          <ellipse cx="72" cy="97" rx="22" ry="7" fill="#0e5c42" opacity=".75"/>
+          <ellipse cx="24" cy="34" rx="2.4" ry="6" fill="#ffffff" opacity=".22"/>
+          <ellipse cx="68" cy="38" rx="2.4" ry="6" fill="#ffffff" opacity=".2"/>
+        </g>
       </svg>`;
     }
     if (theme === 'forest') {
-      return `<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-        <ellipse cx="20" cy="52" rx="30" ry="46" fill="#2e7d32"/>
-        <ellipse cx="52" cy="44" rx="34" ry="44" fill="#43a047"/>
-        <ellipse cx="82" cy="54" rx="28" ry="44" fill="#2e7d32"/>
-        <ellipse cx="34" cy="82" rx="34" ry="24" fill="#1b5e20"/>
-        <ellipse cx="72" cy="86" rx="30" ry="22" fill="#388e3c"/>
-        <ellipse cx="52" cy="20" rx="16" ry="14" fill="#66bb6a" opacity=".9"/>
-        <ellipse cx="18" cy="24" rx="12" ry="12" fill="#66bb6a" opacity=".7"/>
+      return `<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="occ">
+        <defs>
+          <radialGradient id="bush1" cx=".42" cy=".28" r=".85">
+            <stop offset="0" stop-color="#a8ec9a"/><stop offset=".5" stop-color="#4caf50"/><stop offset="1" stop-color="#1f5b24"/>
+          </radialGradient>
+          <radialGradient id="bush2" cx=".45" cy=".3" r=".85">
+            <stop offset="0" stop-color="#c2f2ac"/><stop offset=".5" stop-color="#5cbf5f"/><stop offset="1" stop-color="#255f28"/>
+          </radialGradient>
+        </defs>
+        <g>
+          <ellipse cx="17" cy="84" rx="19" ry="24" fill="url(#bush1)"/>
+          <ellipse cx="36" cy="90" rx="16" ry="18" fill="url(#bush2)"/>
+          <ellipse cx="60" cy="86" rx="18" ry="22" fill="url(#bush1)"/>
+          <ellipse cx="82" cy="90" rx="15" ry="18" fill="url(#bush2)"/>
+          <ellipse cx="24" cy="66" rx="7" ry="5" fill="#d9ffb0" opacity=".55"/>
+          <ellipse cx="66" cy="70" rx="6" ry="4" fill="#d9ffb0" opacity=".5"/>
+          <circle cx="46" cy="96" r="2" fill="#8fe08f" opacity=".8"/>
+          <circle cx="74" cy="96" r="1.7" fill="#8fe08f" opacity=".7"/>
+        </g>
       </svg>`;
     }
-    // grass
-    return `<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path d="M2 100 Q0 44 8 2 Q11 -4 14 4 Q10 48 12 100 Z" fill="#3d7a1f"/>
-      <path d="M16 100 Q14 38 24 0 Q28 -6 31 4 Q26 46 28 100 Z" fill="#6ab04c"/>
-      <path d="M32 100 Q31 46 42 4 Q46 -4 49 6 Q42 50 44 100 Z" fill="#3d7a1f"/>
-      <path d="M48 100 Q47 40 58 2 Q62 -6 65 4 Q58 48 60 100 Z" fill="#6ab04c"/>
-      <path d="M64 100 Q63 46 74 6 Q78 -2 81 8 Q74 52 76 100 Z" fill="#3d7a1f"/>
-      <path d="M80 100 Q80 44 90 10 Q94 2 97 12 Q90 56 92 100 Z" fill="#6ab04c"/>
-      <path d="M0 100 Q20 84 50 88 Q80 92 100 100 Z" fill="#2f6b1a"/>
+    // grass / savanna：幾條草葉，中間有罅
+    return `<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="occ">
+      <defs>
+        <linearGradient id="gr1" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#2f6315"/><stop offset=".55" stop-color="#6cb033"/><stop offset="1" stop-color="#c7e86a"/>
+        </linearGradient>
+        <linearGradient id="gr2" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#3f7d1c"/><stop offset=".5" stop-color="#7cc13f"/><stop offset="1" stop-color="#e0f29a"/>
+        </linearGradient>
+      </defs>
+      <g>
+        <path d="M6 100 C4 76 8 54 16 34 C19 27 23 30 21 39 C14 58 12 80 16 100 Z" fill="url(#gr1)"/>
+        <path d="M22 100 C20 68 25 44 34 24 C37 17 41 21 39 30 C31 51 28 76 32 100 Z" fill="url(#gr2)"/>
+        <path d="M40 100 C38 80 43 60 51 42 C54 36 58 39 56 46 C49 64 47 82 51 100 Z" fill="url(#gr1)"/>
+        <path d="M58 100 C56 66 61 42 70 22 C73 15 77 19 75 28 C67 49 64 76 68 100 Z" fill="url(#gr2)"/>
+        <path d="M76 100 C74 78 79 56 87 36 C90 29 94 32 92 41 C85 60 83 82 87 100 Z" fill="url(#gr1)"/>
+        <path d="M6 100 C24 92 46 94 66 96 C80 98 90 99 96 100 Z" fill="#2a5c12"/>
+        <ellipse cx="30" cy="40" rx="3" ry="6" fill="#ffffff" opacity=".2"/>
+        <ellipse cx="72" cy="46" rx="2.6" ry="5" fill="#ffffff" opacity=".18"/>
+      </g>
     </svg>`;
   }
 

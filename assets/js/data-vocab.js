@@ -184,7 +184,7 @@ window.VOCAB = {
       { zh: '姊', yue: '姐姐', py: 'zǐ', en: 'big sister', art: 'sister', arrow: 0.74, img: 'two cute cartoon girls standing side by side: on the LEFT a SMALL toddler girl in purple, on the RIGHT a BIG taller girl in red' },
       { zh: '男', yue: '男仔', py: 'nán', en: 'boy', art: 'boy', arrow: 0.74, img: 'two cute cartoon children standing side by side: on the LEFT a girl in a pink dress, on the RIGHT a boy in a blue t-shirt' },
       { zh: '女', yue: '女仔', py: 'nǚ', en: 'girl', art: 'girl', arrow: 0.74, img: 'two cute cartoon children standing side by side: on the LEFT a boy in a blue t-shirt, on the RIGHT a girl in a pink dress' },
-      { zh: '人', yue: '人', py: 'rén', en: 'person', art: 'person', arrow: 0.74, img: 'two cute cartoon people standing side by side: on the LEFT a small child, on the RIGHT a grown up adult' },
+      { zh: '人', yue: '人', py: 'rén', en: 'person', art: 'person', arrow: 0.74, img: 'a cute cartoon HUMAN person standing on the RIGHT: skin colour face, brown hair, blue t-shirt, grey trousers; a cute cartoon COW standing on the LEFT' },
       { zh: '小朋友', yue: '小朋友', py: 'xiǎo péng yǒu', en: 'child', art: 'child', arrow: 0.74, img: 'two cute cartoon people standing side by side: on the LEFT a tall grown up adult, on the RIGHT a small child' },
     ],
   },

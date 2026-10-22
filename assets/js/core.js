@@ -110,6 +110,26 @@
 
   function registerScreen(id, hooks) { screenHooks[id] = hooks || {}; }
 
+  const GEAR_HIDE = new Set(['boot', 'quiz', 'feed', 'reveal']);
+  function updateGear() {
+    let el = document.getElementById('gear-fab');
+    if (!el) {
+      el = document.createElement('button');
+      el.id = 'gear-fab';
+      el.className = 'gear-fab';
+      el.setAttribute('aria-label', '設定');
+      el.textContent = '⚙️';
+      el.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        haptic();
+        if (state.screen !== 'settings') go('settings');
+      });
+      document.body.appendChild(el);
+    }
+    el.hidden = GEAR_HIDE.has(state.screen);
+  }
+
   function go(id, opts) {
     opts = opts || {};
     if (currentScreen === id && !opts.force) {
@@ -135,6 +155,7 @@
     }
     const h = screenHooks[id];
     if (h && h.enter) { try { h.enter(opts); } catch (e) { console.error(e); } }
+    updateGear();
     // 每次轉畫面之後套用顯示語言
     try { if (window.I18N && window.I18N.applyLang) setTimeout(() => window.I18N.applyLang(), 0); } catch (e) {}
   }

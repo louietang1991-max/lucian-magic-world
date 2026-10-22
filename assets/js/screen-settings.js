@@ -104,6 +104,24 @@
         圖鑑：${st.got} / ${st.total} 隻動物（${st.pct}%）<br>
         餵食次數：${p.feedings || 0}　答題：${p.quizzes || 0} 次`;
     }
+    const cc = $('#set-clearcache');
+    if (cc) cc.addEventListener('click', async () => {
+      C.haptic();
+      cc.disabled = true;
+      cc.textContent = '清理中…';
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map((r) => r.unregister()));
+        }
+        if (window.caches) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((k) => caches.delete(k)));
+        }
+      } catch (e) { console.warn('clear cache failed', e); }
+      const url = location.pathname + '?fresh=' + Date.now();
+      location.replace(url);
+    });
     const reset = $('#set-reset');
     if (reset) {
       reset.onclick = () => {

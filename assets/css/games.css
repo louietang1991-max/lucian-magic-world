@@ -710,3 +710,56 @@
 .gr-icon.gr-d { background: linear-gradient(160deg, #ffe0b2, #ffb74d); }
 .prompt-listen { font-size: clamp(52px, 16vw, 96px); line-height: 1; display: block; text-align: center; animation: listenPulse 1.6s ease-in-out infinite; }
 @keyframes listenPulse { 0%, 100% { transform: scale(1); opacity: .95; } 50% { transform: scale(1.08); opacity: 1; } }
+
+/* ===== 8 個地方嘅 AI 背景圖（cover，保留漸變做 fallback） ===== */
+.scene.theme-beach {
+  background-image: url('../img/scenes/beach.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-sea {
+  background-image: url('../img/scenes/sea.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-underwater {
+  background-image: url('../img/scenes/underwater.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-river {
+  background-image: url('../img/scenes/river.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-forest {
+  background-image: url('../img/scenes/forest.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-grass {
+  background-image: url('../img/scenes/grass.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-desert {
+  background-image: url('../img/scenes/desert.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.scene.theme-snow {
+  background-image: url('../img/scenes/snow.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+/* 用咗真背景圖就唔需要舊嘅 SVG 裝飾 */
+.scene .scene-deco .deco { display: none !important; }

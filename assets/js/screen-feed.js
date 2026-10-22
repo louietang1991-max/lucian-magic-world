@@ -722,9 +722,11 @@
         const dy = e.clientY - drag.y;
         basket.classList.remove('pulling');
         if (Math.abs(dy) > 26 && dy < 0) {
+          // 掟去手指放開嘅位置（1:1），限制喺圈附近
+          const cur = (F.circle && F.circle.x) ? F.circle : { x: g.cx, y: g.cy };
           const target = {
-            x: clamp(g.cx + dx * 2.6, g.cx - g.r * 1.6, g.cx + g.r * 1.6),
-            y: clamp(g.cy + dy * 1.2, g.cy - g.r * 1.1, g.cy + g.r * 1.1),
+            x: clamp(cur.x + dx * 0.95, cur.x - g.r * 1.5, cur.x + g.r * 1.5),
+            y: clamp(cur.y + dy * 0.95, cur.y - g.r * 1.2, cur.y + g.r * 1.2),
           };
           throwFruit(target);
         } else if (Math.hypot(dx, dy) < 20) {

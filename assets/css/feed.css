@@ -315,3 +315,53 @@
   -webkit-tap-highlight-color: transparent;
 }
 .beat-hit[hidden] { display: none !important; }
+
+/* ===== 餵食畫面：同一個地方背景圖 ===== */
+#screen-feed.feed-beach {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/beach.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-sea {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/sea.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-underwater {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/underwater.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-river {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/river.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-forest {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/forest.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-grass {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/grass.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-desert {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/desert.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+#screen-feed.feed-snow {
+  background-image: linear-gradient(180deg, rgba(24, 12, 44, 0.28), rgba(24, 12, 44, 0.55)), url('../img/scenes/snow.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
