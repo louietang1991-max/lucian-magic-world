@@ -182,7 +182,7 @@
   position: relative;
   z-index: 5;
 }
-#screen-learn, #screen-explore, #screen-album, #screen-settings, #screen-quiz {
+#screen-learn, #screen-explore, #screen-album, #screen-settings, #screen-quiz, #screen-report {
   background: linear-gradient(180deg, #f7f2ff 0%, #efe6ff 55%, #e4d8ff 100%);
 }
 .topbar-title {

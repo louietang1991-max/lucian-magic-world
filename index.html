@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="assets/css/layout.css" />
 <link rel="stylesheet" href="assets/css/games.css" />
 <link rel="stylesheet" href="assets/css/feed.css" />
+  <link rel="stylesheet" href="assets/css/report.css" />
 </head>
 <body>
 <div id="app">
@@ -263,6 +264,11 @@
           <input type="range" id="set-tempo" min="60" max="120" step="5" />
         </div>
         <div class="set-group">
+          <h3>背景音樂 <span class="set-val" id="set-music-vol-val">35%</span></h3>
+          <label class="switch-row"><span>播放背景音樂</span><input type="checkbox" id="set-music" /></label>
+          <input type="range" id="set-music-vol" min="0" max="100" step="5" />
+        </div>
+        <div class="set-group">
           <h3>開關</h3>
           <label class="switch-row"><span>音效</span><input type="checkbox" id="set-sfx" /></label>
           <label class="switch-row"><span>答啱自動去下一題</span><input type="checkbox" id="set-autonext" /></label>
@@ -271,6 +277,8 @@
         <div class="set-group">
           <h3>進度</h3>
           <p class="set-note" id="set-progress-note"></p>
+          <button class="btn ghost" id="set-report">📊 家長報告</button>
+          <button class="btn ghost" id="set-cards">🖨️ 列印字卡（PDF）</button>
           <button class="btn ghost" id="set-clearcache">🧹 清除快取並重新載入</button>
           <p class="set-note">見到舊圖片／舊版面就撳呢個（唔會影響進度）</p>
           <button class="btn danger" id="set-reset">清除所有進度</button>
@@ -281,6 +289,17 @@
         </div>
       </div>
     </div>
+  </section>
+
+
+  <!-- =============================== 家長報告 =============================== -->
+  <section class="screen" id="screen-report">
+    <header class="topbar">
+      <button class="icon-btn back" data-back="settings" aria-label="返去">◀</button>
+      <div class="topbar-title">家長報告</div>
+      <div class="report-spacer"></div>
+    </header>
+    <div class="report-body" id="report-body"></div>
   </section>
 
   <div id="layer-popup" class="layer"></div>
@@ -314,6 +333,8 @@
 <script src="assets/js/screen-album.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/i18n.js"></script>
+<script src="assets/js/music.js"></script>
+<script src="assets/js/screen-report.js"></script>
 <script src="assets/js/screen-boot.js"></script>
 </body>
 </html>

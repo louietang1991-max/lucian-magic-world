@@ -1,0 +1,45 @@
+/* 家長報告樣式 */
+.report-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px calc(90px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.report-spacer { width: 44px; height: 44px; }
+.rep-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(40, 24, 80, 0.10);
+}
+.rep-title { font-size: 15px; font-weight: 900; color: #3d2a6b; margin-bottom: 10px; }
+.rep-nums { display: flex; gap: 10px; }
+.rep-nums > div {
+  flex: 1;
+  background: linear-gradient(160deg, #f6f0ff, #ece2ff);
+  border-radius: 12px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.rep-nums b { display: block; font-size: 22px; color: #5b32c9; line-height: 1.2; }
+.rep-nums span { font-size: 11.5px; color: #8d7fab; }
+.rep-bars { display: flex; gap: 6px; margin-top: 12px; align-items: flex-end; height: 64px; }
+.rep-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.rep-bar i { display: block; width: 70%; min-height: 3px; background: linear-gradient(180deg, #b48bff, #7c4dff); border-radius: 5px 5px 2px 2px; }
+.rep-bar span { font-size: 9px; color: #a99ac4; margin-top: 3px; }
+.rep-list { display: flex; flex-direction: column; gap: 8px; }
+.rep-item { display: flex; align-items: center; gap: 10px; background: #faf7ff; border-radius: 12px; padding: 6px 10px; }
+.rep-pic { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 44px; }
+.rep-pic img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.rep-word { flex: 1; display: flex; flex-direction: column; }
+.rep-word b { font-size: 18px; color: #3d2a6b; }
+.rep-word small { font-size: 11px; color: #9b8cb8; }
+.rep-badge { font-size: 11px; font-weight: 800; color: #c2185b; background: #ffe3ec; border-radius: 99px; padding: 3px 9px; }
+.rep-note { font-size: 12px; color: #8d7fab; margin: 8px 0 0; }
+.rep-locs { display: flex; flex-direction: column; gap: 7px; }
+.rep-loc { display: grid; grid-template-columns: 84px 1fr 46px; align-items: center; gap: 8px; font-size: 12.5px; color: #4a3a6b; }
+.rep-loc i { display: block; height: 8px; background: #eee6ff; border-radius: 99px; overflow: hidden; }
+.rep-loc i em { display: block; height: 100%; background: linear-gradient(90deg, #9d7bff, #7c4dff); border-radius: 99px; }
+.rep-loc b { font-size: 11.5px; color: #8d7fab; text-align: right; }

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>字卡列印 — Lucian 的魔法世界</title>
+<style>
+  :root { --ink:#2b2140; --ink2:#7a6a9c; --line:#d9c9f5; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 14px 14px 40px; background: #f7f2ff; color: var(--ink);
+    font-family: "Noto Sans TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+  }
+  .bar {
+    position: sticky; top: 0; z-index: 5; background: rgba(247,242,255,.96);
+    padding: 10px 0 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    border-bottom: 1px solid var(--line); margin-bottom: 12px;
+  }
+  .bar h1 { font-size: 17px; margin: 0 8px 0 0; }
+  .bar button, .bar select {
+    font: inherit; font-size: 13px; padding: 7px 12px; border-radius: 10px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+  }
+  .bar button.primary { background: #7c4dff; border-color: #7c4dff; color: #fff; font-weight: 700; }
+  .bar .hint { font-size: 12px; color: var(--ink2); }
+  h2 { font-size: 14px; margin: 18px 0 8px; color: #5b32c9; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .card {
+    background: #fff; border: 1.2px dashed #b9a6e6; border-radius: 10px;
+    padding: 8px 6px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; min-height: 150px; break-inside: avoid;
+  }
+  .pic { height: 74px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .pic img { max-height: 74px; max-width: 100%; object-fit: contain; }
+  .zh { font-size: 26px; font-weight: 900; line-height: 1.1; margin-top: 4px; }
+  .py { font-size: 11px; color: var(--ink2); margin-top: 2px; }
+  .en { font-size: 11.5px; color: #2a5fa8; font-weight: 700; margin-top: 1px; }
+
+  @media print {
+    @page { size: A4; margin: 10mm; }
+    body { background: #fff; padding: 0; }
+    .bar { display: none; }
+    h2 { page-break-before: auto; margin: 0 0 4mm; }
+    .grid { grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+    .card { min-height: 84mm; border-radius: 4mm; padding: 3mm; }
+    .pic { height: 44mm; }
+    .pic img { max-height: 44mm; }
+    .zh { font-size: 26pt; }
+    .py { font-size: 10pt; }
+    .en { font-size: 11pt; }
+  }
+</style>
+  <link rel="icon" href="assets/img/icon.svg" />
+</head>
+<body>
+<div class="bar">
+  <h1>字卡列印</h1>
+  <button class="primary" id="btn-print">🖨️ 列印 / 儲存 PDF</button>
+  <select id="pick">
+    <option value="all">全部（字詞 + 動物）</option>
+    <option value="vocab">只印學習字詞</option>
+    <option value="animals">只印動物</option>
+  </select>
+  <span class="hint">A4、每行 3 格、沿虛線剪開</span>
+</div>
+<div id="root"></div>
+
+<script src="assets/js/data-animals.js"></script>
+<script src="assets/js/animals-beach.js"></script>
+<script src="assets/js/animals-sea.js"></script>
+<script src="assets/js/animals-underwater.js"></script>
+<script src="assets/js/animals-river.js"></script>
+<script src="assets/js/animals-forest.js"></script>
+<script src="assets/js/animals-grass.js"></script>
+<script src="assets/js/animals-desert.js"></script>
+<script src="assets/js/animals-snow.js"></script>
+<script src="assets/js/data-vocab.js"></script>
+<script>
+(function () {
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const root = document.getElementById('root');
+  const V = window.VOCAB;
+  const ANIMALS = window.ANIMAL_DATA;
+  const LOCS = window.LOCATIONS || [];
+
+  /* 用同一個 item 圖命名 */
+  function itemImg(tid, i, it) {
+    if (it.art && String(it.art).startsWith('number')) return null;
+    if (['color', 'shape', 'number', 'measure'].includes(tid)) return { img: null, emoji: '' };
+    return { img: `assets/img/items/${tid}/${i}.webp`, img2: `assets/img/items/${tid}/${i}.jpg` };
+  }
+
+  function card(c) {
+    const pic = c.img
+      ? `<img src="${c.img}" alt="" loading="lazy" onerror="this.onerror=null;if(this.dataset.alt){this.src=this.dataset.alt;}else{this.replaceWith(document.createTextNode(''))}" ${c.img2 ? `data-alt="${c.img2}"` : ''} />`
+      : `<span>${esc(c.emoji || '')}</span>`;
+    return `<div class="card"><div class="pic">${pic}</div><div class="zh">${esc(c.zh)}</div><div class="py">${esc(c.py || '')}</div><div class="en">${esc(c.en || '')}</div></div>`;
+  }
+
+  function render(which) {
+    let html = '';
+    if (which !== 'animals') {
+      for (const [tid, t] of Object.entries(V)) {
+        const cards = t.items.map((it, i) => {
+          const m = itemImg(tid, i, it);
+          return card({ zh: it.zh, py: it.py, en: it.en, img: m ? m.img : null, img2: m ? m.img2 : null, emoji: '' });
+        }).join('');
+        html += `<h2>${esc(t.zh)}（${t.items.length}）</h2><div class="grid">${cards}</div>`;
+      }
+    }
+    if (which !== 'vocab') {
+      const groups = {};
+      for (const a of ANIMALS) (groups[a.loc] = groups[a.loc] || []).push(a);
+      for (const l of LOCS) {
+        const list = groups[l.id] || [];
+        if (!list.length) continue;
+        html += `<h2>${esc(l.zh)}（${list.length}）</h2><div class="grid">` +
+          list.map((a) => card({ zh: a.zh, py: a.py, en: a.en, img: `assets/img/animals/cutout-webp/${a.id}.webp`, emoji: a.emoji })).join('') +
+          '</div>';
+      }
+    }
+    root.innerHTML = html;
+  }
+
+  document.getElementById('btn-print').addEventListener('click', () => {
+    const imgs = [...document.images].filter((i) => !i.complete);
+    Promise.all(imgs.map((i) => new Promise((r) => { i.onload = i.onerror = r; }))).then(() => window.print());
+    if (!imgs.length) window.print();
+  });
+  document.getElementById('pick').addEventListener('change', (e) => render(e.target.value));
+
+  render('all');
+})();
+</script>
+</body>
+</html>

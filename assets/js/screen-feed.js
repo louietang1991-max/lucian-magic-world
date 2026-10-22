@@ -617,6 +617,7 @@
     const stars = clamp(window.Game.scoreToStars(total), 0, 3);
     const facts = window.Game.starsToFacts(stars);
     const isNew = window.Profile.recordAnimal(a.id, stars, facts);
+    try { C.recordFeeding(); } catch (e) {}
     try {
       const sess = window.Explore && window.Explore.state && window.Explore.state.session;
       if (sess) {

@@ -104,6 +104,34 @@
         圖鑑：${st.got} / ${st.total} 隻動物（${st.pct}%）<br>
         餵食次數：${p.feedings || 0}　答題：${p.quizzes || 0} 次`;
     }
+    // 背景音樂
+    const musicChk = $('#set-music');
+    const musicVol = $('#set-music-vol');
+    const musicVal = $('#set-music-vol-val');
+    const mv = s.musicVol == null ? 0.35 : s.musicVol;
+    if (musicChk) musicChk.checked = !!s.music;
+    if (musicVol) musicVol.value = Math.round(mv * 100);
+    if (musicVal) musicVal.textContent = Math.round(mv * 100) + '%';
+    if (musicChk) musicChk.addEventListener('change', () => {
+      s.music = musicChk.checked;
+      C.save();
+      if (s.music) { window.Music && window.Music.start(); } else { window.Music && window.Music.stop(); }
+    });
+    if (musicVol) musicVol.addEventListener('input', () => {
+      s.musicVol = Math.min(1, Math.max(0, Number(musicVol.value) / 100));
+      if (musicVal) musicVal.textContent = musicVol.value + '%';
+      window.Music && window.Music.setVolume(s.musicVol);
+      C.save();
+    });
+
+    const rep = $('#set-report');
+    if (rep) rep.addEventListener('click', () => { C.haptic(); C.go('report'); });
+    const cards = $('#set-cards');
+    if (cards) cards.addEventListener('click', () => {
+      C.haptic();
+      window.open('字卡.html', '_blank');
+    });
+
     const cc = $('#set-clearcache');
     if (cc) cc.addEventListener('click', async () => {
       C.haptic();

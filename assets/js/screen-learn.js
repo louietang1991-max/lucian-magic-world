@@ -224,6 +224,7 @@
     if (Q.locked) return;
     const { target } = Q.cur;
     const isRight = item.topicId === target.topicId && item.index === target.index;
+    try { C.recordItem(target.topicId + ':' + target.index, isRight); } catch (e) {}
     C.haptic();
     if (isRight) {
       Q.locked = true;

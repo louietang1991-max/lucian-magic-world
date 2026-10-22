@@ -32,6 +32,8 @@
       tempo: 90,               // 第二部分拍子 BPM
       topics: ['animal', 'fruit', 'veg', 'vehicle', 'color', 'number', 'body', 'nature', 'adj', 'position', 'people', 'food', 'verb', 'item', 'measure'],
       topicsV: 2,
+      music: true,
+      musicVol: 0.35,
       sfx: true,
       autoNext: true,
       easyMode: true,          // 答錯可再試，唔扣魔法生果
@@ -43,6 +45,7 @@
       quizzes: 0,
       correct: 0,
       feedings: 0,
+      stats: { items: {}, days: {} },
     },
     flags: {},
   };
@@ -130,6 +133,41 @@
     el.hidden = GEAR_HIDE.has(state.screen);
   }
 
+  /* ---------------- 家長報告統計 ---------------- */
+  function dayKey(d) {
+    const t = d || new Date();
+    const p = (n) => String(n).padStart(2, '0');
+    return t.getFullYear() + '-' + p(t.getMonth() + 1) + '-' + p(t.getDate());
+  }
+  function stats() {
+    const pr = state.progress;
+    if (!pr.stats || typeof pr.stats !== 'object') pr.stats = { items: {}, days: {} };
+    if (!pr.stats.items) pr.stats.items = {};
+    if (!pr.stats.days) pr.stats.days = {};
+    return pr.stats;
+  }
+  function bumpDay(field, n) {
+    const st = stats();
+    const k = dayKey();
+    if (!st.days[k]) st.days[k] = { q: 0, c: 0, f: 0 };
+    st.days[k][field] = (st.days[k][field] || 0) + (n == null ? 1 : n);
+    const keys = Object.keys(st.days).sort();
+    while (keys.length > 30) delete st.days[keys.shift()];
+  }
+  function recordItem(itemKey, isRight) {
+    if (!itemKey) return;
+    const st = stats();
+    const rec = st.items[itemKey] || { seen: 0, right: 0, wrong: 0, lastAt: 0 };
+    rec.seen++;
+    if (isRight) rec.right++; else rec.wrong++;
+    rec.lastAt = Date.now();
+    st.items[itemKey] = rec;
+    bumpDay('q');
+    if (isRight) bumpDay('c');
+    save();
+  }
+  function recordFeeding() { bumpDay('f'); save(); }
+
   function go(id, opts) {
     opts = opts || {};
     if (currentScreen === id && !opts.force) {
@@ -175,6 +213,7 @@
     reveal: 'place',
     album: 'home',
     settings: 'home',
+    report: 'settings',
   };
 
   function back_(fallback) {
@@ -341,6 +380,7 @@
     get state() { return state; },
     load, save, saveNow, DEFAULTS, KEY,
     go, back: back_, registerScreen, popup, confirmPopup, toast, T, zh, animalName, placeName, speakKeyOf, isEnSpeak,
+    dayKey, stats, recordItem, recordFeeding,
     haptic, fmt, escapeHtml, starsSvg, bus,
     get screen() { return currentScreen; },
   };
