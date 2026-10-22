@@ -618,7 +618,6 @@ window.AI_INDEX = {
   "body/4": "assets/img/items/body/4.webp",
   "body/5": "assets/img/items/body/5.webp",
   "body/6": "assets/img/items/body/6.webp",
-  "body/7": "assets/img/items/body/7.webp",
   "food/0": "assets/img/items/food/0.webp",
   "food/1": "assets/img/items/food/1.webp",
   "food/2": "assets/img/items/food/2.webp",

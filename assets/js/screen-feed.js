@@ -37,6 +37,8 @@
     raf: 0,
     last: 0,
     timers: [],
+    drift: 0,
+    circle: { x: 0, y: 0 },
   };
 
   function later(fn, ms) { const t = setTimeout(fn, ms); F.timers.push(t); return t; }
@@ -65,6 +67,8 @@
       circle.style.left = g.cx - g.r + 'px';
       circle.style.top = g.cy - g.r + 'px';
     }
+    F.circle.x = g.cx;
+    F.circle.y = g.cy;
     // 跟拍撳區：比圈大一圈（小朋友撳手／邊緣都中）
     const hit = $('#beat-hit');
     if (hit) {
@@ -107,7 +111,9 @@
     F.taps = 0;
     F.perfect = 0;
     clearTimers();
-    window.Profile.ensureFruits(THROWS);
+    stopDrift();
+    F._driftT = Math.random() * 6;
+    const gifted = window.Profile.ensureFruits(THROWS);
 
     C.go('feed');
     later(() => {
@@ -127,6 +133,8 @@
         screen.classList.add('stage-throw', 'feed-' + themeName);
       }
       startLoop();
+      startDrift();
+      if (gifted) tip('精靈送咗生果俾你！', 1800);
     }, 80);
   }
 
@@ -193,11 +201,12 @@
     const g = F.geo;
     const from = { x: g.basket.x + rnd(-26, 26), y: g.basket.y - 22 };
     let to;
+    const cur = (F.circle && F.circle.x) ? F.circle : { x: g.cx, y: g.cy };
     if (target) to = target;
     else {
       const rr = g.r * (Math.random() < 0.62 ? rnd(0.1, 0.32) : rnd(0.35, 0.72));
       const a = rnd(0, Math.PI * 2);
-      to = { x: g.cx + Math.cos(a) * rr, y: g.cy + Math.sin(a) * rr * 0.55 };
+      to = { x: cur.x + Math.cos(a) * rr, y: cur.y + Math.sin(a) * rr * 0.55 };
     }
     const el = document.createElement('div');
     el.className = 'throw-fruit';
@@ -213,8 +222,9 @@
     const obj = { el, t: 0, dur: 0.5, sx: from.x, sy: from.y, tx: to.x, ty: to.y, arc: Math.min(180, g.H * 0.18) };
     F.fruits.push(obj);
     later(() => {
-      const dx = to.x - g.cx;
-      const dy = (to.y - g.cy) / 0.55;
+      const curStay = (F.circle && F.circle.x) ? F.circle : { x: g.cx, y: g.cy };
+      const dx = to.x - curStay.x;
+      const dy = (to.y - curStay.y) / 0.55;
       const ratio = Math.hypot(dx, dy) / g.r;
       let pts = 3, label = '差少少', color = '#ffd6de';
       if (ratio < 0.34) { pts = 20; label = '好準呀！'; color = '#7dffb0'; }
@@ -236,6 +246,31 @@
         later(() => { if (F.stage === 'throw') { tip('再掟多一個！', 1100); if (hint) hint.textContent = '將魔法生果掟入圈圈！'; } }, 520);
       }
     }, obj.dur * 1000);
+  }
+
+  /* 圓圈慢慢上下左右飄（似拋食物俾動物） */
+  function startDrift() {
+    stopDrift();
+    const step = () => {
+      const g = F.geo;
+      if (!g || C.screen !== 'feed') { F.drift = 0; return; }
+      if (!F._driftT) F._driftT = Math.random() * 6;
+      F._driftT += 1 / 60;
+      const tt = F._driftT;
+      const ampX = Math.min(g.W * 0.17, 74);
+      const ampY = Math.min(g.H * 0.055, 46);
+      const x = clamp(g.cx + Math.sin(tt * 0.85) * ampX, g.r + 18, g.W - g.r - 18);
+      const y = clamp(g.cy + Math.sin(tt * 0.62 + 1.1) * ampY, g.cy - ampY - 10, g.cy + ampY + 10);
+      F.circle.x = x;
+      F.circle.y = y;
+      const c = $('#feed-circle');
+      if (c) { c.style.left = x - g.r + 'px'; c.style.top = y - g.r + 'px'; }
+      F.drift = requestAnimationFrame(step);
+    };
+    F.drift = requestAnimationFrame(step);
+  }
+  function stopDrift() {
+    if (F.drift) { cancelAnimationFrame(F.drift); F.drift = 0; }
   }
 
   function circlePulse() {
@@ -573,6 +608,7 @@
   /* ================================================================ 獎勵卡 */
   function goReveal() {
     F.stage = 'done';
+    stopDrift();
     window.Metro.stop();
     clearTimers();
     const a = F.animal;
