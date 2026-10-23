@@ -5,7 +5,7 @@
  *   - 靜態資源（css/js/圖示）：stale-while-revalidate
  *   - 語音 mp3：cache-first（immutable，唔會變）
  * ============================================================================= */
-const VERSION = 'lucian-magic-v3.0.0-rjwix5j';
+const VERSION = 'lucian-magic-v3.0.0-rl0yvbg';
 const CORE = [
   './',
   './index.html',

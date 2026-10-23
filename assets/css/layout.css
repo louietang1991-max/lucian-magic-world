@@ -593,3 +593,7 @@ img.ai-shadow {
 }
 .gear-fab:active { transform: scale(0.94); }
 .gear-fab[hidden] { display: none !important; }
+
+/* 等語音準備好之前，答案唔顯示（避免「未聽到就揀」） */
+.answers.q-hide .answer { opacity: 0; transform: scale(0.96); pointer-events: none; }
+.answers .answer { transition: opacity .22s ease, transform .22s ease; }

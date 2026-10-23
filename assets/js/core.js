@@ -348,6 +348,14 @@
     return 'v/' + item.topicId + '/' + item.index + '/' + lang;
   }
   const isEnSpeak = () => state.settings.speakLang === 'en';
+  /** 句子音檔：英文模式用 p/en，否則用 p/zh-HK（冇英文版就 fallback 粵語） */
+  function phrase(key) {
+    if (state.settings.speakLang === 'en') {
+      const en = 'p/en/' + key;
+      if (!window.AudioKit || !window.AudioKit.ready || window.AudioKit.has(en)) return en;
+    }
+    return 'p/zh-HK/' + key;
+  }
 
   /* ------------------------------------------------------------------- misc */
   function haptic() {
@@ -412,7 +420,7 @@
     get state() { return state; },
     load, save, saveNow, DEFAULTS, KEY,
     go, back: back_, registerScreen, popup, confirmPopup, toast, T, zh, animalName, placeName, speakKeyOf, isEnSpeak,
-    dayKey, stats, recordItem, recordFeeding, clearAppCache, hardReload,
+    dayKey, stats, recordItem, recordFeeding, clearAppCache, hardReload, phrase,
     haptic, fmt, escapeHtml, starsSvg, bus,
     get screen() { return currentScreen; },
   };

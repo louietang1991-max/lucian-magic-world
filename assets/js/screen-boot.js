@@ -46,7 +46,7 @@
       const greet = hour < 11 ? '早晨呀！' : hour < 18 ? '下晝好呀！' : '夜晚好呀！';
       const el = $('#home-greeting');
       if (el) el.textContent = greet + ' 一齊學中英普，餵動物食魔法生果！';
-      window.Game.say('p/zh-HK/hi');
+      window.Game.say(C.phrase('hi'));
     },
     async registerSW() {
       if (!('serviceWorker' in navigator)) return;

@@ -81,13 +81,13 @@
   function wordHtml(item) {
     const lang = C.state.settings.textLang;
     if (lang === 'en') return `<div class="ans-word"><span class="ans-en">${C.escapeHtml(item.en)}</span></div>`;
-    return `<div class="ans-word"><span class="ans-han">${C.escapeHtml(C.zh(item.zh))}</span>${item.py ? `<span class="ans-py">${C.escapeHtml(item.py)}</span>` : ''}</div>`;
+    return `<div class="ans-word"><span class="ans-han">${C.escapeHtml(C.zh(item.word || item.zh))}</span>${item.py ? `<span class="ans-py">${C.escapeHtml(item.py)}</span>` : ''}</div>`;
   }
   function bigWordHtml(item) {
     if (C.state.settings.textLang === 'en') {
       return `<span class="prompt-text"><span style="font-size:clamp(30px,9vw,52px);font-weight:900;color:#2a5fa8">${C.escapeHtml(item.en)}</span></span>`;
     }
-    return `<span class="prompt-text"><span class="han-big">${C.escapeHtml(C.zh(item.zh))}</span></span>
+    return `<span class="prompt-text"><span class="han-big">${C.escapeHtml(C.zh(item.word || item.zh))}</span></span>
             <span class="prompt-sub">${C.escapeHtml(item.py || '')}</span>`;
   }
 
@@ -209,6 +209,7 @@
     const picAnswers = Q.mode === 'A' || Q.mode === 'C';
     ansEl.className = 'answers ' + (picAnswers ? 'cols-2' : (C.state.settings.textLang === 'en' ? 'cols-1' : 'cols-2'));
     ansEl.innerHTML = '';
+    ansEl.classList.add('q-hide');
     options.forEach((it) => {
       const btn = document.createElement('button');
       btn.className = 'answer';
@@ -217,6 +218,21 @@
       btn.addEventListener('click', () => choose(btn, it));
       ansEl.appendChild(btn);
     });
+    // 等語音準備好（最多 2 秒）才顯示四個答案
+    {
+      const token = (Q.renderToken = (Q.renderToken || 0) + 1);
+      const key = C.speakKeyOf(target, 'audio');
+      const reveal = () => {
+        if (token !== Q.renderToken) return;
+        ansEl.classList.remove('q-hide');
+        try { window.AudioKit.preload(options.map((it) => audioKey(it, C.state.settings.speakLang)), 4); } catch (e) {}
+      };
+      const played = (Q.mode === 'A' || Q.mode === 'D') ? playWord(target) : Promise.resolve();
+      Promise.race([
+        Promise.resolve(played).catch(() => {}),
+        new Promise((r) => setTimeout(r, 2000)),
+      ]).then(reveal);
+    }
   }
 
   /* ------------------------------------------------------------------ 作答 */
@@ -264,7 +280,7 @@
         // 輕鬆模式：可以再試
         feedback('💪');
         setTimeout(() => btn.classList.remove('wrong'), 600);
-        setTimeout(() => A().play('p/zh-HK/try-again'), 240);
+        setTimeout(() => A().play(C.phrase('try-again')), 240);
         // 再播一次題目
         if (Q.mode === 'A') setTimeout(() => playWord(target), 1500);
         else if (Q.mode === 'C') setTimeout(() => A().play(audioKey(target, C.state.settings.speakLang)), 1500);
@@ -329,8 +345,8 @@
     }
     C.go('result');
     A().star();
-    setTimeout(() => A().play('p/zh-HK/all-done'), 400);
-    setTimeout(() => A().play('p/zh-HK/fruits-earned'), 2100);
+    setTimeout(() => A().play(C.phrase('all-done')), 400);
+    setTimeout(() => A().play(C.phrase('fruits-earned')), 2100);
   }
 
   /* ------------------------------------------------------------------ 開始 */
@@ -349,7 +365,7 @@
     setTimeout(() => {
       nextQuestion();
       const titles = { A: 'game-a-title', B: 'game-b-title', C: 'game-c-title' };
-      A().play('p/zh-HK/' + titles[mode]);
+      A().play(C.phrase(titles[mode]));
     }, 260);
   }
 

@@ -32,9 +32,9 @@
     dig: '用手指撥開上面嘅嘢，見到影子就撳佢！',
   };
   const MODE_VOICE = {
-    float: 'p/zh-HK/peek-water',
-    peek: 'p/zh-HK/peek-grass',
-    dig: 'p/zh-HK/dig-hint',
+    float: C.phrase('peek-water'),
+    peek: C.phrase('peek-grass'),
+    dig: C.phrase('dig-hint'),
   };
 
   const Explore = {
@@ -397,7 +397,7 @@
     }
 
     setTimeout(() => {
-      A().play('p/zh-HK/find-shadow');
+      A().play(C.phrase('find-shadow'));
       setTimeout(() => A().play(MODE_VOICE[mode]), 1500);
     }, 350);
     A().ambient(loc.theme);
@@ -484,7 +484,7 @@
       const now = Date.now();
       if (now - lastWaitTip > 2500) {
         lastWaitTip = now;
-        A().play('p/zh-HK/wait-peek');
+        A().play(C.phrase('wait-peek'));
         const h = $('#place-hint');
         if (h) h.textContent = '等佢出嚟先撳啦！';
       }
@@ -621,7 +621,7 @@
       if (allClearDone) return;
       allClearDone = true;
       window.AudioKit.whoosh();
-      A().play('p/zh-HK/found-animal');
+      A().play(C.phrase('found-animal'));
       cv.style.opacity = '0';
       cv.style.pointerEvents = 'none';
       setTimeout(() => { try { cv.remove(); } catch (e) {} }, 620);
@@ -824,7 +824,7 @@
       p.close();
       C.go('explore');
     });
-    A().play('p/zh-HK/no-more');
+    A().play(C.phrase('no-more'));
   }
 
   /* ---------------------------------------------------------------- 綁定 */

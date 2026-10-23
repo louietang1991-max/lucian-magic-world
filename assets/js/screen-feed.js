@@ -125,7 +125,7 @@
       const hint = $('#feed-hint');
       if (hint) hint.textContent = '將魔法生果掟入圈圈！';
       tip('將魔法生果掟入圈圈！');
-      A().play('p/zh-HK/throw-fruit');
+      A().play(C.phrase('throw-fruit'));
       const screen = document.getElementById('screen-feed');
       if (screen) {
         screen.classList.remove('stage-beat', 'stage-tap', 'stage-eat', 'feed-beach', 'feed-sea', 'feed-underwater', 'feed-river', 'feed-forest', 'feed-grass', 'feed-desert', 'feed-snow');
@@ -204,7 +204,8 @@
     const cur = (F.circle && F.circle.x) ? F.circle : { x: g.cx, y: g.cy };
     if (target) to = target;
     else {
-      const rr = g.r * (Math.random() < 0.62 ? rnd(0.1, 0.32) : rnd(0.35, 0.72));
+      // 冇瞄準（就咁 tap）：目標唔會正中，最多 14 分
+      const rr = g.r * rnd(0.42, 0.95);
       const a = rnd(0, Math.PI * 2);
       to = { x: cur.x + Math.cos(a) * rr, y: cur.y + Math.sin(a) * rr * 0.55 };
     }
@@ -355,7 +356,7 @@
     if (basket) basket.style.display = 'none';
     const ls = $('#rhythm-listen');
     if (ls) ls.disabled = false;
-    A().play('p/zh-HK/ready-rhythm');
+    A().play(C.phrase('ready-rhythm'));
     tip('想聽多次就撳「聽節拍」', 2600);
   }
 
@@ -378,7 +379,7 @@
       if (F.stage === 'done') return;
       if (!F.demo) return;
       F.stage = 'demo';
-      A().play('p/zh-HK/listen-beat');
+      A().play(C.phrase('listen-beat'));
       const hint = $('#feed-hint');
       if (hint) hint.textContent = '聽下個拍子…';
       const ok = window.Metro.start({
@@ -432,7 +433,7 @@
     setStage('beat');
     const hint = $('#feed-hint');
     if (hint) hint.textContent = '準備⋯⋯';
-    A().play('p/zh-HK/count-123');
+    A().play(C.phrase('count-123'));
     const nums = ['1', '2', '3'];
     nums.forEach((n, i) => {
       later(() => {
@@ -466,7 +467,7 @@
     const p = F.pattern;
     if (hint) hint.textContent = '跟住拍子撳圈圈！';
     tip('跟住拍子撳！', 1600);
-    A().play('p/zh-HK/tap-now');
+    A().play(C.phrase('tap-now'));
     const lb = $('#fc-label');
     if (lb) lb.textContent = '撳';
     renderDots();
@@ -564,7 +565,7 @@
     A().crunch();
     later(() => A().crunch(), 340);
     later(() => A().levelUp(), 700);
-    A().play('p/zh-HK/animal-happy');
+    A().play(C.phrase('animal-happy'));
     spawnHearts();
     later(goReveal, 2200);
   }
@@ -586,7 +587,7 @@
     A().crunch();
     later(() => A().crunch(), 340);
     later(() => A().levelUp(), 700);
-    A().play('p/zh-HK/animal-happy');
+    A().play(C.phrase('animal-happy'));
     spawnHearts();
     later(goReveal, 2200);
   }
@@ -672,7 +673,7 @@
     C.go('reveal');
     A().fanfare();
     later(() => A().play(`a/${a.id}/${C.state.settings.speakLang}`), 700);
-    later(() => A().play(a.rarity >= 3 ? 'p/zh-HK/rare-animal' : 'p/zh-HK/now-you-know'), 2400);
+    later(() => A().play(a.rarity >= 3 ? C.phrase('rare-animal') : C.phrase('now-you-know')), 2400);
   }
 
   /* ================================================================== 輸入 */
@@ -726,8 +727,8 @@
           // 掟去手指放開嘅位置（1:1），限制喺圈附近
           const cur = (F.circle && F.circle.x) ? F.circle : { x: g.cx, y: g.cy };
           const target = {
-            x: clamp(cur.x + dx * 0.95, cur.x - g.r * 1.5, cur.x + g.r * 1.5),
-            y: clamp(cur.y + dy * 0.95, cur.y - g.r * 1.2, cur.y + g.r * 1.2),
+            x: clamp(cur.x + dx * 0.6, cur.x - g.r * 1.05, cur.x + g.r * 1.05),
+            y: clamp(cur.y + dy * 0.6, cur.y - g.r * 1.05, cur.y + g.r * 1.05),
           };
           throwFruit(target);
         } else if (Math.hypot(dx, dy) < 20) {

@@ -98,8 +98,10 @@
   /** 講一句（音檔），key 例如 'p/zh-HK/good' */
   function say(key, opts) {
     const A = window.AudioKit;
-    if (!A.has(key) && opts && opts.fallback) return A.say(opts.fallback, opts);
-    return A.play(key, opts);
+    // 容許傳 'hi' 呢類短 key：自動依發音語言揀音檔
+    const full = key.indexOf('/') < 0 ? C.phrase(key) : key;
+    if (!A.has(full) && opts && opts.fallback) return A.say(opts.fallback, opts);
+    return A.play(full, opts);
   }
   function sayText(text, opts) { return window.AudioKit.say(text, opts); }
 
