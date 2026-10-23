@@ -52,34 +52,38 @@ const animalCards = ANIMALS.map((a) => ({
 }));
 
 function pageHtml(title, cards) {
-  const cells = cards.map((c) => `
+  const cardHtml = (c) => `
     <div class="card">
       <div class="pic">${c.img ? `<img src="${c.img}" onerror="this.style.display='none';this.parentElement.textContent='${c.emoji || ''}'" />` : ''}</div>
       <div class="zh">${esc(c.zh)}</div>
       <div class="py">${esc(c.py)}</div>
       <div class="en">${esc(c.en)}</div>
-    </div>`).join('');
+    </div>`;
+  /* 每頁 8 張（4 × 2） */
+  let pages = '';
+  for (let i = 0; i < cards.length; i += 8) {
+    pages += `<section class="page"><div class="grid">${cards.slice(i, i + 8).map(cardHtml).join('')}</div></section>`;
+  }
   return `<!doctype html><html lang="zh-Hant"><head><base href="http://127.0.0.1:8170/"><meta charset="utf-8"><title>${esc(title)}</title>
   <style>
-    @page { size: A4; margin: 10mm; }
+    @page { size: A4 landscape; margin: 7mm; }
     * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { margin: 0; font-family: "Noto Sans TC","PingFang HK","Microsoft JhengHei",sans-serif; color: #2b2140; }
-    h1 { font-size: 16pt; margin: 0 0 4mm; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+    .page { height: 196mm; display: flex; flex-direction: column; break-after: page; page-break-after: always; }
+    .page:last-child { break-after: auto; page-break-after: auto; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 3mm; flex: 1; }
     .card {
-      border: 1.2pt dashed #b9a6e6; border-radius: 4mm; padding: 3mm;
-      height: 84mm; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      page-break-inside: avoid; background: #fff;
+      border: 1.2pt dashed #b9a6e6; border-radius: 3mm; padding: 2mm;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      page-break-inside: avoid; break-inside: avoid; background: #fff;
     }
     .pic { height: 44mm; display: flex; align-items: center; justify-content: center; font-size: 28mm; }
     .pic img { max-height: 44mm; max-width: 100%; object-fit: contain; }
-    .zh { font-size: 26pt; font-weight: 900; line-height: 1.1; margin-top: 1mm; }
-    .py { font-size: 10pt; color: #7a6a9c; margin-top: 1mm; }
-    .en { font-size: 11pt; color: #2a5fa8; font-weight: 700; margin-top: .5mm; }
-    .topic { position: absolute; font-size: 7pt; color: #b9a6e6; }
+    .zh { font-size: 23pt; font-weight: 900; line-height: 1.1; margin-top: 1mm; }
+    .py { font-size: 9.5pt; color: #7a6a9c; margin-top: .5mm; }
+    .en { font-size: 10.5pt; color: #2a5fa8; font-weight: 700; margin-top: .5mm; }
   </style></head><body>
-  <h1>${esc(title)}</h1>
-  <div class="grid">${cells}</div>
+  ${pages}
   </body></html>`;
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -101,7 +105,7 @@ async function makePdf(name, title, cards) {
   } catch (e) {}
   await sleep(800);
   const out = path.join(ROOT, name);
-  await page.pdf({ path: out, format: 'A4', printBackground: true, margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' } });
+  await page.pdf({ path: out, format: 'A4', landscape: true, printBackground: true, margin: { top: '7mm', bottom: '7mm', left: '7mm', right: '7mm' } });
   console.log('pdf:', out, (fs.statSync(out).size / 1048576).toFixed(2), 'MB', cards.length, 'cards');
 }
 

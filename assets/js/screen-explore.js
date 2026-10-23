@@ -31,11 +31,9 @@
     peek: '啲影子匿埋咗，等佢探頭出嚟先撳佢！',
     dig: '用手指撥開上面嘅嘢，見到影子就撳佢！',
   };
-  const MODE_VOICE = {
-    float: C.phrase('peek-water'),
-    peek: C.phrase('peek-grass'),
-    dig: C.phrase('dig-hint'),
-  };
+  /* 唔可以喺 load 時計好（嗰時語言可能未設定）→ 播之前先問 Core */
+  const MODE_VOICE_KEY = { float: 'peek-water', peek: 'peek-grass', dig: 'dig-hint' };
+  const modeVoice = (mode) => C.phrase(MODE_VOICE_KEY[mode] || 'dig-hint');
 
   const Explore = {
     location: null,
@@ -398,7 +396,7 @@
 
     setTimeout(() => {
       A().play(C.phrase('find-shadow'));
-      setTimeout(() => A().play(MODE_VOICE[mode]), 1500);
+      setTimeout(() => A().play(modeVoice(mode)), 1500);
     }, 350);
     A().ambient(loc.theme);
   }
